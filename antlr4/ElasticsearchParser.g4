@@ -45,6 +45,8 @@ columnList:
     )*
 ;
 
+
+//tableName-> index/type, columnName->field
 nameOperand: //need support regex, fixme
 	(
         tableName = ID DOT
@@ -116,13 +118,15 @@ inRightOperandList:
 
 inRightOperand:
 	identity # constLiteral
-	| left = inRightOperand op = (
+	| left = inRightOperand op = 
+    (
 		STAR
 		| DIVIDE
 		| MOD
 		| PLUS
 		| MINUS
-	) right = inRightOperand # arithmeticLiteral
+	) 
+    right = inRightOperand # arithmeticLiteral
 ;
 
 tableRef: 
