@@ -19,7 +19,7 @@ selectOperation:
     )? 
     (
 		routingClause
-	)? 
+	)?
     (
         groupClause
     )? 
