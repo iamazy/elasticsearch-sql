@@ -13,7 +13,7 @@ prog:
 ;
 
 selectOperation:
-	SELECT columnList FROM tableRef 
+	SELECT columnList FROM tableRef ( COMMA tableRef)*
     (
         whereClause
     )? 
@@ -45,19 +45,14 @@ columnList:
     )*
 ;
 
-
-//tableName-> index/type, columnName->field
-nameOperand: //need support regex, fixme
-	(
+nameOperand: //^field,field
+	BIT_XOR_OP?
+    (
         tableName = ID DOT
     )? 
     columnName = name 
     (
-            AS alias = ID
-    )?
-    | 
-    (
-        columnName = BIT_XOR_OP name //^columnNames
+        AS alias = ID
     )?
 ;
 
