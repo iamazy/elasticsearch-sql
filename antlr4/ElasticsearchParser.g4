@@ -51,12 +51,10 @@ nameOperand: //need support regex, fixme
 	(
         tableName = ID DOT
     )? 
+    columnName = name 
     (
-        columnName = name 
-        (
             AS alias = ID
-        )?
-    )
+    )?
     | 
     (
         columnName = BIT_XOR_OP name //^columnNames
@@ -65,9 +63,9 @@ nameOperand: //need support regex, fixme
 
 name:
 	LPAREN name RPAREN														# LRName
-	| DISTINCT columnName = name											# distinct
+	| DISTINCT columnName = name											# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# BinaryName
-	| ID collection															# Aggregation
+	| ID collection															# AggregationName
 	| identity																# columnName
 ;
 
