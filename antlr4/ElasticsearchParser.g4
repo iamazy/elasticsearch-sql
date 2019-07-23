@@ -4,132 +4,162 @@ options {
 	tokenVocab = ElasticsearchLexer;
 }
 
-prog:
-    (
-        selectOperation
-        | deleteOperation       
-    )
-    SEMI?EOF
+prog: 
+    ( 
+        selectOperation 
+        | deleteOperation
+    ) 
+    SEMI? EOF
 ;
-selectOperation: //routing by
-    SELECT columnList FROM tableRef
+
+selectOperation:
+	SELECT columnList FROM tableRef 
     (
         whereClause
-    )?
+    )? 
+    (
+		routingClause
+	)? 
     (
         groupClause
-    )?
+    )? 
     (
         orderClause
-    )?
+    )? 
     (
         limitClause
     )?
 ;
 
-deleteOperation:
-    DELETE FROM tableRef
+deleteOperation: 
+    DELETE FROM tableRef 
     (
         whereClause
     )?
 ;
 
-
-columnList:
-    nameOperand
+columnList: 
+    nameOperand 
     (
         COMMA nameOperand
     )*
 ;
 
 nameOperand: //need support regex, fixme
-    (
+	(
         tableName = ID DOT
-    )? columnName = name
+    )? 
+    columnName = name 
     (
         AS alias = ID
     )?
 ;
 
-name: 
-    LPAREN name RPAREN # LRName
-    | DISTINCT columnName = name #distinct
-    | left = name op = (STAR|DIVIDE|MOD|PLUS|MINUS) right = name # BinaryName
-    | ID collection # Aggregation
-    | identity # columnName
+name:
+	LPAREN name RPAREN														# LRName
+	| DISTINCT columnName = name											# distinct
+	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# BinaryName
+	| ID collection															# Aggregation
+	| identity																# columnName
 ;
 
 identity:
-    ID # idElement
-    | INT #intElement
-    | FLOAT #floatElement
-    | STRING #stringElement
+	ID			# idElement
+	| INT		# intElement
+	| FLOAT		# floatElement
+	| STRING	# stringElement
 ;
 
 boolExpr:
-    LPAREN boolExpr RPAREN #lrExpr
-    | left = boolExpr EQ right = boolExpr #eqExpr
-    | left = boolExpr GT right = boolExpr #gtExpr
-    | left = boolExpr LT right = boolExpr #ltExpr
-    | left = boolExpr GTE right = boolExpr #gteExpr
-    | left = boolExpr LTE right = boolExpr #lteExpr
-    | left = boolExpr BANGEQ right = boolExpr #notEqExpr
-    | left = boolExpr AND right = boolExpr #andExpr
-    | left = boolExpr OR right = boolExpr #orExpr
-    | left = boolExpr BETWEEN right = boolExpr #betweenExpr
-    | inExpr #boolInExpr
-    | name #nameExpr
-;
-collection:
-    LPAREN identity (COMMA identity)* RPAREN
+	LPAREN boolExpr RPAREN						# lrExpr
+	| left = boolExpr EQ right = boolExpr		# eqExpr
+	| left = boolExpr GT right = boolExpr		# gtExpr
+	| left = boolExpr LT right = boolExpr		# ltExpr
+	| left = boolExpr GTE right = boolExpr		# gteExpr
+	| left = boolExpr LTE right = boolExpr		# lteExpr
+	| left = boolExpr BANGEQ right = boolExpr	# notEqExpr
+	| left = boolExpr AND right = boolExpr		# andExpr
+	| left = boolExpr OR right = boolExpr		# orExpr
+	| left = boolExpr BETWEEN right = boolExpr	# betweenExpr
+	| inExpr									# boolInExpr
+	| name										# nameExpr
+	| hasChildClause							# hasChildExpr
+	| hasParentClause							# hasParentExpr
 ;
 
-inExpr:
+
+collection: 
+    LPAREN identity 
+    (
+        COMMA identity
+    )* 
+    RPAREN
+;
+
+inExpr: 
     left = identity inToken right = inRightOperandList
 ;
 
-inToken:
-    IN #inOp
-    | NOT IN #notOp
+inToken: 
+    IN # inOp 
+    | NOT IN # notOp
 ;
 
 inRightOperandList:
-    inRightOperand
-    |LPAREN inRightOperand (COMMA inRightOperand)* RPAREN
+	inRightOperand
+	| LPAREN inRightOperand 
+    (
+        COMMA inRightOperand
+    )* 
+    RPAREN
 ;
 
 inRightOperand:
-    identity # constLiteral
-    | left = inRightOperand op =
-    (
-        STAR
-        | DIVIDE
-        | MOD
-        | PLUS
-        | MINUS
-    )
-    right = inRightOperand # arithmeticLiteral
+	identity # constLiteral
+	| left = inRightOperand op = (
+		STAR
+		| DIVIDE
+		| MOD
+		| PLUS
+		| MINUS
+	) right = inRightOperand # arithmeticLiteral
 ;
-tableRef:
-    tableName = ID
-    (
+
+tableRef: 
+    tableName = ID 
+    ( 
         AS alias = ID
     )?
 ;
 
-whereClause:
+hasParentClause: 
+    HAS_PARENT LPAREN name COMMA boolExpr RPAREN
+;
+
+hasChildClause: 
+    HAS_CHILD LPAREN name COMMA boolExpr RPAREN
+;
+
+whereClause: 
     WHERE boolExpr
 ;
 
-groupClause:
-    GROUP BY name
-    (
+groupClause: 
+    GROUP BY name 
+    ( 
         COMMA name
     )*
 ;
 
-orderClause:
-    ORDER BY order
+routingClause: 
+    ROUTING BY identity
+    (
+        COMMA identity
+    )*
+;
+
+orderClause: 
+    ORDER BY order 
     (
         COMMA order
     )*
@@ -137,14 +167,16 @@ orderClause:
 
 order: 
     name type = 
-    (
-        ASC|DESC
+    ( 
+        ASC 
+        | DESC
     )?
 ;
 
 limitClause: 
     LIMIT 
-    (
+    ( 
         offset = INT
-    )? size = INT
+    )? 
+    size = INT
 ;
