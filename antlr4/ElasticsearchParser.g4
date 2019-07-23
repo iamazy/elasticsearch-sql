@@ -51,9 +51,15 @@ nameOperand: //need support regex, fixme
 	(
         tableName = ID DOT
     )? 
-    columnName = name 
     (
-        AS alias = ID
+        columnName = name 
+        (
+            AS alias = ID
+        )?
+    )
+    | 
+    (
+        columnName = BIT_XOR_OP name //^columnNames
     )?
 ;
 
