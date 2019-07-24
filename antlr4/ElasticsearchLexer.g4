@@ -6,7 +6,7 @@ channels {
 }
 
 //SKIP
-SPACE: [\t\r\n]+ -> channel(HIDDEN);
+SPACE: [ \t\r\n]+ -> channel(HIDDEN);
 SPEC_ESSQL_COMMENT: '/*!' .+? '*/' -> channel(ESQLCOMMENT);
 COMMENT_INPUT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: (
