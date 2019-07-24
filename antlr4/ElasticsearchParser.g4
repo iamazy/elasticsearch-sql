@@ -4,77 +4,41 @@ options {
 	tokenVocab = ElasticsearchLexer;
 }
 
-sql: 
-    ( 
-        selectOperation 
-        | deleteOperation
-    ) 
-    SEMI? EOF
-;
+sql: ( selectOperation | deleteOperation) SEMI? EOF;
 
 selectOperation:
-	SELECT columnList FROM tableRef ( COMMA tableRef)*
-    (
-        whereClause
-    )?
-    (
-		routingClause
-	)?
-    (
-        groupClause
-    )? 
-    (
-        orderClause
-    )? 
-    (
-        limitClause
-    )?
-;
+	SELECT columnList FROM tableRef (COMMA tableRef)* (
+		whereClause
+	)? (routingClause)? (groupClause)? (orderClause)? (
+		limitClause
+	)?;
 
-deleteOperation: 
-    DELETE FROM tableRef 
-    (
-        whereClause
-    )?
-;
+deleteOperation: DELETE FROM tableRef ( whereClause)?;
 
-columnList: 
-    nameOperand 
-    (
-        COMMA nameOperand
-    )*
-;
+columnList: STAR | ( nameOperand ( COMMA nameOperand)*);
 
 nameOperand: //^field,field
-	BIT_XOR_OP?
-    (
-        tableName = ID DOT
-    )? 
-    columnName = name 
-    (
-        AS alias = ID
-    )?
-;
+	BIT_XOR_OP? (tableName = ID DOT)? columnName = name (
+		AS alias = ID
+	)?;
 
 name:
 	LPAREN name RPAREN														# lrName
 	| DISTINCT columnName = name											# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
 	| ID collection															# aggregationName
-	| HIGHLIGHTER? identity												    # columnName
-;
+	| HIGHLIGHTER? identity													# columnName;
 
 identity:
 	ID			# idElement
 	| INT		# intElement
 	| FLOAT		# floatElement
-	| STRING	# stringElement
-;
+	| STRING	# stringElement;
 
 boolExpr:
 	LPAREN boolExpr RPAREN						# lrExpr
 	| left = boolExpr EQ right = boolExpr		# eqExpr
-    | left = boolExpr AEQ right = boolExpr      # aeqExpr
+	| left = boolExpr AEQ right = boolExpr		# aeqExpr
 	| left = boolExpr GT right = boolExpr		# gtExpr
 	| left = boolExpr LT right = boolExpr		# ltExpr
 	| left = boolExpr GTE right = boolExpr		# gteExpr
@@ -87,112 +51,50 @@ boolExpr:
 	| name										# nameExpr
 	| hasChildClause							# hasChildExpr
 	| hasParentClause							# hasParentExpr
-    | isClause                                  # isExpr
-    | nestedClause                              # nestedExpr
-;
+	| isClause									# isExpr
+	| nestedClause								# nestedExpr;
 
+collection: LPAREN identity ( COMMA identity)* RPAREN;
 
-collection: 
-    LPAREN identity 
-    (
-        COMMA identity
-    )* 
-    RPAREN
-;
+isClause: name IS NULL # isOp | IS NOT NULL # isNotOp;
 
-isClause:
-    name 
-    IS NULL # isOp
-    | IS NOT NULL # isNotOp
-;
+inExpr: left = identity inToken right = inRightOperandList;
 
-inExpr: 
-    left = identity inToken right = inRightOperandList
-;
-
-inToken: 
-    IN # inOp 
-    | NOT IN # notOp
-;
+inToken: IN # inOp | NOT IN # notOp;
 
 inRightOperandList:
 	inRightOperand
-	| LPAREN inRightOperand 
-    (
-        COMMA inRightOperand
-    )* 
-    RPAREN
-;
+	| LPAREN inRightOperand (COMMA inRightOperand)* RPAREN;
 
 inRightOperand:
 	identity # constLiteral
-	| left = inRightOperand op = 
-    (
+	| left = inRightOperand op = (
 		STAR
 		| DIVIDE
 		| MOD
 		| PLUS
 		| MINUS
-	) 
-    right = inRightOperand # arithmeticLiteral
-;
+	) right = inRightOperand # arithmeticLiteral;
 
-tableRef: 
-    tableName = ID 
-    ( 
-        AS alias = ID
-    )?
-;
+tableRef: tableName = ID ( AS alias = ID)?;
 
-hasParentClause: 
-    HAS_PARENT LPAREN type = name COMMA query = boolExpr RPAREN
-;
+hasParentClause:
+	HAS_PARENT LPAREN type = name COMMA query = boolExpr RPAREN;
 
-hasChildClause: 
-    HAS_CHILD LPAREN type = name COMMA query = boolExpr RPAREN
-;
+hasChildClause:
+	HAS_CHILD LPAREN type = name COMMA query = boolExpr RPAREN;
 
 nestedClause:
-    LBRACKET nestedPath = identity COMMA query = boolExpr RBRACKET
-;
+	LBRACKET nestedPath = identity COMMA query = boolExpr RBRACKET;
 
-whereClause: 
-    WHERE boolExpr
-;
+whereClause: WHERE boolExpr;
 
-groupClause: 
-    GROUP BY name 
-    ( 
-        COMMA name
-    )*
-;
+groupClause: GROUP BY name ( COMMA name)*;
 
-routingClause: 
-    ROUTING BY identity
-    (
-        COMMA identity
-    )*
-;
+routingClause: ROUTING BY identity ( COMMA identity)*;
 
-orderClause: 
-    ORDER BY order 
-    (
-        COMMA order
-    )*
-;
+orderClause: ORDER BY order ( COMMA order)*;
 
-order: 
-    name type = 
-    ( 
-        ASC 
-        | DESC
-    )?
-;
+order: name type = ( ASC | DESC)?;
 
-limitClause: 
-    LIMIT 
-    ( 
-        offset = INT COMMA
-    )? 
-    size = INT
-;
+limitClause: LIMIT ( offset = INT COMMA)? size = INT;
