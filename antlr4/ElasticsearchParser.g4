@@ -58,10 +58,10 @@ nameOperand: //^field,field
 
 name:
     HIGHLIGHTER?
-	LPAREN name RPAREN														# LRName
+	LPAREN name RPAREN														# lrName
 	| DISTINCT columnName = name											# distinctName
-	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# BinaryName
-	| ID collection															# AggregationName
+	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
+	| ID collection															# aggregationName
 	| HIGHLIGHTER? identity												    # columnName
 ;
 
