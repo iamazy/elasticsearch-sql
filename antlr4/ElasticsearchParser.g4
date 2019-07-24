@@ -89,6 +89,7 @@ boolExpr:
 	| hasChildClause							# hasChildExpr
 	| hasParentClause							# hasParentExpr
     | isClause                                  # isExpr
+    | nestedClause                              # nestedExpr
 ;
 
 
@@ -151,7 +152,7 @@ hasChildClause:
 ;
 
 nestedClause:
-
+    LBRACKET nestedPath = identity COMMA boolExpr RBRACKET
 ;
 
 whereClause: 
