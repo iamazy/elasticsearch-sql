@@ -102,7 +102,9 @@ collection:
 ;
 
 isClause:
-    name IS NOT? NULL
+    name 
+    IS NULL # isOp
+    | IS NOT NULL # isNotOp
 ;
 
 inExpr: 
@@ -144,15 +146,15 @@ tableRef:
 ;
 
 hasParentClause: 
-    HAS_PARENT LPAREN name COMMA boolExpr RPAREN
+    HAS_PARENT LPAREN type = name COMMA query = boolExpr RPAREN
 ;
 
 hasChildClause: 
-    HAS_CHILD LPAREN name COMMA boolExpr RPAREN
+    HAS_CHILD LPAREN type = name COMMA query = boolExpr RPAREN
 ;
 
 nestedClause:
-    LBRACKET nestedPath = identity COMMA boolExpr RBRACKET
+    LBRACKET nestedPath = identity COMMA query = boolExpr RBRACKET
 ;
 
 whereClause: 
