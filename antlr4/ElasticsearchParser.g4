@@ -16,7 +16,7 @@ selectOperation:
 	SELECT columnList FROM tableRef ( COMMA tableRef)*
     (
         whereClause
-    )? 
+    )?
     (
 		routingClause
 	)?
@@ -57,6 +57,7 @@ nameOperand: //^field,field
 ;
 
 name:
+    HIGHLIGHTER?
 	LPAREN name RPAREN														# LRName
 	| DISTINCT columnName = name											# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# BinaryName
@@ -74,6 +75,7 @@ identity:
 boolExpr:
 	LPAREN boolExpr RPAREN						# lrExpr
 	| left = boolExpr EQ right = boolExpr		# eqExpr
+    | left = boolExpr AEQ right = boolExpr      # aeqExpr
 	| left = boolExpr GT right = boolExpr		# gtExpr
 	| left = boolExpr LT right = boolExpr		# ltExpr
 	| left = boolExpr GTE right = boolExpr		# gteExpr
