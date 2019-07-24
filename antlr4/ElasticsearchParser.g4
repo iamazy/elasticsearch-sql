@@ -4,7 +4,7 @@ options {
 	tokenVocab = ElasticsearchLexer;
 }
 
-prog: 
+sql: 
     ( 
         selectOperation 
         | deleteOperation
@@ -88,6 +88,7 @@ boolExpr:
 	| name										# nameExpr
 	| hasChildClause							# hasChildExpr
 	| hasParentClause							# hasParentExpr
+    | isClause                                  # isExpr
 ;
 
 
@@ -97,6 +98,10 @@ collection:
         COMMA identity
     )* 
     RPAREN
+;
+
+isClause:
+    name IS NOT? NULL
 ;
 
 inExpr: 
@@ -181,7 +186,7 @@ order:
 limitClause: 
     LIMIT 
     ( 
-        offset = INT
+        offset = INT COMMA
     )? 
     size = INT
 ;
