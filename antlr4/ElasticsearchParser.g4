@@ -57,7 +57,6 @@ nameOperand: //^field,field
 ;
 
 name:
-    HIGHLIGHTER?
 	LPAREN name RPAREN														# lrName
 	| DISTINCT columnName = name											# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
