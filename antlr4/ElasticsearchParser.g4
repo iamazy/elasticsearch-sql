@@ -62,7 +62,7 @@ name:
 	| DISTINCT columnName = name											# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# BinaryName
 	| ID collection															# AggregationName
-	| identity																# columnName
+	| HIGHLIGHTER? identity												    # columnName
 ;
 
 identity:
@@ -148,6 +148,10 @@ hasParentClause:
 
 hasChildClause: 
     HAS_CHILD LPAREN name COMMA boolExpr RPAREN
+;
+
+nestedClause:
+
 ;
 
 whereClause: 
