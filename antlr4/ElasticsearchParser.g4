@@ -23,8 +23,6 @@ updateOperation: UPDATE tableRef SET ID EQ identity ( COMMA ID EQ identity)* whe
 
 insertOperation: INSERT INTO tableRef (LPAREN identity (COMMA identity)* RPAREN)? VALUES LPAREN identity (COMMA identity)* RPAREN;
 
-
-
 fieldList: STAR | nameOperand ( COMMA nameOperand)*;
 
     
@@ -93,7 +91,7 @@ inRightOperand:
 		| MINUS
 	) right = inRightOperand # arithmeticLiteral;
 
-tableRef: tableName = ID ( AS alias = ID)?;
+tableRef: indexName = ID ( AS alias = ID)?;
 
 hasParentClause:
 	HAS_PARENT LPAREN type = name COMMA query = boolExpr RPAREN;

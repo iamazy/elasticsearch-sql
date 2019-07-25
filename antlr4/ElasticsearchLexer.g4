@@ -27,6 +27,8 @@ TOP: T O P;
 UPDATE: U P D A T E;
 
 CREATE: C R E A T E;
+TABLE: T A B L E;
+IF: I F;
 ALTER: A L T E R;
 DROP: D R O P;
 SET: S E T;
