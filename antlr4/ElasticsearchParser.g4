@@ -4,8 +4,9 @@ options {
 	tokenVocab = ElasticsearchLexer;
 }
 
-sql: ( selectOperation | deleteOperation) SEMI? EOF;
+sql: ( selectOperation | deleteOperation | descOperation | updateOperation) SEMI? EOF;
 
+//OPERATIONS
 selectOperation:
 	SELECT columnList FROM tableRef (COMMA tableRef)* (
 		whereClause
@@ -13,7 +14,16 @@ selectOperation:
 		limitClause
 	)?;
 
+descOperation:
+	DESCRIBE tableRef (DIVIDE identity)?;
+
 deleteOperation: DELETE FROM tableRef ( whereClause)?;
+
+updateOperation: UPDATE tableRef SET ID EQ identity ( COMMA ID EQ identity)* whereClause?;
+
+insertOperation: INSERT INTO tableRef (LPAREN identity (COMMA identity)* RPAREN)? VALUES LPAREN identity (COMMA identity)* RPAREN;
+
+
 
 columnList: STAR | ( nameOperand ( COMMA nameOperand)*);
 
@@ -52,9 +62,13 @@ boolExpr:
 	| hasChildClause							# hasChildExpr
 	| hasParentClause							# hasParentExpr
 	| isClause									# isExpr
-	| nestedClause								# nestedExpr;
+	| nestedClause								# nestedExpr
+	| likeClause								# likeExpr
+	;
 
 collection: LPAREN identity ( COMMA identity)* RPAREN;
+
+likeClause: LIKE STRING;
 
 isClause: name IS NULL # isOp | IS NOT NULL # isNotOp;
 
