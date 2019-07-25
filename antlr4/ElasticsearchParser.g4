@@ -61,13 +61,15 @@ boolExpr:
 	| left = boolExpr AND right = boolExpr		# andExpr
 	| left = boolExpr OR right = boolExpr		# orExpr
 	| left = boolExpr BETWEEN right = boolExpr	# betweenExpr
-	| inExpr									# boolInExpr
+	| inClause									# inExpr
 	| name										# nameExpr
 	| hasChildClause							# hasChildExpr
 	| hasParentClause							# hasParentExpr
 	| isClause									# isExpr
 	| nestedClause								# nestedExpr
-	| likeClause								# likeExpr;
+	| likeClause								# likeExpr
+	| geoClause									# geoExpr;
+
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
@@ -75,7 +77,7 @@ likeClause: name LIKE STRING;
 
 isClause: name IS NULL # isOp | IS NOT NULL # isNotOp;
 
-inExpr: left = identity inToken right = inRightOperandList;
+inClause: left = identity inToken right = inRightOperandList;
 
 inToken: IN # inOp | NOT IN # notOp;
 
@@ -115,3 +117,17 @@ orderClause: ORDER BY order ( COMMA order)*;
 order: name type = ( ASC | DESC)?;
 
 limitClause: LIMIT ( offset = INT COMMA)? size = INT;
+
+//Geo Clause
+
+geoClause:
+	geoDistanceClause|geoBoundingBoxClause
+;
+
+geoDistanceClause:
+	geoPointField = name EQ STRING AND (GEOPOINT|GEOHASH) EQ geohashOrLatLon = STRING AND DISTANCE EQ distance = STRING
+;
+
+geoBoundingBoxClause:
+	geoPointField = name EQ STRING AND TOP_LEFT EQ STRING AND BOTTOM_RIGHT EQ STRING
+;
