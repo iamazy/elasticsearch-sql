@@ -4,7 +4,7 @@ options {
 	tokenVocab = ElasticsearchLexer;
 }
 
-sql: ( selectOperation | deleteOperation | descOperation | updateOperation) SEMI? EOF;
+sql: ( selectOperation | deleteOperation | descOperation | updateOperation | insertOperation) SEMI? EOF;
 
 //OPERATIONS
 selectOperation:
