@@ -14,7 +14,7 @@ sql: (
 
 //OPERATIONS
 selectOperation:
-	SELECT fieldList FROM tableRef (COMMA tableRef)* (whereClause)? (routingClause)? (groupClause)? (orderClause)? (limitClause)?;
+	SELECT fieldList FROM tableRef (COMMA tableRef)* (whereClause)? (routingClause)? (groupClause|aggregateClause)? (orderClause)? (limitClause)?;
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
@@ -109,6 +109,17 @@ nestedClause:
 whereClause: WHERE boolExpr;
 
 groupClause: GROUP BY name ( COMMA name)*;
+
+aggregateClause: 
+    AGGREGATE BY aggregateItemClause nestedAggregateClause?
+;
+
+aggregateItemClause:
+    ID collection (COMMA ID collection)*;
+
+nestedAggregateClause:
+    GT LPAREN aggregateItemClause nestedAggregateClause? RPAREN
+;
 
 routingClause: ROUTING BY identity ( COMMA identity)*;
 
