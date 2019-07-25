@@ -8,7 +8,7 @@ sql: ( selectOperation | deleteOperation | descOperation | updateOperation | ins
 
 //OPERATIONS
 selectOperation:
-	SELECT columnList FROM tableRef (COMMA tableRef)* (
+	SELECT fieldList FROM tableRef (COMMA tableRef)* (
 		whereClause
 	)? (routingClause)? (groupClause)? (orderClause)? (
 		limitClause
@@ -25,19 +25,22 @@ insertOperation: INSERT INTO tableRef (LPAREN identity (COMMA identity)* RPAREN)
 
 
 
-columnList: STAR | ( nameOperand ( COMMA nameOperand)*);
+fieldList: STAR | nameOperand ( COMMA nameOperand)*;
 
+    
 nameOperand: //^field,field
-	BIT_XOR_OP? (tableName = ID DOT)? columnName = name (
+	BIT_XOR_OP? (indexName = ID DOT)? fieldName = name
+	(
 		AS alias = ID
 	)?;
 
 name:
 	LPAREN name RPAREN														# lrName
-	| DISTINCT columnName = name											# distinctName
+	| DISTINCT fieldName = name											# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
-	| ID collection															# aggregationName
+	| ID collection															# functionName
 	| HIGHLIGHTER? identity													# columnName;
+
 
 identity:
 	ID			# idElement
@@ -63,12 +66,12 @@ boolExpr:
 	| hasParentClause							# hasParentExpr
 	| isClause									# isExpr
 	| nestedClause								# nestedExpr
-	| likeClause								# likeExpr
+	| likeClause							    # likeExpr
 	;
 
-collection: LPAREN identity ( COMMA identity)* RPAREN;
+collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
-likeClause: LIKE STRING;
+likeClause: name LIKE STRING;
 
 isClause: name IS NULL # isOp | IS NOT NULL # isNotOp;
 
