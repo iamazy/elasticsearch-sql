@@ -17,7 +17,7 @@ selectOperation:
 descOperation:
 	DESCRIBE tableRef (DIVIDE identity)?;
 
-deleteOperation: DELETE FROM tableRef ( whereClause)?;
+deleteOperation: DELETE FROM tableRef whereClause?;
 
 updateOperation: UPDATE tableRef SET ID EQ identity ( COMMA ID EQ identity)* whereClause?;
 
