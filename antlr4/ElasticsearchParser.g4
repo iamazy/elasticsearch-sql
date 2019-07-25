@@ -4,41 +4,44 @@ options {
 	tokenVocab = ElasticsearchLexer;
 }
 
-sql: ( selectOperation | deleteOperation | descOperation | updateOperation | insertOperation) SEMI? EOF;
+sql: (
+		selectOperation
+		| deleteOperation
+		| descOperation
+		| updateOperation
+		| insertOperation
+	) SEMI? EOF;
 
 //OPERATIONS
 selectOperation:
-	SELECT fieldList FROM tableRef (COMMA tableRef)* (
-		whereClause
-	)? (routingClause)? (groupClause)? (orderClause)? (
-		limitClause
-	)?;
+	SELECT fieldList FROM tableRef (COMMA tableRef)* (whereClause)? (routingClause)? (groupClause)? (orderClause)? (limitClause)?;
 
-descOperation:
-	DESCRIBE tableRef (DIVIDE identity)?;
+descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
 deleteOperation: DELETE FROM tableRef whereClause?;
 
-updateOperation: UPDATE tableRef SET ID EQ identity ( COMMA ID EQ identity)* whereClause?;
+updateOperation:
+	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause?;
 
-insertOperation: INSERT INTO tableRef (LPAREN identity (COMMA identity)* RPAREN)? VALUES LPAREN identity (COMMA identity)* RPAREN;
+insertOperation:
+	INSERT INTO tableRef 
+	(
+		LPAREN identity (COMMA identity)* RPAREN
+	)? VALUES LPAREN identity (COMMA identity)* RPAREN;
 
 fieldList: STAR | nameOperand ( COMMA nameOperand)*;
 
-    
 nameOperand: //^field,field
-	BIT_XOR_OP? (indexName = ID DOT)? fieldName = name
-	(
+	BIT_XOR_OP? (indexName = ID DOT)? fieldName = name (
 		AS alias = ID
 	)?;
 
 name:
 	LPAREN name RPAREN														# lrName
-	| DISTINCT fieldName = name											# distinctName
+	| DISTINCT fieldName = name												# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
 	| ID collection															# functionName
 	| HIGHLIGHTER? identity													# columnName;
-
 
 identity:
 	ID			# idElement
@@ -64,8 +67,7 @@ boolExpr:
 	| hasParentClause							# hasParentExpr
 	| isClause									# isExpr
 	| nestedClause								# nestedExpr
-	| likeClause							    # likeExpr
-	;
+	| likeClause								# likeExpr;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
