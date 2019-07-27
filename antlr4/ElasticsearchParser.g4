@@ -41,7 +41,7 @@ name:
 	| DISTINCT fieldName = name												# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
 	| ID collection															# functionName
-	| HIGHLIGHTER? identity													# columnName;
+	| HIGHLIGHTER? identity													# fieldName;
 
 identity:
 	ID			# idElement
