@@ -136,9 +136,9 @@ geoClause:
 ;
 
 geoDistanceClause:
-	geoPointField = name EQ STRING AND (GEOPOINT|GEOHASH) EQ geohashOrLatLon = STRING AND DISTANCE EQ distance = STRING
+	name EQ field = STRING AND (GEOPOINT|GEOHASH) EQ coordinate = STRING AND DISTANCE EQ distance = STRING
 ;
 
 geoBoundingBoxClause:
-	geoPointField = name EQ STRING AND TOP_LEFT EQ STRING AND BOTTOM_RIGHT EQ STRING
+	name EQ field = STRING AND TOP_LEFT EQ leftTop = STRING AND BOTTOM_RIGHT EQ rightBottom = STRING
 ;
