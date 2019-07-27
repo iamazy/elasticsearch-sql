@@ -12,13 +12,14 @@ public final class Location {
     private final String sourceName;
     private final int offset;
 
+    /**
+     * Create a new Location
+     * @param sourceName script's name
+     * @param offset Character offset of script element
+     */
     public Location(String sourceName,int offset){
         this.sourceName= Objects.requireNonNull(sourceName);
         this.offset=offset;
-    }
-
-    public String getSourceName() {
-        return sourceName;
     }
 
     public int getOffset() {

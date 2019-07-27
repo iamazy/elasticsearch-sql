@@ -148,281 +148,183 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitBinaryName(ElasticsearchParser.BinaryNameContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code idElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Enter a parse tree produced by {@link ElasticsearchParser#identity}.
 	 * @param ctx the parse tree
 	 */
-	void enterIdElement(ElasticsearchParser.IdElementContext ctx);
+	void enterIdentity(ElasticsearchParser.IdentityContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code idElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Exit a parse tree produced by {@link ElasticsearchParser#identity}.
 	 * @param ctx the parse tree
 	 */
-	void exitIdElement(ElasticsearchParser.IdElementContext ctx);
+	void exitIdentity(ElasticsearchParser.IdentityContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code intElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Enter a parse tree produced by the {@code compare}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterIntElement(ElasticsearchParser.IntElementContext ctx);
+	void enterCompare(ElasticsearchParser.CompareContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code intElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Exit a parse tree produced by the {@code compare}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitIntElement(ElasticsearchParser.IntElementContext ctx);
+	void exitCompare(ElasticsearchParser.CompareContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code floatElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Enter a parse tree produced by the {@code bool}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFloatElement(ElasticsearchParser.FloatElementContext ctx);
+	void enterBool(ElasticsearchParser.BoolContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code floatElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Exit a parse tree produced by the {@code bool}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFloatElement(ElasticsearchParser.FloatElementContext ctx);
+	void exitBool(ElasticsearchParser.BoolContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code stringElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Enter a parse tree produced by the {@code conditional}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterStringElement(ElasticsearchParser.StringElementContext ctx);
+	void enterConditional(ElasticsearchParser.ConditionalContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code stringElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Exit a parse tree produced by the {@code conditional}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitStringElement(ElasticsearchParser.StringElementContext ctx);
+	void exitConditional(ElasticsearchParser.ConditionalContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code notEqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code in}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotEqExpr(ElasticsearchParser.NotEqExprContext ctx);
+	void enterIn(ElasticsearchParser.InContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code notEqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code in}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotEqExpr(ElasticsearchParser.NotEqExprContext ctx);
+	void exitIn(ElasticsearchParser.InContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code gtExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code like}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterGtExpr(ElasticsearchParser.GtExprContext ctx);
+	void enterLike(ElasticsearchParser.LikeContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code gtExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code like}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitGtExpr(ElasticsearchParser.GtExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code hasParentExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterHasParentExpr(ElasticsearchParser.HasParentExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code hasParentExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitHasParentExpr(ElasticsearchParser.HasParentExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code inExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterInExpr(ElasticsearchParser.InExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code inExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitInExpr(ElasticsearchParser.InExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code hasChildExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterHasChildExpr(ElasticsearchParser.HasChildExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code hasChildExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitHasChildExpr(ElasticsearchParser.HasChildExprContext ctx);
+	void exitLike(ElasticsearchParser.LikeContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code lrExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterLrExpr(ElasticsearchParser.LrExprContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code lrExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitLrExpr(ElasticsearchParser.LrExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code nestedExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code is}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNestedExpr(ElasticsearchParser.NestedExprContext ctx);
+	void enterIs(ElasticsearchParser.IsContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code nestedExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code is}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNestedExpr(ElasticsearchParser.NestedExprContext ctx);
+	void exitIs(ElasticsearchParser.IsContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code gteExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code nested}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterGteExpr(ElasticsearchParser.GteExprContext ctx);
+	void enterNested(ElasticsearchParser.NestedContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code gteExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code nested}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitGteExpr(ElasticsearchParser.GteExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code orExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterOrExpr(ElasticsearchParser.OrExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code orExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitOrExpr(ElasticsearchParser.OrExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code aeqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterAeqExpr(ElasticsearchParser.AeqExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code aeqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitAeqExpr(ElasticsearchParser.AeqExprContext ctx);
+	void exitNested(ElasticsearchParser.NestedContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code nameExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
 	void enterNameExpr(ElasticsearchParser.NameExprContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code nameExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
 	void exitNameExpr(ElasticsearchParser.NameExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code betweenExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code geo}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterBetweenExpr(ElasticsearchParser.BetweenExprContext ctx);
+	void enterGeo(ElasticsearchParser.GeoContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code betweenExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code geo}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitBetweenExpr(ElasticsearchParser.BetweenExprContext ctx);
+	void exitGeo(ElasticsearchParser.GeoContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code lteExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code hasChild}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLteExpr(ElasticsearchParser.LteExprContext ctx);
+	void enterHasChild(ElasticsearchParser.HasChildContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code lteExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code hasChild}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLteExpr(ElasticsearchParser.LteExprContext ctx);
+	void exitHasChild(ElasticsearchParser.HasChildContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code eqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code binary}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterEqExpr(ElasticsearchParser.EqExprContext ctx);
+	void enterBinary(ElasticsearchParser.BinaryContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code eqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code binary}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitEqExpr(ElasticsearchParser.EqExprContext ctx);
+	void exitBinary(ElasticsearchParser.BinaryContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ltExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code between}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLtExpr(ElasticsearchParser.LtExprContext ctx);
+	void enterBetween(ElasticsearchParser.BetweenContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code ltExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code between}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLtExpr(ElasticsearchParser.LtExprContext ctx);
+	void exitBetween(ElasticsearchParser.BetweenContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code likeExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Enter a parse tree produced by the {@code hasParent}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLikeExpr(ElasticsearchParser.LikeExprContext ctx);
+	void enterHasParent(ElasticsearchParser.HasParentContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code likeExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Exit a parse tree produced by the {@code hasParent}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLikeExpr(ElasticsearchParser.LikeExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code isExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterIsExpr(ElasticsearchParser.IsExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code isExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitIsExpr(ElasticsearchParser.IsExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code geoExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterGeoExpr(ElasticsearchParser.GeoExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code geoExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitGeoExpr(ElasticsearchParser.GeoExprContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code andExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterAndExpr(ElasticsearchParser.AndExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code andExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitAndExpr(ElasticsearchParser.AndExprContext ctx);
+	void exitHasParent(ElasticsearchParser.HasParentContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#collection}.
 	 * @param ctx the parse tree
@@ -490,17 +392,17 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitInOp(ElasticsearchParser.InOpContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code notOp}
+	 * Enter a parse tree produced by the {@code notInOp}
 	 * labeled alternative in {@link ElasticsearchParser#inToken}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotOp(ElasticsearchParser.NotOpContext ctx);
+	void enterNotInOp(ElasticsearchParser.NotInOpContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code notOp}
+	 * Exit a parse tree produced by the {@code notInOp}
 	 * labeled alternative in {@link ElasticsearchParser#inToken}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotOp(ElasticsearchParser.NotOpContext ctx);
+	void exitNotInOp(ElasticsearchParser.NotInOpContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#inRightOperandList}.
 	 * @param ctx the parse tree

@@ -94,166 +94,109 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBinaryName(ElasticsearchParser.BinaryNameContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code idElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Visit a parse tree produced by {@link ElasticsearchParser#identity}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIdElement(ElasticsearchParser.IdElementContext ctx);
+	T visitIdentity(ElasticsearchParser.IdentityContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code intElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Visit a parse tree produced by the {@code compare}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntElement(ElasticsearchParser.IntElementContext ctx);
+	T visitCompare(ElasticsearchParser.CompareContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code floatElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Visit a parse tree produced by the {@code bool}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFloatElement(ElasticsearchParser.FloatElementContext ctx);
+	T visitBool(ElasticsearchParser.BoolContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code stringElement}
-	 * labeled alternative in {@link ElasticsearchParser#identity}.
+	 * Visit a parse tree produced by the {@code conditional}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitStringElement(ElasticsearchParser.StringElementContext ctx);
+	T visitConditional(ElasticsearchParser.ConditionalContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code notEqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code in}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNotEqExpr(ElasticsearchParser.NotEqExprContext ctx);
+	T visitIn(ElasticsearchParser.InContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code gtExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code like}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitGtExpr(ElasticsearchParser.GtExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code hasParentExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHasParentExpr(ElasticsearchParser.HasParentExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code inExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInExpr(ElasticsearchParser.InExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code hasChildExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHasChildExpr(ElasticsearchParser.HasChildExprContext ctx);
+	T visitLike(ElasticsearchParser.LikeContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lrExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLrExpr(ElasticsearchParser.LrExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code nestedExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code is}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNestedExpr(ElasticsearchParser.NestedExprContext ctx);
+	T visitIs(ElasticsearchParser.IsContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code gteExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code nested}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitGteExpr(ElasticsearchParser.GteExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code orExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOrExpr(ElasticsearchParser.OrExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code aeqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAeqExpr(ElasticsearchParser.AeqExprContext ctx);
+	T visitNested(ElasticsearchParser.NestedContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code nameExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNameExpr(ElasticsearchParser.NameExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code betweenExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code geo}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBetweenExpr(ElasticsearchParser.BetweenExprContext ctx);
+	T visitGeo(ElasticsearchParser.GeoContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code lteExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code hasChild}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLteExpr(ElasticsearchParser.LteExprContext ctx);
+	T visitHasChild(ElasticsearchParser.HasChildContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code eqExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code binary}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitEqExpr(ElasticsearchParser.EqExprContext ctx);
+	T visitBinary(ElasticsearchParser.BinaryContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ltExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code between}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLtExpr(ElasticsearchParser.LtExprContext ctx);
+	T visitBetween(ElasticsearchParser.BetweenContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code likeExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
+	 * Visit a parse tree produced by the {@code hasParent}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLikeExpr(ElasticsearchParser.LikeExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code isExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIsExpr(ElasticsearchParser.IsExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code geoExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGeoExpr(ElasticsearchParser.GeoExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code andExpr}
-	 * labeled alternative in {@link ElasticsearchParser#boolExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAndExpr(ElasticsearchParser.AndExprContext ctx);
+	T visitHasParent(ElasticsearchParser.HasParentContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#collection}.
 	 * @param ctx the parse tree
@@ -294,12 +237,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInOp(ElasticsearchParser.InOpContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code notOp}
+	 * Visit a parse tree produced by the {@code notInOp}
 	 * labeled alternative in {@link ElasticsearchParser#inToken}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNotOp(ElasticsearchParser.NotOpContext ctx);
+	T visitNotInOp(ElasticsearchParser.NotInOpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#inRightOperandList}.
 	 * @param ctx the parse tree

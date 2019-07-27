@@ -20,24 +20,26 @@ public class ElasticsearchParser extends Parser {
 		SPACE=1, SPEC_ESSQL_COMMENT=2, COMMENT_INPUT=3, LINE_COMMENT=4, EXPLAIN=5, 
 		ADD=6, DESCRIBE=7, SELECT=8, DELETE=9, INSERT=10, INTO=11, VALUES=12, 
 		TOP=13, UPDATE=14, CREATE=15, TABLE=16, IF=17, ALTER=18, DROP=19, SET=20, 
-		NULL=21, DISTINCT=22, AND=23, OR=24, XOR=25, NOT=26, IS=27, AS=28, LIKE=29, 
-		RLIKE=30, EXISTS=31, TRUE=32, FALSE=33, LIMIT=34, ORDER=35, ASC=36, DESC=37, 
-		BEFORE=38, BETWEEN=39, GROUP=40, AGGREGATE=41, ROUTING=42, PARENT_ID=43, 
-		HAS_PARENT=44, HAS_CHILD=45, NESTED=46, HIGHLIGHTER=47, BY=48, IN=49, 
-		WHERE=50, FROM=51, HAVING=52, DISTANCE=53, GEOPOINT=54, GEOHASH=55, TOP_LEFT=56, 
+		NULL=21, DISTINCT=22, AND=23, OR=24, NOT=25, IS=26, AS=27, LIKE=28, RLIKE=29, 
+		EXISTS=30, TRUE=31, FALSE=32, LIMIT=33, ORDER=34, ASC=35, DESC=36, BEFORE=37, 
+		BETWEEN=38, GROUP=39, AGGREGATE=40, ROUTING=41, PARENT_ID=42, HAS_PARENT=43, 
+		HAS_CHILD=44, QUERY=45, NESTED=46, HIGHLIGHTER=47, BY=48, IN=49, WHERE=50, 
+		FROM=51, HAVING=52, DISTANCE=53, GEOPOINT=54, GEOHASH=55, TOP_LEFT=56, 
 		BOTTOM_RIGHT=57, VAR_ASSIGN=58, PLUS_ASSIGN=59, MINUS_ASSIGN=60, MULT_ASSIGN=61, 
 		DIV_ASSIGN=62, MOD_ASSIGN=63, AND_ASSIGN=64, XOR_ASSIGN=65, OR_ASSIGN=66, 
-		STAR=67, DIVIDE=68, MODULE=69, PLUS=70, MINUSMINUS=71, MINUS=72, DIV=73, 
-		MOD=74, POUND=75, QUES=76, EQ=77, AEQ=78, EQEQ=79, BANGEQ=80, GT=81, GTE=82, 
-		LT=83, LTE=84, BANG=85, BIT_NOT_OP=86, BIT_OR_OP=87, DBIT_OR_OP=88, BIT_AND_OP=89, 
-		DBIT_AND_OP=90, BIT_XOR_OP=91, GTGT=92, LTLT=93, DOT=94, LPAREN=95, RPAREN=96, 
-		LBRACE=97, RBRACE=98, LBRACKET=99, RBRACKET=100, COMMA=101, SEMI=102, 
-		AT_SIGN=103, SINGLE_QUOTE=104, DOUBLE_QUOTE=105, REVERSE_QUOTE=106, COLON=107, 
-		UNDERLINE=108, INT=109, FLOAT=110, DOT_ID=111, ID=112, STRING=113;
+		ALSH=67, ARSH=68, AUSH=69, STAR=70, MUL=71, DIVIDE=72, MODULE=73, PLUS=74, 
+		INCR=75, DECR=76, MINUS=77, DIV=78, MOD=79, POUND=80, COND=81, EQ=82, 
+		AEQ=83, EQEQ=84, NE=85, GT=86, GTE=87, LT=88, LTE=89, BOOLNOT=90, BWNOT=91, 
+		BWOR=92, BOOLOR=93, BWAND=94, BOOLAND=95, XOR=96, ARROW=97, LSH=98, RSH=99, 
+		USH=100, DOT=101, NSDOT=102, LPAREN=103, RPAREN=104, LBRACE=105, RBRACE=106, 
+		LBRACKET=107, RBRACKET=108, COMMA=109, SEMI=110, AT_SIGN=111, SINGLE_QUOTE=112, 
+		DOUBLE_QUOTE=113, REVERSE_QUOTE=114, COLON=115, UNDERLINE=116, INT=117, 
+		FLOAT=118, DOT_ID=119, ID=120, OCTAL=121, HEX=122, INTEGER=123, DECIMAL=124, 
+		STRING=125, REGEX=126, DOTINTEGER=127, DOTID=128;
 	public static final int
 		RULE_sql = 0, RULE_selectOperation = 1, RULE_descOperation = 2, RULE_deleteOperation = 3, 
 		RULE_updateOperation = 4, RULE_insertOperation = 5, RULE_fieldList = 6, 
-		RULE_nameOperand = 7, RULE_name = 8, RULE_identity = 9, RULE_boolExpr = 10, 
+		RULE_nameOperand = 7, RULE_name = 8, RULE_identity = 9, RULE_expression = 10, 
 		RULE_collection = 11, RULE_likeClause = 12, RULE_isClause = 13, RULE_inClause = 14, 
 		RULE_inToken = 15, RULE_inRightOperandList = 16, RULE_inRightOperand = 17, 
 		RULE_tableRef = 18, RULE_hasParentClause = 19, RULE_hasChildClause = 20, 
@@ -48,7 +50,7 @@ public class ElasticsearchParser extends Parser {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"sql", "selectOperation", "descOperation", "deleteOperation", "updateOperation", 
-			"insertOperation", "fieldList", "nameOperand", "name", "identity", "boolExpr", 
+			"insertOperation", "fieldList", "nameOperand", "name", "identity", "expression", 
 			"collection", "likeClause", "isClause", "inClause", "inToken", "inRightOperandList", 
 			"inRightOperand", "tableRef", "hasParentClause", "hasChildClause", "nestedClause", 
 			"whereClause", "groupClause", "aggregateClause", "aggregateItemClause", 
@@ -65,11 +67,12 @@ public class ElasticsearchParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, "':='", "'+='", 
-			"'-='", "'*='", "'/='", "'%='", "'&='", "'^='", "'|='", "'*'", "'/'", 
-			"'%'", "'+'", "'--'", "'-'", null, null, "'#'", "'?'", "'='", "'~='", 
-			"'=='", "'!='", "'>'", "'>='", "'<'", "'<='", "'!'", "'~'", "'|'", "'||'", 
-			"'&'", "'&&'", "'^'", "'>>'", "'<<'", "'.'", "'('", "')'", "'{'", "'}'", 
-			"'['", "']'", "','", "';'", "'@'", "'''", "'\"'", "'`'", "':'", "'_'"
+			"'-='", "'*='", "'/='", "'%='", "'&='", "'^='", "'|='", "'<<='", "'>>='", 
+			"'>>>='", "'*'", null, "'/'", "'%'", "'+'", "'++'", "'--'", "'-'", null, 
+			null, "'#'", "'?'", "'='", "'~='", "'=='", "'!='", "'>'", "'>='", "'<'", 
+			"'<='", "'!'", "'~'", "'|'", "'||'", "'&'", "'&&'", "'^'", "'->'", "'<<'", 
+			"'>>'", "'>>>'", "'.'", "'?.'", "'('", "')'", "'{'", "'}'", "'['", "']'", 
+			"','", "';'", "'@'", "'''", "'\"'", "'`'", "':'", "'_'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -78,19 +81,21 @@ public class ElasticsearchParser extends Parser {
 			null, "SPACE", "SPEC_ESSQL_COMMENT", "COMMENT_INPUT", "LINE_COMMENT", 
 			"EXPLAIN", "ADD", "DESCRIBE", "SELECT", "DELETE", "INSERT", "INTO", "VALUES", 
 			"TOP", "UPDATE", "CREATE", "TABLE", "IF", "ALTER", "DROP", "SET", "NULL", 
-			"DISTINCT", "AND", "OR", "XOR", "NOT", "IS", "AS", "LIKE", "RLIKE", "EXISTS", 
+			"DISTINCT", "AND", "OR", "NOT", "IS", "AS", "LIKE", "RLIKE", "EXISTS", 
 			"TRUE", "FALSE", "LIMIT", "ORDER", "ASC", "DESC", "BEFORE", "BETWEEN", 
 			"GROUP", "AGGREGATE", "ROUTING", "PARENT_ID", "HAS_PARENT", "HAS_CHILD", 
-			"NESTED", "HIGHLIGHTER", "BY", "IN", "WHERE", "FROM", "HAVING", "DISTANCE", 
-			"GEOPOINT", "GEOHASH", "TOP_LEFT", "BOTTOM_RIGHT", "VAR_ASSIGN", "PLUS_ASSIGN", 
-			"MINUS_ASSIGN", "MULT_ASSIGN", "DIV_ASSIGN", "MOD_ASSIGN", "AND_ASSIGN", 
-			"XOR_ASSIGN", "OR_ASSIGN", "STAR", "DIVIDE", "MODULE", "PLUS", "MINUSMINUS", 
-			"MINUS", "DIV", "MOD", "POUND", "QUES", "EQ", "AEQ", "EQEQ", "BANGEQ", 
-			"GT", "GTE", "LT", "LTE", "BANG", "BIT_NOT_OP", "BIT_OR_OP", "DBIT_OR_OP", 
-			"BIT_AND_OP", "DBIT_AND_OP", "BIT_XOR_OP", "GTGT", "LTLT", "DOT", "LPAREN", 
-			"RPAREN", "LBRACE", "RBRACE", "LBRACKET", "RBRACKET", "COMMA", "SEMI", 
-			"AT_SIGN", "SINGLE_QUOTE", "DOUBLE_QUOTE", "REVERSE_QUOTE", "COLON", 
-			"UNDERLINE", "INT", "FLOAT", "DOT_ID", "ID", "STRING"
+			"QUERY", "NESTED", "HIGHLIGHTER", "BY", "IN", "WHERE", "FROM", "HAVING", 
+			"DISTANCE", "GEOPOINT", "GEOHASH", "TOP_LEFT", "BOTTOM_RIGHT", "VAR_ASSIGN", 
+			"PLUS_ASSIGN", "MINUS_ASSIGN", "MULT_ASSIGN", "DIV_ASSIGN", "MOD_ASSIGN", 
+			"AND_ASSIGN", "XOR_ASSIGN", "OR_ASSIGN", "ALSH", "ARSH", "AUSH", "STAR", 
+			"MUL", "DIVIDE", "MODULE", "PLUS", "INCR", "DECR", "MINUS", "DIV", "MOD", 
+			"POUND", "COND", "EQ", "AEQ", "EQEQ", "NE", "GT", "GTE", "LT", "LTE", 
+			"BOOLNOT", "BWNOT", "BWOR", "BOOLOR", "BWAND", "BOOLAND", "XOR", "ARROW", 
+			"LSH", "RSH", "USH", "DOT", "NSDOT", "LPAREN", "RPAREN", "LBRACE", "RBRACE", 
+			"LBRACKET", "RBRACKET", "COMMA", "SEMI", "AT_SIGN", "SINGLE_QUOTE", "DOUBLE_QUOTE", 
+			"REVERSE_QUOTE", "COLON", "UNDERLINE", "INT", "FLOAT", "DOT_ID", "ID", 
+			"OCTAL", "HEX", "INTEGER", "DECIMAL", "STRING", "REGEX", "DOTINTEGER", 
+			"DOTID"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -817,13 +822,14 @@ public class ElasticsearchParser extends Parser {
 				break;
 			case DISTINCT:
 			case HIGHLIGHTER:
-			case BIT_XOR_OP:
+			case XOR:
 			case LPAREN:
 			case INT:
 			case FLOAT:
 			case ID:
 			case STRING:
 				enterOuterAlt(_localctx, 2);
+				{
 				{
 				setState(166);
 				nameOperand();
@@ -844,6 +850,7 @@ public class ElasticsearchParser extends Parser {
 					_la = _input.LA(1);
 				}
 				}
+				}
 				break;
 			default:
 				throw new NoViableAltException(this);
@@ -861,15 +868,16 @@ public class ElasticsearchParser extends Parser {
 	}
 
 	public static class NameOperandContext extends ParserRuleContext {
+		public Token exclude;
 		public Token indexName;
 		public NameContext fieldName;
 		public Token alias;
 		public NameContext name() {
 			return getRuleContext(NameContext.class,0);
 		}
-		public TerminalNode BIT_XOR_OP() { return getToken(ElasticsearchParser.BIT_XOR_OP, 0); }
 		public TerminalNode DOT() { return getToken(ElasticsearchParser.DOT, 0); }
 		public TerminalNode AS() { return getToken(ElasticsearchParser.AS, 0); }
+		public TerminalNode XOR() { return getToken(ElasticsearchParser.XOR, 0); }
 		public List<TerminalNode> ID() { return getTokens(ElasticsearchParser.ID); }
 		public TerminalNode ID(int i) {
 			return getToken(ElasticsearchParser.ID, i);
@@ -903,10 +911,10 @@ public class ElasticsearchParser extends Parser {
 			setState(177);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==BIT_XOR_OP) {
+			if (_la==XOR) {
 				{
 				setState(176);
-				match(BIT_XOR_OP);
+				((NameOperandContext)_localctx).exclude = match(XOR);
 				}
 			}
 
@@ -1152,7 +1160,7 @@ public class ElasticsearchParser extends Parser {
 			setState(208);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,22,_ctx);
-			while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
@@ -1166,7 +1174,7 @@ public class ElasticsearchParser extends Parser {
 					setState(204);
 					((BinaryNameContext)_localctx).op = _input.LT(1);
 					_la = _input.LA(1);
-					if ( !(((((_la - 67)) & ~0x3f) == 0 && ((1L << (_la - 67)) & ((1L << (STAR - 67)) | (1L << (DIVIDE - 67)) | (1L << (PLUS - 67)) | (1L << (MINUS - 67)) | (1L << (MOD - 67)))) != 0)) ) {
+					if ( !(((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (STAR - 70)) | (1L << (DIVIDE - 70)) | (1L << (PLUS - 70)) | (1L << (MINUS - 70)) | (1L << (MOD - 70)))) != 0)) ) {
 						((BinaryNameContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 					}
 					else {
@@ -1197,81 +1205,25 @@ public class ElasticsearchParser extends Parser {
 	}
 
 	public static class IdentityContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(ElasticsearchParser.ID, 0); }
+		public TerminalNode INT() { return getToken(ElasticsearchParser.INT, 0); }
+		public TerminalNode FLOAT() { return getToken(ElasticsearchParser.FLOAT, 0); }
+		public TerminalNode STRING() { return getToken(ElasticsearchParser.STRING, 0); }
 		public IdentityContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identity; }
-	 
-		public IdentityContext() { }
-		public void copyFrom(IdentityContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class IdElementContext extends IdentityContext {
-		public TerminalNode ID() { return getToken(ElasticsearchParser.ID, 0); }
-		public IdElementContext(IdentityContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterIdElement(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterIdentity(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitIdElement(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitIdentity(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitIdElement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class StringElementContext extends IdentityContext {
-		public TerminalNode STRING() { return getToken(ElasticsearchParser.STRING, 0); }
-		public StringElementContext(IdentityContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterStringElement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitStringElement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitStringElement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class IntElementContext extends IdentityContext {
-		public TerminalNode INT() { return getToken(ElasticsearchParser.INT, 0); }
-		public IntElementContext(IdentityContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterIntElement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitIntElement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitIntElement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class FloatElementContext extends IdentityContext {
-		public TerminalNode FLOAT() { return getToken(ElasticsearchParser.FLOAT, 0); }
-		public FloatElementContext(IdentityContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterFloatElement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitFloatElement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitFloatElement(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitIdentity(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1279,44 +1231,20 @@ public class ElasticsearchParser extends Parser {
 	public final IdentityContext identity() throws RecognitionException {
 		IdentityContext _localctx = new IdentityContext(_ctx, getState());
 		enterRule(_localctx, 18, RULE_identity);
+		int _la;
 		try {
-			setState(215);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case ID:
-				_localctx = new IdElementContext(_localctx);
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(211);
-				match(ID);
-				}
-				break;
-			case INT:
-				_localctx = new IntElementContext(_localctx);
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(212);
-				match(INT);
-				}
-				break;
-			case FLOAT:
-				_localctx = new FloatElementContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(213);
-				match(FLOAT);
-				}
-				break;
-			case STRING:
-				_localctx = new StringElementContext(_localctx);
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(214);
-				match(STRING);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(211);
+			_la = _input.LA(1);
+			if ( !(((((_la - 117)) & ~0x3f) == 0 && ((1L << (_la - 117)) & ((1L << (INT - 117)) | (1L << (FLOAT - 117)) | (1L << (ID - 117)) | (1L << (STRING - 117)))) != 0)) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -1330,131 +1258,150 @@ public class ElasticsearchParser extends Parser {
 		return _localctx;
 	}
 
-	public static class BoolExprContext extends ParserRuleContext {
-		public BoolExprContext(ParserRuleContext parent, int invokingState) {
+	public static class ExpressionContext extends ParserRuleContext {
+		public ExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_boolExpr; }
+		@Override public int getRuleIndex() { return RULE_expression; }
 	 
-		public BoolExprContext() { }
-		public void copyFrom(BoolExprContext ctx) {
+		public ExpressionContext() { }
+		public void copyFrom(ExpressionContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class NotEqExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode BANGEQ() { return getToken(ElasticsearchParser.BANGEQ, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
+	public static class CompareContext extends ExpressionContext {
+		public ExpressionContext leftExpr;
+		public Token operator;
+		public ExpressionContext right;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
 		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
 		}
-		public NotEqExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterNotEqExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitNotEqExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitNotEqExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class GtExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
+		public TerminalNode LT() { return getToken(ElasticsearchParser.LT, 0); }
+		public TerminalNode LTE() { return getToken(ElasticsearchParser.LTE, 0); }
 		public TerminalNode GT() { return getToken(ElasticsearchParser.GT, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
-		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public GtExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public TerminalNode GTE() { return getToken(ElasticsearchParser.GTE, 0); }
+		public TerminalNode EQ() { return getToken(ElasticsearchParser.EQ, 0); }
+		public TerminalNode NE() { return getToken(ElasticsearchParser.NE, 0); }
+		public TerminalNode AEQ() { return getToken(ElasticsearchParser.AEQ, 0); }
+		public CompareContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterGtExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterCompare(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitGtExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitCompare(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitGtExpr(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitCompare(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class HasParentExprContext extends BoolExprContext {
-		public HasParentClauseContext hasParentClause() {
-			return getRuleContext(HasParentClauseContext.class,0);
+	public static class BoolContext extends ExpressionContext {
+		public ExpressionContext leftExpr;
+		public Token operator;
+		public ExpressionContext right;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
 		}
-		public HasParentExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode AND() { return getToken(ElasticsearchParser.AND, 0); }
+		public TerminalNode BOOLAND() { return getToken(ElasticsearchParser.BOOLAND, 0); }
+		public TerminalNode OR() { return getToken(ElasticsearchParser.OR, 0); }
+		public TerminalNode BOOLOR() { return getToken(ElasticsearchParser.BOOLOR, 0); }
+		public BoolContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterHasParentExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterBool(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitHasParentExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitBool(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitHasParentExpr(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitBool(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class InExprContext extends BoolExprContext {
+	public static class ConditionalContext extends ExpressionContext {
+		public ExpressionContext expr;
+		public ExpressionContext left;
+		public ExpressionContext right;
+		public TerminalNode COND() { return getToken(ElasticsearchParser.COND, 0); }
+		public TerminalNode COLON() { return getToken(ElasticsearchParser.COLON, 0); }
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public ConditionalContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterConditional(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitConditional(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitConditional(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class InContext extends ExpressionContext {
 		public InClauseContext inClause() {
 			return getRuleContext(InClauseContext.class,0);
 		}
-		public InExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public InContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterInExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterIn(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitInExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitIn(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitInExpr(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitIn(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class HasChildExprContext extends BoolExprContext {
-		public HasChildClauseContext hasChildClause() {
-			return getRuleContext(HasChildClauseContext.class,0);
+	public static class LikeContext extends ExpressionContext {
+		public LikeClauseContext likeClause() {
+			return getRuleContext(LikeClauseContext.class,0);
 		}
-		public HasChildExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public LikeContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterHasChildExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterLike(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitHasChildExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitLike(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitHasChildExpr(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitLike(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class LrExprContext extends BoolExprContext {
+	public static class LrExprContext extends ExpressionContext {
 		public TerminalNode LPAREN() { return getToken(ElasticsearchParser.LPAREN, 0); }
-		public BoolExprContext boolExpr() {
-			return getRuleContext(BoolExprContext.class,0);
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public TerminalNode RPAREN() { return getToken(ElasticsearchParser.RPAREN, 0); }
-		public LrExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public LrExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterLrExpr(this);
@@ -1469,105 +1416,49 @@ public class ElasticsearchParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class NestedExprContext extends BoolExprContext {
+	public static class IsContext extends ExpressionContext {
+		public IsClauseContext isClause() {
+			return getRuleContext(IsClauseContext.class,0);
+		}
+		public IsContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterIs(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitIs(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitIs(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class NestedContext extends ExpressionContext {
 		public NestedClauseContext nestedClause() {
 			return getRuleContext(NestedClauseContext.class,0);
 		}
-		public NestedExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public NestedContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterNestedExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterNested(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitNestedExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitNested(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitNestedExpr(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitNested(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class GteExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode GTE() { return getToken(ElasticsearchParser.GTE, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
-		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public GteExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterGteExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitGteExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitGteExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class OrExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode OR() { return getToken(ElasticsearchParser.OR, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
-		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public OrExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterOrExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitOrExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitOrExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class AeqExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode AEQ() { return getToken(ElasticsearchParser.AEQ, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
-		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public AeqExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterAeqExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitAeqExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitAeqExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class NameExprContext extends BoolExprContext {
+	public static class NameExprContext extends ExpressionContext {
 		public NameContext name() {
 			return getRuleContext(NameContext.class,0);
 		}
-		public NameExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public NameExprContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterNameExpr(this);
@@ -1582,227 +1473,164 @@ public class ElasticsearchParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class BetweenExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode BETWEEN() { return getToken(ElasticsearchParser.BETWEEN, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
-		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public BetweenExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterBetweenExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitBetweenExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitBetweenExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class LteExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode LTE() { return getToken(ElasticsearchParser.LTE, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
-		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public LteExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterLteExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitLteExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitLteExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class EqExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode EQ() { return getToken(ElasticsearchParser.EQ, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
-		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public EqExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterEqExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitEqExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitEqExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class LtExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode LT() { return getToken(ElasticsearchParser.LT, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
-		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public LtExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterLtExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitLtExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitLtExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class LikeExprContext extends BoolExprContext {
-		public LikeClauseContext likeClause() {
-			return getRuleContext(LikeClauseContext.class,0);
-		}
-		public LikeExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterLikeExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitLikeExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitLikeExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class IsExprContext extends BoolExprContext {
-		public IsClauseContext isClause() {
-			return getRuleContext(IsClauseContext.class,0);
-		}
-		public IsExprContext(BoolExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterIsExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitIsExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitIsExpr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class GeoExprContext extends BoolExprContext {
+	public static class GeoContext extends ExpressionContext {
 		public GeoClauseContext geoClause() {
 			return getRuleContext(GeoClauseContext.class,0);
 		}
-		public GeoExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public GeoContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterGeoExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterGeo(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitGeoExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitGeo(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitGeoExpr(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitGeo(this);
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class AndExprContext extends BoolExprContext {
-		public BoolExprContext left;
-		public BoolExprContext right;
-		public TerminalNode AND() { return getToken(ElasticsearchParser.AND, 0); }
-		public List<BoolExprContext> boolExpr() {
-			return getRuleContexts(BoolExprContext.class);
+	public static class HasChildContext extends ExpressionContext {
+		public HasChildClauseContext hasChildClause() {
+			return getRuleContext(HasChildClauseContext.class,0);
 		}
-		public BoolExprContext boolExpr(int i) {
-			return getRuleContext(BoolExprContext.class,i);
-		}
-		public AndExprContext(BoolExprContext ctx) { copyFrom(ctx); }
+		public HasChildContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterAndExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterHasChild(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitAndExpr(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitHasChild(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitAndExpr(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitHasChild(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class BinaryContext extends ExpressionContext {
+		public ExpressionContext leftExpr;
+		public Token operator;
+		public ExpressionContext right;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode MUL() { return getToken(ElasticsearchParser.MUL, 0); }
+		public TerminalNode DIV() { return getToken(ElasticsearchParser.DIV, 0); }
+		public TerminalNode MOD() { return getToken(ElasticsearchParser.MOD, 0); }
+		public TerminalNode PLUS() { return getToken(ElasticsearchParser.PLUS, 0); }
+		public TerminalNode MINUS() { return getToken(ElasticsearchParser.MINUS, 0); }
+		public TerminalNode LSH() { return getToken(ElasticsearchParser.LSH, 0); }
+		public TerminalNode RSH() { return getToken(ElasticsearchParser.RSH, 0); }
+		public TerminalNode USH() { return getToken(ElasticsearchParser.USH, 0); }
+		public TerminalNode XOR() { return getToken(ElasticsearchParser.XOR, 0); }
+		public TerminalNode BWOR() { return getToken(ElasticsearchParser.BWOR, 0); }
+		public BinaryContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterBinary(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitBinary(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitBinary(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class BetweenContext extends ExpressionContext {
+		public ExpressionContext leftExpr;
+		public Token operator;
+		public ExpressionContext right;
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode BETWEEN() { return getToken(ElasticsearchParser.BETWEEN, 0); }
+		public BetweenContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterBetween(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitBetween(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitBetween(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class HasParentContext extends ExpressionContext {
+		public HasParentClauseContext hasParentClause() {
+			return getRuleContext(HasParentClauseContext.class,0);
+		}
+		public HasParentContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterHasParent(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitHasParent(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitHasParent(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final BoolExprContext boolExpr() throws RecognitionException {
-		return boolExpr(0);
+	public final ExpressionContext expression() throws RecognitionException {
+		return expression(0);
 	}
 
-	private BoolExprContext boolExpr(int _p) throws RecognitionException {
+	private ExpressionContext expression(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
 		int _parentState = getState();
-		BoolExprContext _localctx = new BoolExprContext(_ctx, _parentState);
-		BoolExprContext _prevctx = _localctx;
+		ExpressionContext _localctx = new ExpressionContext(_ctx, _parentState);
+		ExpressionContext _prevctx = _localctx;
 		int _startState = 20;
-		enterRecursionRule(_localctx, 20, RULE_boolExpr, _p);
+		enterRecursionRule(_localctx, 20, RULE_expression, _p);
+		int _la;
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(230);
+			setState(226);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,24,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,23,_ctx) ) {
 			case 1:
 				{
 				_localctx = new LrExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(218);
+				setState(214);
 				match(LPAREN);
-				setState(219);
-				boolExpr(0);
-				setState(220);
+				setState(215);
+				expression(0);
+				setState(216);
 				match(RPAREN);
 				}
 				break;
 			case 2:
 				{
-				_localctx = new InExprContext(_localctx);
+				_localctx = new InContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(222);
+				setState(218);
 				inClause();
 				}
 				break;
@@ -1811,213 +1639,293 @@ public class ElasticsearchParser extends Parser {
 				_localctx = new NameExprContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(223);
+				setState(219);
 				name(0);
 				}
 				break;
 			case 4:
 				{
-				_localctx = new HasChildExprContext(_localctx);
+				_localctx = new HasChildContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(224);
+				setState(220);
 				hasChildClause();
 				}
 				break;
 			case 5:
 				{
-				_localctx = new HasParentExprContext(_localctx);
+				_localctx = new HasParentContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(225);
+				setState(221);
 				hasParentClause();
 				}
 				break;
 			case 6:
 				{
-				_localctx = new IsExprContext(_localctx);
+				_localctx = new IsContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(226);
+				setState(222);
 				isClause();
 				}
 				break;
 			case 7:
 				{
-				_localctx = new NestedExprContext(_localctx);
+				_localctx = new NestedContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(227);
+				setState(223);
 				nestedClause();
 				}
 				break;
 			case 8:
 				{
-				_localctx = new LikeExprContext(_localctx);
+				_localctx = new LikeContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(228);
+				setState(224);
 				likeClause();
 				}
 				break;
 			case 9:
 				{
-				_localctx = new GeoExprContext(_localctx);
+				_localctx = new GeoContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(229);
+				setState(225);
 				geoClause();
 				}
 				break;
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(264);
+			setState(266);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,26,_ctx);
-			while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER ) {
+			_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(262);
+					setState(264);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,25,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,24,_ctx) ) {
 					case 1:
 						{
-						_localctx = new EqExprContext(new BoolExprContext(_parentctx, _parentState));
-						((EqExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(232);
-						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
-						setState(233);
-						match(EQ);
-						setState(234);
-						((EqExprContext)_localctx).right = boolExpr(19);
+						_localctx = new BinaryContext(new ExpressionContext(_parentctx, _parentState));
+						((BinaryContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(228);
+						if (!(precpred(_ctx, 19))) throw new FailedPredicateException(this, "precpred(_ctx, 19)");
+						setState(229);
+						((BinaryContext)_localctx).operator = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(((((_la - 71)) & ~0x3f) == 0 && ((1L << (_la - 71)) & ((1L << (MUL - 71)) | (1L << (DIV - 71)) | (1L << (MOD - 71)))) != 0)) ) {
+							((BinaryContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(230);
+						((BinaryContext)_localctx).right = expression(20);
 						}
 						break;
 					case 2:
 						{
-						_localctx = new AeqExprContext(new BoolExprContext(_parentctx, _parentState));
-						((AeqExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(235);
-						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
-						setState(236);
-						match(AEQ);
-						setState(237);
-						((AeqExprContext)_localctx).right = boolExpr(18);
+						_localctx = new BinaryContext(new ExpressionContext(_parentctx, _parentState));
+						((BinaryContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(231);
+						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
+						setState(232);
+						((BinaryContext)_localctx).operator = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==PLUS || _la==MINUS) ) {
+							((BinaryContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(233);
+						((BinaryContext)_localctx).right = expression(19);
 						}
 						break;
 					case 3:
 						{
-						_localctx = new GtExprContext(new BoolExprContext(_parentctx, _parentState));
-						((GtExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(238);
-						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
-						setState(239);
-						match(GT);
-						setState(240);
-						((GtExprContext)_localctx).right = boolExpr(17);
+						_localctx = new BinaryContext(new ExpressionContext(_parentctx, _parentState));
+						((BinaryContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(234);
+						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
+						setState(235);
+						((BinaryContext)_localctx).operator = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(((((_la - 98)) & ~0x3f) == 0 && ((1L << (_la - 98)) & ((1L << (LSH - 98)) | (1L << (RSH - 98)) | (1L << (USH - 98)))) != 0)) ) {
+							((BinaryContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(236);
+						((BinaryContext)_localctx).right = expression(18);
 						}
 						break;
 					case 4:
 						{
-						_localctx = new LtExprContext(new BoolExprContext(_parentctx, _parentState));
-						((LtExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(241);
-						if (!(precpred(_ctx, 15))) throw new FailedPredicateException(this, "precpred(_ctx, 15)");
-						setState(242);
-						match(LT);
-						setState(243);
-						((LtExprContext)_localctx).right = boolExpr(16);
+						_localctx = new CompareContext(new ExpressionContext(_parentctx, _parentState));
+						((CompareContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(237);
+						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
+						setState(238);
+						((CompareContext)_localctx).operator = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(((((_la - 86)) & ~0x3f) == 0 && ((1L << (_la - 86)) & ((1L << (GT - 86)) | (1L << (GTE - 86)) | (1L << (LT - 86)) | (1L << (LTE - 86)))) != 0)) ) {
+							((CompareContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(239);
+						((CompareContext)_localctx).right = expression(17);
 						}
 						break;
 					case 5:
 						{
-						_localctx = new GteExprContext(new BoolExprContext(_parentctx, _parentState));
-						((GteExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(244);
-						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
-						setState(245);
-						match(GTE);
-						setState(246);
-						((GteExprContext)_localctx).right = boolExpr(15);
+						_localctx = new CompareContext(new ExpressionContext(_parentctx, _parentState));
+						((CompareContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(240);
+						if (!(precpred(_ctx, 15))) throw new FailedPredicateException(this, "precpred(_ctx, 15)");
+						setState(241);
+						((CompareContext)_localctx).operator = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(((((_la - 82)) & ~0x3f) == 0 && ((1L << (_la - 82)) & ((1L << (EQ - 82)) | (1L << (AEQ - 82)) | (1L << (NE - 82)))) != 0)) ) {
+							((CompareContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(242);
+						((CompareContext)_localctx).right = expression(16);
 						}
 						break;
 					case 6:
 						{
-						_localctx = new LteExprContext(new BoolExprContext(_parentctx, _parentState));
-						((LteExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(247);
-						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
-						setState(248);
-						match(LTE);
-						setState(249);
-						((LteExprContext)_localctx).right = boolExpr(14);
+						_localctx = new BoolContext(new ExpressionContext(_parentctx, _parentState));
+						((BoolContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(243);
+						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
+						setState(244);
+						((BoolContext)_localctx).operator = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==AND || _la==BOOLAND) ) {
+							((BoolContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(245);
+						((BoolContext)_localctx).right = expression(15);
 						}
 						break;
 					case 7:
 						{
-						_localctx = new NotEqExprContext(new BoolExprContext(_parentctx, _parentState));
-						((NotEqExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(250);
-						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
-						setState(251);
-						match(BANGEQ);
-						setState(252);
-						((NotEqExprContext)_localctx).right = boolExpr(13);
+						_localctx = new BoolContext(new ExpressionContext(_parentctx, _parentState));
+						((BoolContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(246);
+						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
+						setState(247);
+						((BoolContext)_localctx).operator = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==OR || _la==BOOLOR) ) {
+							((BoolContext)_localctx).operator = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(248);
+						((BoolContext)_localctx).right = expression(14);
 						}
 						break;
 					case 8:
 						{
-						_localctx = new AndExprContext(new BoolExprContext(_parentctx, _parentState));
-						((AndExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(253);
-						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
-						setState(254);
-						match(AND);
-						setState(255);
-						((AndExprContext)_localctx).right = boolExpr(12);
+						_localctx = new BetweenContext(new ExpressionContext(_parentctx, _parentState));
+						((BetweenContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(249);
+						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
+						setState(250);
+						((BetweenContext)_localctx).operator = match(BETWEEN);
+						setState(251);
+						((BetweenContext)_localctx).right = expression(13);
 						}
 						break;
 					case 9:
 						{
-						_localctx = new OrExprContext(new BoolExprContext(_parentctx, _parentState));
-						((OrExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(256);
-						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
-						setState(257);
-						match(OR);
-						setState(258);
-						((OrExprContext)_localctx).right = boolExpr(11);
+						_localctx = new BinaryContext(new ExpressionContext(_parentctx, _parentState));
+						((BinaryContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(252);
+						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
+						setState(253);
+						((BinaryContext)_localctx).operator = match(XOR);
+						setState(254);
+						((BinaryContext)_localctx).right = expression(12);
 						}
 						break;
 					case 10:
 						{
-						_localctx = new BetweenExprContext(new BoolExprContext(_parentctx, _parentState));
-						((BetweenExprContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_boolExpr);
-						setState(259);
+						_localctx = new BinaryContext(new ExpressionContext(_parentctx, _parentState));
+						((BinaryContext)_localctx).leftExpr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(255);
+						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
+						setState(256);
+						((BinaryContext)_localctx).operator = match(BWOR);
+						setState(257);
+						((BinaryContext)_localctx).right = expression(11);
+						}
+						break;
+					case 11:
+						{
+						_localctx = new ConditionalContext(new ExpressionContext(_parentctx, _parentState));
+						((ConditionalContext)_localctx).expr = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(258);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
+						setState(259);
+						match(COND);
 						setState(260);
-						match(BETWEEN);
+						((ConditionalContext)_localctx).left = expression(0);
 						setState(261);
-						((BetweenExprContext)_localctx).right = boolExpr(10);
+						match(COLON);
+						setState(262);
+						((ConditionalContext)_localctx).right = expression(9);
 						}
 						break;
 					}
 					} 
 				}
-				setState(266);
+				setState(268);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,26,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,25,_ctx);
 			}
 			}
 		}
@@ -2071,35 +1979,35 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(267);
-			match(LPAREN);
 			setState(269);
+			match(LPAREN);
+			setState(271);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (((((_la - 109)) & ~0x3f) == 0 && ((1L << (_la - 109)) & ((1L << (INT - 109)) | (1L << (FLOAT - 109)) | (1L << (ID - 109)) | (1L << (STRING - 109)))) != 0)) {
+			if (((((_la - 117)) & ~0x3f) == 0 && ((1L << (_la - 117)) & ((1L << (INT - 117)) | (1L << (FLOAT - 117)) | (1L << (ID - 117)) | (1L << (STRING - 117)))) != 0)) {
 				{
-				setState(268);
+				setState(270);
 				identity();
 				}
 			}
 
-			setState(275);
+			setState(277);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(271);
+				setState(273);
 				match(COMMA);
-				setState(272);
+				setState(274);
 				identity();
 				}
 				}
-				setState(277);
+				setState(279);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(278);
+			setState(280);
 			match(RPAREN);
 			}
 		}
@@ -2115,10 +2023,12 @@ public class ElasticsearchParser extends Parser {
 	}
 
 	public static class LikeClauseContext extends ParserRuleContext {
+		public NameContext field;
+		public Token pattern;
+		public TerminalNode LIKE() { return getToken(ElasticsearchParser.LIKE, 0); }
 		public NameContext name() {
 			return getRuleContext(NameContext.class,0);
 		}
-		public TerminalNode LIKE() { return getToken(ElasticsearchParser.LIKE, 0); }
 		public TerminalNode STRING() { return getToken(ElasticsearchParser.STRING, 0); }
 		public LikeClauseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2145,12 +2055,12 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(280);
-			name(0);
-			setState(281);
-			match(LIKE);
 			setState(282);
-			match(STRING);
+			((LikeClauseContext)_localctx).field = name(0);
+			setState(283);
+			match(LIKE);
+			setState(284);
+			((LikeClauseContext)_localctx).pattern = match(STRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2195,6 +2105,7 @@ public class ElasticsearchParser extends Parser {
 		}
 	}
 	public static class IsOpContext extends IsClauseContext {
+		public NameContext field;
 		public NameContext name() {
 			return getRuleContext(NameContext.class,0);
 		}
@@ -2220,7 +2131,7 @@ public class ElasticsearchParser extends Parser {
 		IsClauseContext _localctx = new IsClauseContext(_ctx, getState());
 		enterRule(_localctx, 26, RULE_isClause);
 		try {
-			setState(291);
+			setState(293);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case DISTINCT:
@@ -2233,24 +2144,28 @@ public class ElasticsearchParser extends Parser {
 				_localctx = new IsOpContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(284);
-				name(0);
-				setState(285);
-				match(IS);
 				setState(286);
+				((IsOpContext)_localctx).field = name(0);
+				{
+				setState(287);
+				match(IS);
+				setState(288);
 				match(NULL);
+				}
 				}
 				break;
 			case IS:
 				_localctx = new IsNotOpContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(288);
-				match(IS);
-				setState(289);
-				match(NOT);
+				{
 				setState(290);
+				match(IS);
+				setState(291);
+				match(NOT);
+				setState(292);
 				match(NULL);
+				}
 				}
 				break;
 			default:
@@ -2305,11 +2220,11 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(293);
-			((InClauseContext)_localctx).left = identity();
-			setState(294);
-			inToken();
 			setState(295);
+			((InClauseContext)_localctx).left = identity();
+			setState(296);
+			inToken();
+			setState(297);
 			((InClauseContext)_localctx).right = inRightOperandList();
 			}
 		}
@@ -2335,21 +2250,21 @@ public class ElasticsearchParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class NotOpContext extends InTokenContext {
+	public static class NotInOpContext extends InTokenContext {
 		public TerminalNode NOT() { return getToken(ElasticsearchParser.NOT, 0); }
 		public TerminalNode IN() { return getToken(ElasticsearchParser.IN, 0); }
-		public NotOpContext(InTokenContext ctx) { copyFrom(ctx); }
+		public NotInOpContext(InTokenContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterNotOp(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).enterNotInOp(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitNotOp(this);
+			if ( listener instanceof ElasticsearchParserListener ) ((ElasticsearchParserListener)listener).exitNotInOp(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitNotOp(this);
+			if ( visitor instanceof ElasticsearchParserVisitor ) return ((ElasticsearchParserVisitor<? extends T>)visitor).visitNotInOp(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2375,25 +2290,27 @@ public class ElasticsearchParser extends Parser {
 		InTokenContext _localctx = new InTokenContext(_ctx, getState());
 		enterRule(_localctx, 30, RULE_inToken);
 		try {
-			setState(300);
+			setState(302);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case IN:
 				_localctx = new InOpContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(297);
+				setState(299);
 				match(IN);
 				}
 				break;
 			case NOT:
-				_localctx = new NotOpContext(_localctx);
+				_localctx = new NotInOpContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(298);
+				{
+				setState(300);
 				match(NOT);
-				setState(299);
+				setState(301);
 				match(IN);
+				}
 				}
 				break;
 			default:
@@ -2448,7 +2365,7 @@ public class ElasticsearchParser extends Parser {
 		enterRule(_localctx, 32, RULE_inRightOperandList);
 		int _la;
 		try {
-			setState(314);
+			setState(316);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
@@ -2457,34 +2374,34 @@ public class ElasticsearchParser extends Parser {
 			case STRING:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(302);
+				setState(304);
 				inRightOperand(0);
 				}
 				break;
 			case LPAREN:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(303);
+				setState(305);
 				match(LPAREN);
-				setState(304);
+				setState(306);
 				inRightOperand(0);
-				setState(309);
+				setState(311);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(305);
+					setState(307);
 					match(COMMA);
-					setState(306);
+					setState(308);
 					inRightOperand(0);
 					}
 					}
-					setState(311);
+					setState(313);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
-				setState(312);
+				setState(314);
 				match(RPAREN);
 				}
 				break;
@@ -2544,7 +2461,7 @@ public class ElasticsearchParser extends Parser {
 			return getRuleContext(InRightOperandContext.class,i);
 		}
 		public TerminalNode STAR() { return getToken(ElasticsearchParser.STAR, 0); }
-		public TerminalNode DIVIDE() { return getToken(ElasticsearchParser.DIVIDE, 0); }
+		public TerminalNode DIV() { return getToken(ElasticsearchParser.DIV, 0); }
 		public TerminalNode MOD() { return getToken(ElasticsearchParser.MOD, 0); }
 		public TerminalNode PLUS() { return getToken(ElasticsearchParser.PLUS, 0); }
 		public TerminalNode MINUS() { return getToken(ElasticsearchParser.MINUS, 0); }
@@ -2585,14 +2502,14 @@ public class ElasticsearchParser extends Parser {
 			_ctx = _localctx;
 			_prevctx = _localctx;
 
-			setState(317);
+			setState(319);
 			identity();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(324);
+			setState(326);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
-			while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER ) {
+			_alt = getInterpreter().adaptivePredict(_input,32,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
@@ -2601,12 +2518,12 @@ public class ElasticsearchParser extends Parser {
 					_localctx = new ArithmeticLiteralContext(new InRightOperandContext(_parentctx, _parentState));
 					((ArithmeticLiteralContext)_localctx).left = _prevctx;
 					pushNewRecursionContext(_localctx, _startState, RULE_inRightOperand);
-					setState(319);
+					setState(321);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(320);
+					setState(322);
 					((ArithmeticLiteralContext)_localctx).op = _input.LT(1);
 					_la = _input.LA(1);
-					if ( !(((((_la - 67)) & ~0x3f) == 0 && ((1L << (_la - 67)) & ((1L << (STAR - 67)) | (1L << (DIVIDE - 67)) | (1L << (PLUS - 67)) | (1L << (MINUS - 67)) | (1L << (MOD - 67)))) != 0)) ) {
+					if ( !(((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & ((1L << (STAR - 70)) | (1L << (PLUS - 70)) | (1L << (MINUS - 70)) | (1L << (DIV - 70)) | (1L << (MOD - 70)))) != 0)) ) {
 						((ArithmeticLiteralContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 					}
 					else {
@@ -2614,14 +2531,14 @@ public class ElasticsearchParser extends Parser {
 						_errHandler.reportMatch(this);
 						consume();
 					}
-					setState(321);
+					setState(323);
 					((ArithmeticLiteralContext)_localctx).right = inRightOperand(2);
 					}
 					} 
 				}
-				setState(326);
+				setState(328);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,33,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,32,_ctx);
 			}
 			}
 		}
@@ -2670,16 +2587,16 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(327);
+			setState(329);
 			((TableRefContext)_localctx).indexName = match(ID);
-			setState(330);
+			setState(332);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==AS) {
 				{
-				setState(328);
+				setState(330);
 				match(AS);
-				setState(329);
+				setState(331);
 				((TableRefContext)_localctx).alias = match(ID);
 				}
 			}
@@ -2699,7 +2616,7 @@ public class ElasticsearchParser extends Parser {
 
 	public static class HasParentClauseContext extends ParserRuleContext {
 		public NameContext type;
-		public BoolExprContext query;
+		public ExpressionContext query;
 		public TerminalNode HAS_PARENT() { return getToken(ElasticsearchParser.HAS_PARENT, 0); }
 		public TerminalNode LPAREN() { return getToken(ElasticsearchParser.LPAREN, 0); }
 		public TerminalNode COMMA() { return getToken(ElasticsearchParser.COMMA, 0); }
@@ -2707,8 +2624,8 @@ public class ElasticsearchParser extends Parser {
 		public NameContext name() {
 			return getRuleContext(NameContext.class,0);
 		}
-		public BoolExprContext boolExpr() {
-			return getRuleContext(BoolExprContext.class,0);
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public HasParentClauseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2735,17 +2652,17 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(332);
-			match(HAS_PARENT);
-			setState(333);
-			match(LPAREN);
 			setState(334);
-			((HasParentClauseContext)_localctx).type = name(0);
+			match(HAS_PARENT);
 			setState(335);
-			match(COMMA);
+			match(LPAREN);
 			setState(336);
-			((HasParentClauseContext)_localctx).query = boolExpr(0);
+			((HasParentClauseContext)_localctx).type = name(0);
 			setState(337);
+			match(COMMA);
+			setState(338);
+			((HasParentClauseContext)_localctx).query = expression(0);
+			setState(339);
 			match(RPAREN);
 			}
 		}
@@ -2762,7 +2679,7 @@ public class ElasticsearchParser extends Parser {
 
 	public static class HasChildClauseContext extends ParserRuleContext {
 		public NameContext type;
-		public BoolExprContext query;
+		public ExpressionContext query;
 		public TerminalNode HAS_CHILD() { return getToken(ElasticsearchParser.HAS_CHILD, 0); }
 		public TerminalNode LPAREN() { return getToken(ElasticsearchParser.LPAREN, 0); }
 		public TerminalNode COMMA() { return getToken(ElasticsearchParser.COMMA, 0); }
@@ -2770,8 +2687,8 @@ public class ElasticsearchParser extends Parser {
 		public NameContext name() {
 			return getRuleContext(NameContext.class,0);
 		}
-		public BoolExprContext boolExpr() {
-			return getRuleContext(BoolExprContext.class,0);
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public HasChildClauseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2798,17 +2715,17 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(339);
-			match(HAS_CHILD);
-			setState(340);
-			match(LPAREN);
 			setState(341);
-			((HasChildClauseContext)_localctx).type = name(0);
+			match(HAS_CHILD);
 			setState(342);
-			match(COMMA);
+			match(LPAREN);
 			setState(343);
-			((HasChildClauseContext)_localctx).query = boolExpr(0);
+			((HasChildClauseContext)_localctx).type = name(0);
 			setState(344);
+			match(COMMA);
+			setState(345);
+			((HasChildClauseContext)_localctx).query = expression(0);
+			setState(346);
 			match(RPAREN);
 			}
 		}
@@ -2825,15 +2742,15 @@ public class ElasticsearchParser extends Parser {
 
 	public static class NestedClauseContext extends ParserRuleContext {
 		public IdentityContext nestedPath;
-		public BoolExprContext query;
+		public ExpressionContext query;
 		public TerminalNode LBRACKET() { return getToken(ElasticsearchParser.LBRACKET, 0); }
 		public TerminalNode COMMA() { return getToken(ElasticsearchParser.COMMA, 0); }
 		public TerminalNode RBRACKET() { return getToken(ElasticsearchParser.RBRACKET, 0); }
 		public IdentityContext identity() {
 			return getRuleContext(IdentityContext.class,0);
 		}
-		public BoolExprContext boolExpr() {
-			return getRuleContext(BoolExprContext.class,0);
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public NestedClauseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2860,15 +2777,15 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(346);
-			match(LBRACKET);
-			setState(347);
-			((NestedClauseContext)_localctx).nestedPath = identity();
 			setState(348);
-			match(COMMA);
+			match(LBRACKET);
 			setState(349);
-			((NestedClauseContext)_localctx).query = boolExpr(0);
+			((NestedClauseContext)_localctx).nestedPath = identity();
 			setState(350);
+			match(COMMA);
+			setState(351);
+			((NestedClauseContext)_localctx).query = expression(0);
+			setState(352);
 			match(RBRACKET);
 			}
 		}
@@ -2885,8 +2802,8 @@ public class ElasticsearchParser extends Parser {
 
 	public static class WhereClauseContext extends ParserRuleContext {
 		public TerminalNode WHERE() { return getToken(ElasticsearchParser.WHERE, 0); }
-		public BoolExprContext boolExpr() {
-			return getRuleContext(BoolExprContext.class,0);
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
 		public WhereClauseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2913,10 +2830,10 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(352);
+			setState(354);
 			match(WHERE);
-			setState(353);
-			boolExpr(0);
+			setState(355);
+			expression(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2969,25 +2886,25 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(355);
-			match(GROUP);
-			setState(356);
-			match(BY);
 			setState(357);
+			match(GROUP);
+			setState(358);
+			match(BY);
+			setState(359);
 			name(0);
-			setState(362);
+			setState(364);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(358);
+				setState(360);
 				match(COMMA);
-				setState(359);
+				setState(361);
 				name(0);
 				}
 				}
-				setState(364);
+				setState(366);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -3039,18 +2956,18 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(365);
-			match(AGGREGATE);
-			setState(366);
-			match(BY);
 			setState(367);
-			aggregateItemClause();
+			match(AGGREGATE);
+			setState(368);
+			match(BY);
 			setState(369);
+			aggregateItemClause();
+			setState(371);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==GT) {
 				{
-				setState(368);
+				setState(370);
 				nestedAggregateClause();
 				}
 			}
@@ -3109,25 +3026,25 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(371);
+			setState(373);
 			match(ID);
-			setState(372);
+			setState(374);
 			collection();
-			setState(378);
+			setState(380);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(373);
-				match(COMMA);
-				setState(374);
-				match(ID);
 				setState(375);
+				match(COMMA);
+				setState(376);
+				match(ID);
+				setState(377);
 				collection();
 				}
 				}
-				setState(380);
+				setState(382);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -3180,23 +3097,23 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(381);
-			match(GT);
-			setState(382);
-			match(LPAREN);
 			setState(383);
-			aggregateItemClause();
+			match(GT);
+			setState(384);
+			match(LPAREN);
 			setState(385);
+			aggregateItemClause();
+			setState(387);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==GT) {
 				{
-				setState(384);
+				setState(386);
 				nestedAggregateClause();
 				}
 			}
 
-			setState(387);
+			setState(389);
 			match(RPAREN);
 			}
 		}
@@ -3250,25 +3167,25 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(389);
-			match(ROUTING);
-			setState(390);
-			match(BY);
 			setState(391);
+			match(ROUTING);
+			setState(392);
+			match(BY);
+			setState(393);
 			identity();
-			setState(396);
+			setState(398);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(392);
+				setState(394);
 				match(COMMA);
-				setState(393);
+				setState(395);
 				identity();
 				}
 				}
-				setState(398);
+				setState(400);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -3324,25 +3241,25 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(399);
-			match(ORDER);
-			setState(400);
-			match(BY);
 			setState(401);
+			match(ORDER);
+			setState(402);
+			match(BY);
+			setState(403);
 			order();
-			setState(406);
+			setState(408);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(402);
+				setState(404);
 				match(COMMA);
-				setState(403);
+				setState(405);
 				order();
 				}
 				}
-				setState(408);
+				setState(410);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -3392,14 +3309,14 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(409);
-			name(0);
 			setState(411);
+			name(0);
+			setState(413);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ASC || _la==DESC) {
 				{
-				setState(410);
+				setState(412);
 				((OrderContext)_localctx).type = _input.LT(1);
 				_la = _input.LA(1);
 				if ( !(_la==ASC || _la==DESC) ) {
@@ -3460,21 +3377,21 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(413);
+			setState(415);
 			match(LIMIT);
-			setState(416);
+			setState(418);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,42,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,41,_ctx) ) {
 			case 1:
 				{
-				setState(414);
+				setState(416);
 				((LimitClauseContext)_localctx).offset = match(INT);
-				setState(415);
+				setState(417);
 				match(COMMA);
 				}
 				break;
 			}
-			setState(418);
+			setState(420);
 			((LimitClauseContext)_localctx).size = match(INT);
 			}
 		}
@@ -3519,20 +3436,20 @@ public class ElasticsearchParser extends Parser {
 		GeoClauseContext _localctx = new GeoClauseContext(_ctx, getState());
 		enterRule(_localctx, 62, RULE_geoClause);
 		try {
-			setState(422);
+			setState(424);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,43,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,42,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(420);
+				setState(422);
 				geoDistanceClause();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(421);
+				setState(423);
 				geoBoundingBoxClause();
 				}
 				break;
@@ -3550,24 +3467,24 @@ public class ElasticsearchParser extends Parser {
 	}
 
 	public static class GeoDistanceClauseContext extends ParserRuleContext {
-		public NameContext geoPointField;
-		public Token geohashOrLatLon;
+		public Token field;
+		public Token coordinate;
 		public Token distance;
+		public NameContext name() {
+			return getRuleContext(NameContext.class,0);
+		}
 		public List<TerminalNode> EQ() { return getTokens(ElasticsearchParser.EQ); }
 		public TerminalNode EQ(int i) {
 			return getToken(ElasticsearchParser.EQ, i);
-		}
-		public List<TerminalNode> STRING() { return getTokens(ElasticsearchParser.STRING); }
-		public TerminalNode STRING(int i) {
-			return getToken(ElasticsearchParser.STRING, i);
 		}
 		public List<TerminalNode> AND() { return getTokens(ElasticsearchParser.AND); }
 		public TerminalNode AND(int i) {
 			return getToken(ElasticsearchParser.AND, i);
 		}
 		public TerminalNode DISTANCE() { return getToken(ElasticsearchParser.DISTANCE, 0); }
-		public NameContext name() {
-			return getRuleContext(NameContext.class,0);
+		public List<TerminalNode> STRING() { return getTokens(ElasticsearchParser.STRING); }
+		public TerminalNode STRING(int i) {
+			return getToken(ElasticsearchParser.STRING, i);
 		}
 		public TerminalNode GEOPOINT() { return getToken(ElasticsearchParser.GEOPOINT, 0); }
 		public TerminalNode GEOHASH() { return getToken(ElasticsearchParser.GEOHASH, 0); }
@@ -3597,15 +3514,15 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(424);
-			((GeoDistanceClauseContext)_localctx).geoPointField = name(0);
-			setState(425);
-			match(EQ);
 			setState(426);
-			match(STRING);
+			name(0);
 			setState(427);
-			match(AND);
+			match(EQ);
 			setState(428);
+			((GeoDistanceClauseContext)_localctx).field = match(STRING);
+			setState(429);
+			match(AND);
+			setState(430);
 			_la = _input.LA(1);
 			if ( !(_la==GEOPOINT || _la==GEOHASH) ) {
 			_errHandler.recoverInline(this);
@@ -3615,17 +3532,17 @@ public class ElasticsearchParser extends Parser {
 				_errHandler.reportMatch(this);
 				consume();
 			}
-			setState(429);
-			match(EQ);
-			setState(430);
-			((GeoDistanceClauseContext)_localctx).geohashOrLatLon = match(STRING);
 			setState(431);
-			match(AND);
-			setState(432);
-			match(DISTANCE);
-			setState(433);
 			match(EQ);
+			setState(432);
+			((GeoDistanceClauseContext)_localctx).coordinate = match(STRING);
+			setState(433);
+			match(AND);
 			setState(434);
+			match(DISTANCE);
+			setState(435);
+			match(EQ);
+			setState(436);
 			((GeoDistanceClauseContext)_localctx).distance = match(STRING);
 			}
 		}
@@ -3641,14 +3558,15 @@ public class ElasticsearchParser extends Parser {
 	}
 
 	public static class GeoBoundingBoxClauseContext extends ParserRuleContext {
-		public NameContext geoPointField;
+		public Token field;
+		public Token leftTop;
+		public Token rightBottom;
+		public NameContext name() {
+			return getRuleContext(NameContext.class,0);
+		}
 		public List<TerminalNode> EQ() { return getTokens(ElasticsearchParser.EQ); }
 		public TerminalNode EQ(int i) {
 			return getToken(ElasticsearchParser.EQ, i);
-		}
-		public List<TerminalNode> STRING() { return getTokens(ElasticsearchParser.STRING); }
-		public TerminalNode STRING(int i) {
-			return getToken(ElasticsearchParser.STRING, i);
 		}
 		public List<TerminalNode> AND() { return getTokens(ElasticsearchParser.AND); }
 		public TerminalNode AND(int i) {
@@ -3656,8 +3574,9 @@ public class ElasticsearchParser extends Parser {
 		}
 		public TerminalNode TOP_LEFT() { return getToken(ElasticsearchParser.TOP_LEFT, 0); }
 		public TerminalNode BOTTOM_RIGHT() { return getToken(ElasticsearchParser.BOTTOM_RIGHT, 0); }
-		public NameContext name() {
-			return getRuleContext(NameContext.class,0);
+		public List<TerminalNode> STRING() { return getTokens(ElasticsearchParser.STRING); }
+		public TerminalNode STRING(int i) {
+			return getToken(ElasticsearchParser.STRING, i);
 		}
 		public GeoBoundingBoxClauseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3684,28 +3603,28 @@ public class ElasticsearchParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(436);
-			((GeoBoundingBoxClauseContext)_localctx).geoPointField = name(0);
-			setState(437);
-			match(EQ);
 			setState(438);
-			match(STRING);
+			name(0);
 			setState(439);
-			match(AND);
+			match(EQ);
 			setState(440);
-			match(TOP_LEFT);
+			((GeoBoundingBoxClauseContext)_localctx).field = match(STRING);
 			setState(441);
-			match(EQ);
-			setState(442);
-			match(STRING);
-			setState(443);
 			match(AND);
-			setState(444);
-			match(BOTTOM_RIGHT);
-			setState(445);
+			setState(442);
+			match(TOP_LEFT);
+			setState(443);
 			match(EQ);
+			setState(444);
+			((GeoBoundingBoxClauseContext)_localctx).leftTop = match(STRING);
+			setState(445);
+			match(AND);
 			setState(446);
-			match(STRING);
+			match(BOTTOM_RIGHT);
+			setState(447);
+			match(EQ);
+			setState(448);
+			((GeoBoundingBoxClauseContext)_localctx).rightBottom = match(STRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3724,7 +3643,7 @@ public class ElasticsearchParser extends Parser {
 		case 8:
 			return name_sempred((NameContext)_localctx, predIndex);
 		case 10:
-			return boolExpr_sempred((BoolExprContext)_localctx, predIndex);
+			return expression_sempred((ExpressionContext)_localctx, predIndex);
 		case 17:
 			return inRightOperand_sempred((InRightOperandContext)_localctx, predIndex);
 		}
@@ -3737,43 +3656,45 @@ public class ElasticsearchParser extends Parser {
 		}
 		return true;
 	}
-	private boolean boolExpr_sempred(BoolExprContext _localctx, int predIndex) {
+	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 1:
-			return precpred(_ctx, 18);
+			return precpred(_ctx, 19);
 		case 2:
-			return precpred(_ctx, 17);
+			return precpred(_ctx, 18);
 		case 3:
-			return precpred(_ctx, 16);
+			return precpred(_ctx, 17);
 		case 4:
-			return precpred(_ctx, 15);
+			return precpred(_ctx, 16);
 		case 5:
-			return precpred(_ctx, 14);
+			return precpred(_ctx, 15);
 		case 6:
-			return precpred(_ctx, 13);
+			return precpred(_ctx, 14);
 		case 7:
-			return precpred(_ctx, 12);
+			return precpred(_ctx, 13);
 		case 8:
-			return precpred(_ctx, 11);
+			return precpred(_ctx, 12);
 		case 9:
-			return precpred(_ctx, 10);
+			return precpred(_ctx, 11);
 		case 10:
+			return precpred(_ctx, 10);
+		case 11:
 			return precpred(_ctx, 9);
 		}
 		return true;
 	}
 	private boolean inRightOperand_sempred(InRightOperandContext _localctx, int predIndex) {
 		switch (predIndex) {
-		case 11:
+		case 12:
 			return precpred(_ctx, 1);
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3s\u01c3\4\2\t\2\4"+
-		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
-		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\u0082\u01c5\4\2\t"+
+		"\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
+		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
 		"\t!\4\"\t\"\4#\t#\3\2\3\2\3\2\3\2\3\2\5\2L\n\2\3\2\5\2O\n\2\3\2\3\2\3"+
@@ -3786,152 +3707,154 @@ public class ElasticsearchParser extends Parser {
 		"\b\7\b\u00ac\n\b\f\b\16\b\u00af\13\b\5\b\u00b1\n\b\3\t\5\t\u00b4\n\t\3"+
 		"\t\3\t\5\t\u00b8\n\t\3\t\3\t\3\t\5\t\u00bd\n\t\3\n\3\n\3\n\3\n\3\n\3\n"+
 		"\3\n\3\n\3\n\3\n\5\n\u00c9\n\n\3\n\5\n\u00cc\n\n\3\n\3\n\3\n\7\n\u00d1"+
-		"\n\n\f\n\16\n\u00d4\13\n\3\13\3\13\3\13\3\13\5\13\u00da\n\13\3\f\3\f\3"+
-		"\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\5\f\u00e9\n\f\3\f\3\f\3\f\3"+
-		"\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f"+
-		"\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\7\f\u0109\n\f\f\f\16\f\u010c\13\f"+
-		"\3\r\3\r\5\r\u0110\n\r\3\r\3\r\7\r\u0114\n\r\f\r\16\r\u0117\13\r\3\r\3"+
-		"\r\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u0126\n"+
-		"\17\3\20\3\20\3\20\3\20\3\21\3\21\3\21\5\21\u012f\n\21\3\22\3\22\3\22"+
-		"\3\22\3\22\7\22\u0136\n\22\f\22\16\22\u0139\13\22\3\22\3\22\5\22\u013d"+
-		"\n\22\3\23\3\23\3\23\3\23\3\23\3\23\7\23\u0145\n\23\f\23\16\23\u0148\13"+
-		"\23\3\24\3\24\3\24\5\24\u014d\n\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25"+
-		"\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\27\3\27\3\27\3\27\3\27\3\27\3\30"+
-		"\3\30\3\30\3\31\3\31\3\31\3\31\3\31\7\31\u016b\n\31\f\31\16\31\u016e\13"+
-		"\31\3\32\3\32\3\32\3\32\5\32\u0174\n\32\3\33\3\33\3\33\3\33\3\33\7\33"+
-		"\u017b\n\33\f\33\16\33\u017e\13\33\3\34\3\34\3\34\3\34\5\34\u0184\n\34"+
-		"\3\34\3\34\3\35\3\35\3\35\3\35\3\35\7\35\u018d\n\35\f\35\16\35\u0190\13"+
-		"\35\3\36\3\36\3\36\3\36\3\36\7\36\u0197\n\36\f\36\16\36\u019a\13\36\3"+
-		"\37\3\37\5\37\u019e\n\37\3 \3 \3 \5 \u01a3\n \3 \3 \3!\3!\5!\u01a9\n!"+
-		"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3#\3#\3#\3#\3#\3#\3#"+
-		"\3#\3#\3#\3#\3#\3#\2\5\22\26$$\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36"+
-		" \"$&(*,.\60\62\64\668:<>@BD\2\5\6\2EFHHJJLL\3\2&\'\3\289\2\u01e3\2K\3"+
-		"\2\2\2\4R\3\2\2\2\6m\3\2\2\2\bs\3\2\2\2\ny\3\2\2\2\f\u008b\3\2\2\2\16"+
-		"\u00b0\3\2\2\2\20\u00b3\3\2\2\2\22\u00cb\3\2\2\2\24\u00d9\3\2\2\2\26\u00e8"+
-		"\3\2\2\2\30\u010d\3\2\2\2\32\u011a\3\2\2\2\34\u0125\3\2\2\2\36\u0127\3"+
-		"\2\2\2 \u012e\3\2\2\2\"\u013c\3\2\2\2$\u013e\3\2\2\2&\u0149\3\2\2\2(\u014e"+
-		"\3\2\2\2*\u0155\3\2\2\2,\u015c\3\2\2\2.\u0162\3\2\2\2\60\u0165\3\2\2\2"+
-		"\62\u016f\3\2\2\2\64\u0175\3\2\2\2\66\u017f\3\2\2\28\u0187\3\2\2\2:\u0191"+
-		"\3\2\2\2<\u019b\3\2\2\2>\u019f\3\2\2\2@\u01a8\3\2\2\2B\u01aa\3\2\2\2D"+
-		"\u01b6\3\2\2\2FL\5\4\3\2GL\5\b\5\2HL\5\6\4\2IL\5\n\6\2JL\5\f\7\2KF\3\2"+
-		"\2\2KG\3\2\2\2KH\3\2\2\2KI\3\2\2\2KJ\3\2\2\2LN\3\2\2\2MO\7h\2\2NM\3\2"+
-		"\2\2NO\3\2\2\2OP\3\2\2\2PQ\7\2\2\3Q\3\3\2\2\2RS\7\n\2\2ST\5\16\b\2TU\7"+
-		"\65\2\2UZ\5&\24\2VW\7g\2\2WY\5&\24\2XV\3\2\2\2Y\\\3\2\2\2ZX\3\2\2\2Z["+
-		"\3\2\2\2[^\3\2\2\2\\Z\3\2\2\2]_\5.\30\2^]\3\2\2\2^_\3\2\2\2_a\3\2\2\2"+
-		"`b\58\35\2a`\3\2\2\2ab\3\2\2\2be\3\2\2\2cf\5\60\31\2df\5\62\32\2ec\3\2"+
-		"\2\2ed\3\2\2\2ef\3\2\2\2fh\3\2\2\2gi\5:\36\2hg\3\2\2\2hi\3\2\2\2ik\3\2"+
-		"\2\2jl\5> \2kj\3\2\2\2kl\3\2\2\2l\5\3\2\2\2mn\7\t\2\2nq\5&\24\2op\7F\2"+
-		"\2pr\5\24\13\2qo\3\2\2\2qr\3\2\2\2r\7\3\2\2\2st\7\13\2\2tu\7\65\2\2uw"+
-		"\5&\24\2vx\5.\30\2wv\3\2\2\2wx\3\2\2\2x\t\3\2\2\2yz\7\20\2\2z{\5&\24\2"+
-		"{|\7\26\2\2|}\7r\2\2}~\7O\2\2~\u0085\5\24\13\2\177\u0080\7g\2\2\u0080"+
-		"\u0081\7r\2\2\u0081\u0082\7O\2\2\u0082\u0084\5\24\13\2\u0083\177\3\2\2"+
-		"\2\u0084\u0087\3\2\2\2\u0085\u0083\3\2\2\2\u0085\u0086\3\2\2\2\u0086\u0089"+
-		"\3\2\2\2\u0087\u0085\3\2\2\2\u0088\u008a\5.\30\2\u0089\u0088\3\2\2\2\u0089"+
-		"\u008a\3\2\2\2\u008a\13\3\2\2\2\u008b\u008c\7\f\2\2\u008c\u008d\7\r\2"+
-		"\2\u008d\u0099\5&\24\2\u008e\u008f\7a\2\2\u008f\u0094\5\24\13\2\u0090"+
-		"\u0091\7g\2\2\u0091\u0093\5\24\13\2\u0092\u0090\3\2\2\2\u0093\u0096\3"+
-		"\2\2\2\u0094\u0092\3\2\2\2\u0094\u0095\3\2\2\2\u0095\u0097\3\2\2\2\u0096"+
-		"\u0094\3\2\2\2\u0097\u0098\7b\2\2\u0098\u009a\3\2\2\2\u0099\u008e\3\2"+
-		"\2\2\u0099\u009a\3\2\2\2\u009a\u009b\3\2\2\2\u009b\u009c\7\16\2\2\u009c"+
-		"\u009d\7a\2\2\u009d\u00a2\5\24\13\2\u009e\u009f\7g\2\2\u009f\u00a1\5\24"+
-		"\13\2\u00a0\u009e\3\2\2\2\u00a1\u00a4\3\2\2\2\u00a2\u00a0\3\2\2\2\u00a2"+
-		"\u00a3\3\2\2\2\u00a3\u00a5\3\2\2\2\u00a4\u00a2\3\2\2\2\u00a5\u00a6\7b"+
-		"\2\2\u00a6\r\3\2\2\2\u00a7\u00b1\7E\2\2\u00a8\u00ad\5\20\t\2\u00a9\u00aa"+
-		"\7g\2\2\u00aa\u00ac\5\20\t\2\u00ab\u00a9\3\2\2\2\u00ac\u00af\3\2\2\2\u00ad"+
-		"\u00ab\3\2\2\2\u00ad\u00ae\3\2\2\2\u00ae\u00b1\3\2\2\2\u00af\u00ad\3\2"+
-		"\2\2\u00b0\u00a7\3\2\2\2\u00b0\u00a8\3\2\2\2\u00b1\17\3\2\2\2\u00b2\u00b4"+
-		"\7]\2\2\u00b3\u00b2\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4\u00b7\3\2\2\2\u00b5"+
-		"\u00b6\7r\2\2\u00b6\u00b8\7`\2\2\u00b7\u00b5\3\2\2\2\u00b7\u00b8\3\2\2"+
-		"\2\u00b8\u00b9\3\2\2\2\u00b9\u00bc\5\22\n\2\u00ba\u00bb\7\36\2\2\u00bb"+
-		"\u00bd\7r\2\2\u00bc\u00ba\3\2\2\2\u00bc\u00bd\3\2\2\2\u00bd\21\3\2\2\2"+
-		"\u00be\u00bf\b\n\1\2\u00bf\u00c0\7a\2\2\u00c0\u00c1\5\22\n\2\u00c1\u00c2"+
-		"\7b\2\2\u00c2\u00cc\3\2\2\2\u00c3\u00c4\7\30\2\2\u00c4\u00cc\5\22\n\6"+
-		"\u00c5\u00c6\7r\2\2\u00c6\u00cc\5\30\r\2\u00c7\u00c9\7\61\2\2\u00c8\u00c7"+
-		"\3\2\2\2\u00c8\u00c9\3\2\2\2\u00c9\u00ca\3\2\2\2\u00ca\u00cc\5\24\13\2"+
-		"\u00cb\u00be\3\2\2\2\u00cb\u00c3\3\2\2\2\u00cb\u00c5\3\2\2\2\u00cb\u00c8"+
-		"\3\2\2\2\u00cc\u00d2\3\2\2\2\u00cd\u00ce\f\5\2\2\u00ce\u00cf\t\2\2\2\u00cf"+
-		"\u00d1\5\22\n\6\u00d0\u00cd\3\2\2\2\u00d1\u00d4\3\2\2\2\u00d2\u00d0\3"+
-		"\2\2\2\u00d2\u00d3\3\2\2\2\u00d3\23\3\2\2\2\u00d4\u00d2\3\2\2\2\u00d5"+
-		"\u00da\7r\2\2\u00d6\u00da\7o\2\2\u00d7\u00da\7p\2\2\u00d8\u00da\7s\2\2"+
-		"\u00d9\u00d5\3\2\2\2\u00d9\u00d6\3\2\2\2\u00d9\u00d7\3\2\2\2\u00d9\u00d8"+
-		"\3\2\2\2\u00da\25\3\2\2\2\u00db\u00dc\b\f\1\2\u00dc\u00dd\7a\2\2\u00dd"+
-		"\u00de\5\26\f\2\u00de\u00df\7b\2\2\u00df\u00e9\3\2\2\2\u00e0\u00e9\5\36"+
-		"\20\2\u00e1\u00e9\5\22\n\2\u00e2\u00e9\5*\26\2\u00e3\u00e9\5(\25\2\u00e4"+
-		"\u00e9\5\34\17\2\u00e5\u00e9\5,\27\2\u00e6\u00e9\5\32\16\2\u00e7\u00e9"+
-		"\5@!\2\u00e8\u00db\3\2\2\2\u00e8\u00e0\3\2\2\2\u00e8\u00e1\3\2\2\2\u00e8"+
-		"\u00e2\3\2\2\2\u00e8\u00e3\3\2\2\2\u00e8\u00e4\3\2\2\2\u00e8\u00e5\3\2"+
-		"\2\2\u00e8\u00e6\3\2\2\2\u00e8\u00e7\3\2\2\2\u00e9\u010a\3\2\2\2\u00ea"+
-		"\u00eb\f\24\2\2\u00eb\u00ec\7O\2\2\u00ec\u0109\5\26\f\25\u00ed\u00ee\f"+
-		"\23\2\2\u00ee\u00ef\7P\2\2\u00ef\u0109\5\26\f\24\u00f0\u00f1\f\22\2\2"+
-		"\u00f1\u00f2\7S\2\2\u00f2\u0109\5\26\f\23\u00f3\u00f4\f\21\2\2\u00f4\u00f5"+
-		"\7U\2\2\u00f5\u0109\5\26\f\22\u00f6\u00f7\f\20\2\2\u00f7\u00f8\7T\2\2"+
-		"\u00f8\u0109\5\26\f\21\u00f9\u00fa\f\17\2\2\u00fa\u00fb\7V\2\2\u00fb\u0109"+
-		"\5\26\f\20\u00fc\u00fd\f\16\2\2\u00fd\u00fe\7R\2\2\u00fe\u0109\5\26\f"+
-		"\17\u00ff\u0100\f\r\2\2\u0100\u0101\7\31\2\2\u0101\u0109\5\26\f\16\u0102"+
-		"\u0103\f\f\2\2\u0103\u0104\7\32\2\2\u0104\u0109\5\26\f\r\u0105\u0106\f"+
-		"\13\2\2\u0106\u0107\7)\2\2\u0107\u0109\5\26\f\f\u0108\u00ea\3\2\2\2\u0108"+
-		"\u00ed\3\2\2\2\u0108\u00f0\3\2\2\2\u0108\u00f3\3\2\2\2\u0108\u00f6\3\2"+
-		"\2\2\u0108\u00f9\3\2\2\2\u0108\u00fc\3\2\2\2\u0108\u00ff\3\2\2\2\u0108"+
-		"\u0102\3\2\2\2\u0108\u0105\3\2\2\2\u0109\u010c\3\2\2\2\u010a\u0108\3\2"+
-		"\2\2\u010a\u010b\3\2\2\2\u010b\27\3\2\2\2\u010c\u010a\3\2\2\2\u010d\u010f"+
-		"\7a\2\2\u010e\u0110\5\24\13\2\u010f\u010e\3\2\2\2\u010f\u0110\3\2\2\2"+
-		"\u0110\u0115\3\2\2\2\u0111\u0112\7g\2\2\u0112\u0114\5\24\13\2\u0113\u0111"+
-		"\3\2\2\2\u0114\u0117\3\2\2\2\u0115\u0113\3\2\2\2\u0115\u0116\3\2\2\2\u0116"+
-		"\u0118\3\2\2\2\u0117\u0115\3\2\2\2\u0118\u0119\7b\2\2\u0119\31\3\2\2\2"+
-		"\u011a\u011b\5\22\n\2\u011b\u011c\7\37\2\2\u011c\u011d\7s\2\2\u011d\33"+
-		"\3\2\2\2\u011e\u011f\5\22\n\2\u011f\u0120\7\35\2\2\u0120\u0121\7\27\2"+
-		"\2\u0121\u0126\3\2\2\2\u0122\u0123\7\35\2\2\u0123\u0124\7\34\2\2\u0124"+
-		"\u0126\7\27\2\2\u0125\u011e\3\2\2\2\u0125\u0122\3\2\2\2\u0126\35\3\2\2"+
-		"\2\u0127\u0128\5\24\13\2\u0128\u0129\5 \21\2\u0129\u012a\5\"\22\2\u012a"+
-		"\37\3\2\2\2\u012b\u012f\7\63\2\2\u012c\u012d\7\34\2\2\u012d\u012f\7\63"+
-		"\2\2\u012e\u012b\3\2\2\2\u012e\u012c\3\2\2\2\u012f!\3\2\2\2\u0130\u013d"+
-		"\5$\23\2\u0131\u0132\7a\2\2\u0132\u0137\5$\23\2\u0133\u0134\7g\2\2\u0134"+
-		"\u0136\5$\23\2\u0135\u0133\3\2\2\2\u0136\u0139\3\2\2\2\u0137\u0135\3\2"+
-		"\2\2\u0137\u0138\3\2\2\2\u0138\u013a\3\2\2\2\u0139\u0137\3\2\2\2\u013a"+
-		"\u013b\7b\2\2\u013b\u013d\3\2\2\2\u013c\u0130\3\2\2\2\u013c\u0131\3\2"+
-		"\2\2\u013d#\3\2\2\2\u013e\u013f\b\23\1\2\u013f\u0140\5\24\13\2\u0140\u0146"+
-		"\3\2\2\2\u0141\u0142\f\3\2\2\u0142\u0143\t\2\2\2\u0143\u0145\5$\23\4\u0144"+
-		"\u0141\3\2\2\2\u0145\u0148\3\2\2\2\u0146\u0144\3\2\2\2\u0146\u0147\3\2"+
-		"\2\2\u0147%\3\2\2\2\u0148\u0146\3\2\2\2\u0149\u014c\7r\2\2\u014a\u014b"+
-		"\7\36\2\2\u014b\u014d\7r\2\2\u014c\u014a\3\2\2\2\u014c\u014d\3\2\2\2\u014d"+
-		"\'\3\2\2\2\u014e\u014f\7.\2\2\u014f\u0150\7a\2\2\u0150\u0151\5\22\n\2"+
-		"\u0151\u0152\7g\2\2\u0152\u0153\5\26\f\2\u0153\u0154\7b\2\2\u0154)\3\2"+
-		"\2\2\u0155\u0156\7/\2\2\u0156\u0157\7a\2\2\u0157\u0158\5\22\n\2\u0158"+
-		"\u0159\7g\2\2\u0159\u015a\5\26\f\2\u015a\u015b\7b\2\2\u015b+\3\2\2\2\u015c"+
-		"\u015d\7e\2\2\u015d\u015e\5\24\13\2\u015e\u015f\7g\2\2\u015f\u0160\5\26"+
-		"\f\2\u0160\u0161\7f\2\2\u0161-\3\2\2\2\u0162\u0163\7\64\2\2\u0163\u0164"+
-		"\5\26\f\2\u0164/\3\2\2\2\u0165\u0166\7*\2\2\u0166\u0167\7\62\2\2\u0167"+
-		"\u016c\5\22\n\2\u0168\u0169\7g\2\2\u0169\u016b\5\22\n\2\u016a\u0168\3"+
-		"\2\2\2\u016b\u016e\3\2\2\2\u016c\u016a\3\2\2\2\u016c\u016d\3\2\2\2\u016d"+
-		"\61\3\2\2\2\u016e\u016c\3\2\2\2\u016f\u0170\7+\2\2\u0170\u0171\7\62\2"+
-		"\2\u0171\u0173\5\64\33\2\u0172\u0174\5\66\34\2\u0173\u0172\3\2\2\2\u0173"+
-		"\u0174\3\2\2\2\u0174\63\3\2\2\2\u0175\u0176\7r\2\2\u0176\u017c\5\30\r"+
-		"\2\u0177\u0178\7g\2\2\u0178\u0179\7r\2\2\u0179\u017b\5\30\r\2\u017a\u0177"+
-		"\3\2\2\2\u017b\u017e\3\2\2\2\u017c\u017a\3\2\2\2\u017c\u017d\3\2\2\2\u017d"+
-		"\65\3\2\2\2\u017e\u017c\3\2\2\2\u017f\u0180\7S\2\2\u0180\u0181\7a\2\2"+
-		"\u0181\u0183\5\64\33\2\u0182\u0184\5\66\34\2\u0183\u0182\3\2\2\2\u0183"+
-		"\u0184\3\2\2\2\u0184\u0185\3\2\2\2\u0185\u0186\7b\2\2\u0186\67\3\2\2\2"+
-		"\u0187\u0188\7,\2\2\u0188\u0189\7\62\2\2\u0189\u018e\5\24\13\2\u018a\u018b"+
-		"\7g\2\2\u018b\u018d\5\24\13\2\u018c\u018a\3\2\2\2\u018d\u0190\3\2\2\2"+
-		"\u018e\u018c\3\2\2\2\u018e\u018f\3\2\2\2\u018f9\3\2\2\2\u0190\u018e\3"+
-		"\2\2\2\u0191\u0192\7%\2\2\u0192\u0193\7\62\2\2\u0193\u0198\5<\37\2\u0194"+
-		"\u0195\7g\2\2\u0195\u0197\5<\37\2\u0196\u0194\3\2\2\2\u0197\u019a\3\2"+
-		"\2\2\u0198\u0196\3\2\2\2\u0198\u0199\3\2\2\2\u0199;\3\2\2\2\u019a\u0198"+
-		"\3\2\2\2\u019b\u019d\5\22\n\2\u019c\u019e\t\3\2\2\u019d\u019c\3\2\2\2"+
-		"\u019d\u019e\3\2\2\2\u019e=\3\2\2\2\u019f\u01a2\7$\2\2\u01a0\u01a1\7o"+
-		"\2\2\u01a1\u01a3\7g\2\2\u01a2\u01a0\3\2\2\2\u01a2\u01a3\3\2\2\2\u01a3"+
-		"\u01a4\3\2\2\2\u01a4\u01a5\7o\2\2\u01a5?\3\2\2\2\u01a6\u01a9\5B\"\2\u01a7"+
-		"\u01a9\5D#\2\u01a8\u01a6\3\2\2\2\u01a8\u01a7\3\2\2\2\u01a9A\3\2\2\2\u01aa"+
-		"\u01ab\5\22\n\2\u01ab\u01ac\7O\2\2\u01ac\u01ad\7s\2\2\u01ad\u01ae\7\31"+
-		"\2\2\u01ae\u01af\t\4\2\2\u01af\u01b0\7O\2\2\u01b0\u01b1\7s\2\2\u01b1\u01b2"+
-		"\7\31\2\2\u01b2\u01b3\7\67\2\2\u01b3\u01b4\7O\2\2\u01b4\u01b5\7s\2\2\u01b5"+
-		"C\3\2\2\2\u01b6\u01b7\5\22\n\2\u01b7\u01b8\7O\2\2\u01b8\u01b9\7s\2\2\u01b9"+
-		"\u01ba\7\31\2\2\u01ba\u01bb\7:\2\2\u01bb\u01bc\7O\2\2\u01bc\u01bd\7s\2"+
-		"\2\u01bd\u01be\7\31\2\2\u01be\u01bf\7;\2\2\u01bf\u01c0\7O\2\2\u01c0\u01c1"+
-		"\7s\2\2\u01c1E\3\2\2\2.KNZ^aehkqw\u0085\u0089\u0094\u0099\u00a2\u00ad"+
-		"\u00b0\u00b3\u00b7\u00bc\u00c8\u00cb\u00d2\u00d9\u00e8\u0108\u010a\u010f"+
-		"\u0115\u0125\u012e\u0137\u013c\u0146\u014c\u016c\u0173\u017c\u0183\u018e"+
-		"\u0198\u019d\u01a2\u01a8";
+		"\n\n\f\n\16\n\u00d4\13\n\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f"+
+		"\3\f\3\f\3\f\3\f\5\f\u00e5\n\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f"+
+		"\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3"+
+		"\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\3\f\7\f\u010b\n\f\f\f\16\f\u010e\13\f\3"+
+		"\r\3\r\5\r\u0112\n\r\3\r\3\r\7\r\u0116\n\r\f\r\16\r\u0119\13\r\3\r\3\r"+
+		"\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\5\17\u0128\n\17"+
+		"\3\20\3\20\3\20\3\20\3\21\3\21\3\21\5\21\u0131\n\21\3\22\3\22\3\22\3\22"+
+		"\3\22\7\22\u0138\n\22\f\22\16\22\u013b\13\22\3\22\3\22\5\22\u013f\n\22"+
+		"\3\23\3\23\3\23\3\23\3\23\3\23\7\23\u0147\n\23\f\23\16\23\u014a\13\23"+
+		"\3\24\3\24\3\24\5\24\u014f\n\24\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\26"+
+		"\3\26\3\26\3\26\3\26\3\26\3\26\3\27\3\27\3\27\3\27\3\27\3\27\3\30\3\30"+
+		"\3\30\3\31\3\31\3\31\3\31\3\31\7\31\u016d\n\31\f\31\16\31\u0170\13\31"+
+		"\3\32\3\32\3\32\3\32\5\32\u0176\n\32\3\33\3\33\3\33\3\33\3\33\7\33\u017d"+
+		"\n\33\f\33\16\33\u0180\13\33\3\34\3\34\3\34\3\34\5\34\u0186\n\34\3\34"+
+		"\3\34\3\35\3\35\3\35\3\35\3\35\7\35\u018f\n\35\f\35\16\35\u0192\13\35"+
+		"\3\36\3\36\3\36\3\36\3\36\7\36\u0199\n\36\f\36\16\36\u019c\13\36\3\37"+
+		"\3\37\5\37\u01a0\n\37\3 \3 \3 \5 \u01a5\n \3 \3 \3!\3!\5!\u01ab\n!\3\""+
+		"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3\"\3#\3#\3#\3#\3#\3#\3#\3#\3"+
+		"#\3#\3#\3#\3#\2\5\22\26$$\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&"+
+		"(*,.\60\62\64\668:<>@BD\2\16\7\2HHJJLLOOQQ\5\2wxzz\177\177\4\2IIPQ\4\2"+
+		"LLOO\3\2df\3\2X[\4\2TUWW\4\2\31\31aa\4\2\32\32__\5\2HHLLOQ\3\2%&\3\28"+
+		"9\2\u01e3\2K\3\2\2\2\4R\3\2\2\2\6m\3\2\2\2\bs\3\2\2\2\ny\3\2\2\2\f\u008b"+
+		"\3\2\2\2\16\u00b0\3\2\2\2\20\u00b3\3\2\2\2\22\u00cb\3\2\2\2\24\u00d5\3"+
+		"\2\2\2\26\u00e4\3\2\2\2\30\u010f\3\2\2\2\32\u011c\3\2\2\2\34\u0127\3\2"+
+		"\2\2\36\u0129\3\2\2\2 \u0130\3\2\2\2\"\u013e\3\2\2\2$\u0140\3\2\2\2&\u014b"+
+		"\3\2\2\2(\u0150\3\2\2\2*\u0157\3\2\2\2,\u015e\3\2\2\2.\u0164\3\2\2\2\60"+
+		"\u0167\3\2\2\2\62\u0171\3\2\2\2\64\u0177\3\2\2\2\66\u0181\3\2\2\28\u0189"+
+		"\3\2\2\2:\u0193\3\2\2\2<\u019d\3\2\2\2>\u01a1\3\2\2\2@\u01aa\3\2\2\2B"+
+		"\u01ac\3\2\2\2D\u01b8\3\2\2\2FL\5\4\3\2GL\5\b\5\2HL\5\6\4\2IL\5\n\6\2"+
+		"JL\5\f\7\2KF\3\2\2\2KG\3\2\2\2KH\3\2\2\2KI\3\2\2\2KJ\3\2\2\2LN\3\2\2\2"+
+		"MO\7p\2\2NM\3\2\2\2NO\3\2\2\2OP\3\2\2\2PQ\7\2\2\3Q\3\3\2\2\2RS\7\n\2\2"+
+		"ST\5\16\b\2TU\7\65\2\2UZ\5&\24\2VW\7o\2\2WY\5&\24\2XV\3\2\2\2Y\\\3\2\2"+
+		"\2ZX\3\2\2\2Z[\3\2\2\2[^\3\2\2\2\\Z\3\2\2\2]_\5.\30\2^]\3\2\2\2^_\3\2"+
+		"\2\2_a\3\2\2\2`b\58\35\2a`\3\2\2\2ab\3\2\2\2be\3\2\2\2cf\5\60\31\2df\5"+
+		"\62\32\2ec\3\2\2\2ed\3\2\2\2ef\3\2\2\2fh\3\2\2\2gi\5:\36\2hg\3\2\2\2h"+
+		"i\3\2\2\2ik\3\2\2\2jl\5> \2kj\3\2\2\2kl\3\2\2\2l\5\3\2\2\2mn\7\t\2\2n"+
+		"q\5&\24\2op\7J\2\2pr\5\24\13\2qo\3\2\2\2qr\3\2\2\2r\7\3\2\2\2st\7\13\2"+
+		"\2tu\7\65\2\2uw\5&\24\2vx\5.\30\2wv\3\2\2\2wx\3\2\2\2x\t\3\2\2\2yz\7\20"+
+		"\2\2z{\5&\24\2{|\7\26\2\2|}\7z\2\2}~\7T\2\2~\u0085\5\24\13\2\177\u0080"+
+		"\7o\2\2\u0080\u0081\7z\2\2\u0081\u0082\7T\2\2\u0082\u0084\5\24\13\2\u0083"+
+		"\177\3\2\2\2\u0084\u0087\3\2\2\2\u0085\u0083\3\2\2\2\u0085\u0086\3\2\2"+
+		"\2\u0086\u0089\3\2\2\2\u0087\u0085\3\2\2\2\u0088\u008a\5.\30\2\u0089\u0088"+
+		"\3\2\2\2\u0089\u008a\3\2\2\2\u008a\13\3\2\2\2\u008b\u008c\7\f\2\2\u008c"+
+		"\u008d\7\r\2\2\u008d\u0099\5&\24\2\u008e\u008f\7i\2\2\u008f\u0094\5\24"+
+		"\13\2\u0090\u0091\7o\2\2\u0091\u0093\5\24\13\2\u0092\u0090\3\2\2\2\u0093"+
+		"\u0096\3\2\2\2\u0094\u0092\3\2\2\2\u0094\u0095\3\2\2\2\u0095\u0097\3\2"+
+		"\2\2\u0096\u0094\3\2\2\2\u0097\u0098\7j\2\2\u0098\u009a\3\2\2\2\u0099"+
+		"\u008e\3\2\2\2\u0099\u009a\3\2\2\2\u009a\u009b\3\2\2\2\u009b\u009c\7\16"+
+		"\2\2\u009c\u009d\7i\2\2\u009d\u00a2\5\24\13\2\u009e\u009f\7o\2\2\u009f"+
+		"\u00a1\5\24\13\2\u00a0\u009e\3\2\2\2\u00a1\u00a4\3\2\2\2\u00a2\u00a0\3"+
+		"\2\2\2\u00a2\u00a3\3\2\2\2\u00a3\u00a5\3\2\2\2\u00a4\u00a2\3\2\2\2\u00a5"+
+		"\u00a6\7j\2\2\u00a6\r\3\2\2\2\u00a7\u00b1\7H\2\2\u00a8\u00ad\5\20\t\2"+
+		"\u00a9\u00aa\7o\2\2\u00aa\u00ac\5\20\t\2\u00ab\u00a9\3\2\2\2\u00ac\u00af"+
+		"\3\2\2\2\u00ad\u00ab\3\2\2\2\u00ad\u00ae\3\2\2\2\u00ae\u00b1\3\2\2\2\u00af"+
+		"\u00ad\3\2\2\2\u00b0\u00a7\3\2\2\2\u00b0\u00a8\3\2\2\2\u00b1\17\3\2\2"+
+		"\2\u00b2\u00b4\7b\2\2\u00b3\u00b2\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4\u00b7"+
+		"\3\2\2\2\u00b5\u00b6\7z\2\2\u00b6\u00b8\7g\2\2\u00b7\u00b5\3\2\2\2\u00b7"+
+		"\u00b8\3\2\2\2\u00b8\u00b9\3\2\2\2\u00b9\u00bc\5\22\n\2\u00ba\u00bb\7"+
+		"\35\2\2\u00bb\u00bd\7z\2\2\u00bc\u00ba\3\2\2\2\u00bc\u00bd\3\2\2\2\u00bd"+
+		"\21\3\2\2\2\u00be\u00bf\b\n\1\2\u00bf\u00c0\7i\2\2\u00c0\u00c1\5\22\n"+
+		"\2\u00c1\u00c2\7j\2\2\u00c2\u00cc\3\2\2\2\u00c3\u00c4\7\30\2\2\u00c4\u00cc"+
+		"\5\22\n\6\u00c5\u00c6\7z\2\2\u00c6\u00cc\5\30\r\2\u00c7\u00c9\7\61\2\2"+
+		"\u00c8\u00c7\3\2\2\2\u00c8\u00c9\3\2\2\2\u00c9\u00ca\3\2\2\2\u00ca\u00cc"+
+		"\5\24\13\2\u00cb\u00be\3\2\2\2\u00cb\u00c3\3\2\2\2\u00cb\u00c5\3\2\2\2"+
+		"\u00cb\u00c8\3\2\2\2\u00cc\u00d2\3\2\2\2\u00cd\u00ce\f\5\2\2\u00ce\u00cf"+
+		"\t\2\2\2\u00cf\u00d1\5\22\n\6\u00d0\u00cd\3\2\2\2\u00d1\u00d4\3\2\2\2"+
+		"\u00d2\u00d0\3\2\2\2\u00d2\u00d3\3\2\2\2\u00d3\23\3\2\2\2\u00d4\u00d2"+
+		"\3\2\2\2\u00d5\u00d6\t\3\2\2\u00d6\25\3\2\2\2\u00d7\u00d8\b\f\1\2\u00d8"+
+		"\u00d9\7i\2\2\u00d9\u00da\5\26\f\2\u00da\u00db\7j\2\2\u00db\u00e5\3\2"+
+		"\2\2\u00dc\u00e5\5\36\20\2\u00dd\u00e5\5\22\n\2\u00de\u00e5\5*\26\2\u00df"+
+		"\u00e5\5(\25\2\u00e0\u00e5\5\34\17\2\u00e1\u00e5\5,\27\2\u00e2\u00e5\5"+
+		"\32\16\2\u00e3\u00e5\5@!\2\u00e4\u00d7\3\2\2\2\u00e4\u00dc\3\2\2\2\u00e4"+
+		"\u00dd\3\2\2\2\u00e4\u00de\3\2\2\2\u00e4\u00df\3\2\2\2\u00e4\u00e0\3\2"+
+		"\2\2\u00e4\u00e1\3\2\2\2\u00e4\u00e2\3\2\2\2\u00e4\u00e3\3\2\2\2\u00e5"+
+		"\u010c\3\2\2\2\u00e6\u00e7\f\25\2\2\u00e7\u00e8\t\4\2\2\u00e8\u010b\5"+
+		"\26\f\26\u00e9\u00ea\f\24\2\2\u00ea\u00eb\t\5\2\2\u00eb\u010b\5\26\f\25"+
+		"\u00ec\u00ed\f\23\2\2\u00ed\u00ee\t\6\2\2\u00ee\u010b\5\26\f\24\u00ef"+
+		"\u00f0\f\22\2\2\u00f0\u00f1\t\7\2\2\u00f1\u010b\5\26\f\23\u00f2\u00f3"+
+		"\f\21\2\2\u00f3\u00f4\t\b\2\2\u00f4\u010b\5\26\f\22\u00f5\u00f6\f\20\2"+
+		"\2\u00f6\u00f7\t\t\2\2\u00f7\u010b\5\26\f\21\u00f8\u00f9\f\17\2\2\u00f9"+
+		"\u00fa\t\n\2\2\u00fa\u010b\5\26\f\20\u00fb\u00fc\f\16\2\2\u00fc\u00fd"+
+		"\7(\2\2\u00fd\u010b\5\26\f\17\u00fe\u00ff\f\r\2\2\u00ff\u0100\7b\2\2\u0100"+
+		"\u010b\5\26\f\16\u0101\u0102\f\f\2\2\u0102\u0103\7^\2\2\u0103\u010b\5"+
+		"\26\f\r\u0104\u0105\f\13\2\2\u0105\u0106\7S\2\2\u0106\u0107\5\26\f\2\u0107"+
+		"\u0108\7u\2\2\u0108\u0109\5\26\f\13\u0109\u010b\3\2\2\2\u010a\u00e6\3"+
+		"\2\2\2\u010a\u00e9\3\2\2\2\u010a\u00ec\3\2\2\2\u010a\u00ef\3\2\2\2\u010a"+
+		"\u00f2\3\2\2\2\u010a\u00f5\3\2\2\2\u010a\u00f8\3\2\2\2\u010a\u00fb\3\2"+
+		"\2\2\u010a\u00fe\3\2\2\2\u010a\u0101\3\2\2\2\u010a\u0104\3\2\2\2\u010b"+
+		"\u010e\3\2\2\2\u010c\u010a\3\2\2\2\u010c\u010d\3\2\2\2\u010d\27\3\2\2"+
+		"\2\u010e\u010c\3\2\2\2\u010f\u0111\7i\2\2\u0110\u0112\5\24\13\2\u0111"+
+		"\u0110\3\2\2\2\u0111\u0112\3\2\2\2\u0112\u0117\3\2\2\2\u0113\u0114\7o"+
+		"\2\2\u0114\u0116\5\24\13\2\u0115\u0113\3\2\2\2\u0116\u0119\3\2\2\2\u0117"+
+		"\u0115\3\2\2\2\u0117\u0118\3\2\2\2\u0118\u011a\3\2\2\2\u0119\u0117\3\2"+
+		"\2\2\u011a\u011b\7j\2\2\u011b\31\3\2\2\2\u011c\u011d\5\22\n\2\u011d\u011e"+
+		"\7\36\2\2\u011e\u011f\7\177\2\2\u011f\33\3\2\2\2\u0120\u0121\5\22\n\2"+
+		"\u0121\u0122\7\34\2\2\u0122\u0123\7\27\2\2\u0123\u0128\3\2\2\2\u0124\u0125"+
+		"\7\34\2\2\u0125\u0126\7\33\2\2\u0126\u0128\7\27\2\2\u0127\u0120\3\2\2"+
+		"\2\u0127\u0124\3\2\2\2\u0128\35\3\2\2\2\u0129\u012a\5\24\13\2\u012a\u012b"+
+		"\5 \21\2\u012b\u012c\5\"\22\2\u012c\37\3\2\2\2\u012d\u0131\7\63\2\2\u012e"+
+		"\u012f\7\33\2\2\u012f\u0131\7\63\2\2\u0130\u012d\3\2\2\2\u0130\u012e\3"+
+		"\2\2\2\u0131!\3\2\2\2\u0132\u013f\5$\23\2\u0133\u0134\7i\2\2\u0134\u0139"+
+		"\5$\23\2\u0135\u0136\7o\2\2\u0136\u0138\5$\23\2\u0137\u0135\3\2\2\2\u0138"+
+		"\u013b\3\2\2\2\u0139\u0137\3\2\2\2\u0139\u013a\3\2\2\2\u013a\u013c\3\2"+
+		"\2\2\u013b\u0139\3\2\2\2\u013c\u013d\7j\2\2\u013d\u013f\3\2\2\2\u013e"+
+		"\u0132\3\2\2\2\u013e\u0133\3\2\2\2\u013f#\3\2\2\2\u0140\u0141\b\23\1\2"+
+		"\u0141\u0142\5\24\13\2\u0142\u0148\3\2\2\2\u0143\u0144\f\3\2\2\u0144\u0145"+
+		"\t\13\2\2\u0145\u0147\5$\23\4\u0146\u0143\3\2\2\2\u0147\u014a\3\2\2\2"+
+		"\u0148\u0146\3\2\2\2\u0148\u0149\3\2\2\2\u0149%\3\2\2\2\u014a\u0148\3"+
+		"\2\2\2\u014b\u014e\7z\2\2\u014c\u014d\7\35\2\2\u014d\u014f\7z\2\2\u014e"+
+		"\u014c\3\2\2\2\u014e\u014f\3\2\2\2\u014f\'\3\2\2\2\u0150\u0151\7-\2\2"+
+		"\u0151\u0152\7i\2\2\u0152\u0153\5\22\n\2\u0153\u0154\7o\2\2\u0154\u0155"+
+		"\5\26\f\2\u0155\u0156\7j\2\2\u0156)\3\2\2\2\u0157\u0158\7.\2\2\u0158\u0159"+
+		"\7i\2\2\u0159\u015a\5\22\n\2\u015a\u015b\7o\2\2\u015b\u015c\5\26\f\2\u015c"+
+		"\u015d\7j\2\2\u015d+\3\2\2\2\u015e\u015f\7m\2\2\u015f\u0160\5\24\13\2"+
+		"\u0160\u0161\7o\2\2\u0161\u0162\5\26\f\2\u0162\u0163\7n\2\2\u0163-\3\2"+
+		"\2\2\u0164\u0165\7\64\2\2\u0165\u0166\5\26\f\2\u0166/\3\2\2\2\u0167\u0168"+
+		"\7)\2\2\u0168\u0169\7\62\2\2\u0169\u016e\5\22\n\2\u016a\u016b\7o\2\2\u016b"+
+		"\u016d\5\22\n\2\u016c\u016a\3\2\2\2\u016d\u0170\3\2\2\2\u016e\u016c\3"+
+		"\2\2\2\u016e\u016f\3\2\2\2\u016f\61\3\2\2\2\u0170\u016e\3\2\2\2\u0171"+
+		"\u0172\7*\2\2\u0172\u0173\7\62\2\2\u0173\u0175\5\64\33\2\u0174\u0176\5"+
+		"\66\34\2\u0175\u0174\3\2\2\2\u0175\u0176\3\2\2\2\u0176\63\3\2\2\2\u0177"+
+		"\u0178\7z\2\2\u0178\u017e\5\30\r\2\u0179\u017a\7o\2\2\u017a\u017b\7z\2"+
+		"\2\u017b\u017d\5\30\r\2\u017c\u0179\3\2\2\2\u017d\u0180\3\2\2\2\u017e"+
+		"\u017c\3\2\2\2\u017e\u017f\3\2\2\2\u017f\65\3\2\2\2\u0180\u017e\3\2\2"+
+		"\2\u0181\u0182\7X\2\2\u0182\u0183\7i\2\2\u0183\u0185\5\64\33\2\u0184\u0186"+
+		"\5\66\34\2\u0185\u0184\3\2\2\2\u0185\u0186\3\2\2\2\u0186\u0187\3\2\2\2"+
+		"\u0187\u0188\7j\2\2\u0188\67\3\2\2\2\u0189\u018a\7+\2\2\u018a\u018b\7"+
+		"\62\2\2\u018b\u0190\5\24\13\2\u018c\u018d\7o\2\2\u018d\u018f\5\24\13\2"+
+		"\u018e\u018c\3\2\2\2\u018f\u0192\3\2\2\2\u0190\u018e\3\2\2\2\u0190\u0191"+
+		"\3\2\2\2\u01919\3\2\2\2\u0192\u0190\3\2\2\2\u0193\u0194\7$\2\2\u0194\u0195"+
+		"\7\62\2\2\u0195\u019a\5<\37\2\u0196\u0197\7o\2\2\u0197\u0199\5<\37\2\u0198"+
+		"\u0196\3\2\2\2\u0199\u019c\3\2\2\2\u019a\u0198\3\2\2\2\u019a\u019b\3\2"+
+		"\2\2\u019b;\3\2\2\2\u019c\u019a\3\2\2\2\u019d\u019f\5\22\n\2\u019e\u01a0"+
+		"\t\f\2\2\u019f\u019e\3\2\2\2\u019f\u01a0\3\2\2\2\u01a0=\3\2\2\2\u01a1"+
+		"\u01a4\7#\2\2\u01a2\u01a3\7w\2\2\u01a3\u01a5\7o\2\2\u01a4\u01a2\3\2\2"+
+		"\2\u01a4\u01a5\3\2\2\2\u01a5\u01a6\3\2\2\2\u01a6\u01a7\7w\2\2\u01a7?\3"+
+		"\2\2\2\u01a8\u01ab\5B\"\2\u01a9\u01ab\5D#\2\u01aa\u01a8\3\2\2\2\u01aa"+
+		"\u01a9\3\2\2\2\u01abA\3\2\2\2\u01ac\u01ad\5\22\n\2\u01ad\u01ae\7T\2\2"+
+		"\u01ae\u01af\7\177\2\2\u01af\u01b0\7\31\2\2\u01b0\u01b1\t\r\2\2\u01b1"+
+		"\u01b2\7T\2\2\u01b2\u01b3\7\177\2\2\u01b3\u01b4\7\31\2\2\u01b4\u01b5\7"+
+		"\67\2\2\u01b5\u01b6\7T\2\2\u01b6\u01b7\7\177\2\2\u01b7C\3\2\2\2\u01b8"+
+		"\u01b9\5\22\n\2\u01b9\u01ba\7T\2\2\u01ba\u01bb\7\177\2\2\u01bb\u01bc\7"+
+		"\31\2\2\u01bc\u01bd\7:\2\2\u01bd\u01be\7T\2\2\u01be\u01bf\7\177\2\2\u01bf"+
+		"\u01c0\7\31\2\2\u01c0\u01c1\7;\2\2\u01c1\u01c2\7T\2\2\u01c2\u01c3\7\177"+
+		"\2\2\u01c3E\3\2\2\2-KNZ^aehkqw\u0085\u0089\u0094\u0099\u00a2\u00ad\u00b0"+
+		"\u00b3\u00b7\u00bc\u00c8\u00cb\u00d2\u00e4\u010a\u010c\u0111\u0117\u0127"+
+		"\u0130\u0139\u013e\u0148\u014e\u016e\u0175\u017e\u0185\u0190\u019a\u019f"+
+		"\u01a4\u01aa";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

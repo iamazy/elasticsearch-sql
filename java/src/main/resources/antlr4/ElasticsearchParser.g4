@@ -24,15 +24,15 @@ updateOperation:
 	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause?;
 
 insertOperation:
-	INSERT INTO tableRef 
+	INSERT INTO tableRef
 	(
 		LPAREN identity (COMMA identity)* RPAREN
 	)? VALUES LPAREN identity (COMMA identity)* RPAREN;
 
-fieldList: STAR | nameOperand ( COMMA nameOperand)*;
+fieldList: STAR | ( nameOperand ( COMMA nameOperand)* );
 
 nameOperand: //^field,field
-	BIT_XOR_OP? (indexName = ID DOT)? fieldName = name (
+	exclude = XOR? (indexName = ID DOT)? fieldName = name (
 		AS alias = ID
 	)?;
 
@@ -44,42 +44,44 @@ name:
 	| HIGHLIGHTER? identity													# fieldName;
 
 identity:
-	ID			# idElement
-	| INT		# intElement
-	| FLOAT		# floatElement
-	| STRING	# stringElement;
+	ID
+	| INT
+	| FLOAT
+	| STRING
+;
 
-boolExpr:
-	LPAREN boolExpr RPAREN						# lrExpr
-	| left = boolExpr EQ right = boolExpr		# eqExpr
-	| left = boolExpr AEQ right = boolExpr		# aeqExpr
-	| left = boolExpr GT right = boolExpr		# gtExpr
-	| left = boolExpr LT right = boolExpr		# ltExpr
-	| left = boolExpr GTE right = boolExpr		# gteExpr
-	| left = boolExpr LTE right = boolExpr		# lteExpr
-	| left = boolExpr BANGEQ right = boolExpr	# notEqExpr
-	| left = boolExpr AND right = boolExpr		# andExpr
-	| left = boolExpr OR right = boolExpr		# orExpr
-	| left = boolExpr BETWEEN right = boolExpr	# betweenExpr
-	| inClause									# inExpr
+expression:
+	LPAREN expression RPAREN     # lrExpr 
+	| leftExpr = expression operator = ( MUL | DIV | MOD) right = expression		# binary
+	| leftExpr = expression operator = ( PLUS | MINUS) right = expression # binary
+	| leftExpr = expression operator = ( LSH | RSH | USH) right = expression # binary
+	| leftExpr = expression operator = ( LT | LTE | GT | GTE ) right = expression # compare
+	| leftExpr = expression operator = ( EQ | NE |AEQ ) right = expression # compare
+	| leftExpr = expression operator = ( AND | BOOLAND ) right = expression		# bool
+	| leftExpr = expression operator = ( OR | BOOLOR ) right = expression		# bool
+	| leftExpr = expression operator = BETWEEN right = expression	# between
+	| leftExpr = expression operator = XOR right = expression # binary
+	| leftExpr = expression operator = BWOR right = expression # binary
+	| <assoc=right> expr = expression COND left = expression COLON right = expression # conditional
+	| inClause									# in
 	| name										# nameExpr
-	| hasChildClause							# hasChildExpr
-	| hasParentClause							# hasParentExpr
-	| isClause									# isExpr
-	| nestedClause								# nestedExpr
-	| likeClause								# likeExpr
-	| geoClause									# geoExpr;
+	| hasChildClause							# hasChild
+	| hasParentClause							# hasParent
+	| isClause									# is
+	| nestedClause								# nested
+	| likeClause								# like
+	| geoClause									# geo;
 
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
-likeClause: name LIKE STRING;
+likeClause: field = name LIKE pattern = STRING;
 
-isClause: name IS NULL # isOp | IS NOT NULL # isNotOp;
+isClause: field = name ( IS NULL ) # isOp | ( IS NOT NULL ) # isNotOp;
 
 inClause: left = identity inToken right = inRightOperandList;
 
-inToken: IN # inOp | NOT IN # notOp;
+inToken: IN # inOp | ( NOT IN ) # notInOp;
 
 inRightOperandList:
 	inRightOperand
@@ -89,7 +91,7 @@ inRightOperand:
 	identity # constLiteral
 	| left = inRightOperand op = (
 		STAR
-		| DIVIDE
+		| DIV
 		| MOD
 		| PLUS
 		| MINUS
@@ -98,15 +100,15 @@ inRightOperand:
 tableRef: indexName = ID ( AS alias = ID)?;
 
 hasParentClause:
-	HAS_PARENT LPAREN type = name COMMA query = boolExpr RPAREN;
+	HAS_PARENT LPAREN type = name COMMA query = expression RPAREN;
 
 hasChildClause:
-	HAS_CHILD LPAREN type = name COMMA query = boolExpr RPAREN;
+	HAS_CHILD LPAREN type = name COMMA query = expression RPAREN;
 
 nestedClause:
-	LBRACKET nestedPath = identity COMMA query = boolExpr RBRACKET;
+	LBRACKET nestedPath = identity COMMA query = expression RBRACKET;
 
-whereClause: WHERE boolExpr;
+whereClause: WHERE expression;
 
 groupClause: GROUP BY name ( COMMA name)*;
 
@@ -136,9 +138,9 @@ geoClause:
 ;
 
 geoDistanceClause:
-	geoPointField = name EQ STRING AND (GEOPOINT|GEOHASH) EQ geohashOrLatLon = STRING AND DISTANCE EQ distance = STRING
+	name EQ field = STRING AND (GEOPOINT|GEOHASH) EQ coordinate = STRING AND DISTANCE EQ distance = STRING
 ;
 
 geoBoundingBoxClause:
-	geoPointField = name EQ STRING AND TOP_LEFT EQ STRING AND BOTTOM_RIGHT EQ STRING
+	name EQ field = STRING AND TOP_LEFT EQ leftTop = STRING AND BOTTOM_RIGHT EQ rightBottom = STRING
 ;

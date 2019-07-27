@@ -29,7 +29,7 @@ public class ElasticSql2DslParser {
         ElasticsearchParser parser=new ElasticsearchParser(tokenStream);
 
         ElasticsearchParser.SqlContext sqlTree=parser.sql();
-        ElasticsearchParserVisitor<ANode> visitor=new Walker();
+        ElasticsearchParserVisitor<ANode> visitor=new Walker(sql);
         ANode visit = visitor.visit(sqlTree);
 
         return null;

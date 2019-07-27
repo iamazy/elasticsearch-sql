@@ -11,7 +11,7 @@ public class ElasticSql2DslParserTest {
 
     @Test
     public void parse(){
-        String sql="select name,^age,gender from student";
+        String sql="select name,^age,gender from student limit 2,5";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         parser.parse(sql);
     }
