@@ -5,6 +5,12 @@ channels {
 	ERRORCHANNEL
 }
 
+@members{
+	protected abstract boolean isType(String name);
+
+	protected abstract boolean slashIsRegex();
+}
+
 //SKIP
 SPACE: [ \t\r\n]+ -> channel(HIDDEN);
 SPEC_ESSQL_COMMENT: '/*!' .+? '*/' -> channel(ESQLCOMMENT);
@@ -38,7 +44,6 @@ DISTINCT: D I S T I N C T;
 
 AND: A N D;
 OR: O R;
-XOR: X O R;
 NOT: N O T;
 IS: I S;
 AS: A S;
@@ -62,8 +67,9 @@ ROUTING: R O U T I N G;
 PARENT_ID: P A R E N T I D;
 HAS_PARENT: H A S UNDERLINE P A R E N T;
 HAS_CHILD: H A S UNDERLINE C H I L D;
+QUERY: Q U E R Y;
 NESTED: N E S T E D;
-HIGHLIGHTER: H BANG;
+HIGHLIGHTER: H BOOLNOT;
 BY: B Y;
 IN: I N;
 WHERE: W H E R E;
@@ -142,45 +148,57 @@ MOD_ASSIGN: '%=';
 AND_ASSIGN: '&=';
 XOR_ASSIGN: '^=';
 OR_ASSIGN: '|=';
+ALSH: '<<=';
+ARSH: '>>=';
+AUSH: '>>>=';
 
 //ARITHMETICS
 
 STAR: '*';
+MUL: STAR;
 DIVIDE: '/';
 MODULE: '%';
 PLUS: '+';
-MINUSMINUS: '--';
+INCR: '++';
+DECR: '--';
 MINUS: '-';
-DIV: D I V;
+DIV: D I V |  DIVIDE;
 MOD: M O D | MODULE;
 POUND: '#';
-QUES: '?';
+COND: '?';
 
 //COMPARATION
 
 EQ: '=';
+// ~= -> match
 AEQ: '~=';
 EQEQ: '==';
-BANGEQ: '!=';
+NE: '!=';
 GT: '>';
 GTE: '>=';
 LT: '<';
 LTE: '<=';
-BANG: '!';
+BOOLNOT: '!';
 
 //BIT
-BIT_NOT_OP: '~';
-BIT_OR_OP: '|';
-DBIT_OR_OP: '||';
-BIT_AND_OP: '&';
-DBIT_AND_OP: '&&';
-BIT_XOR_OP: '^';
-GTGT: '>>';
-LTLT: '<<';
+BWNOT: '~';
+BWOR: '|';
+BOOLOR: '||';
+BWAND: '&';
+BOOLAND: '&&';
+XOR: '^';
+ARROW: '->';
+
+LSH: '<<';
+RSH: '>>';
+USH: '>>>';
+
+
 
 //CONSTRUCTORS
 
-DOT: '.';
+DOT: '.' -> mode(AFTER_DOT);
+NSDOT: '?.' -> mode(AFTER_DOT);
 LPAREN: '(';
 RPAREN: ')';
 LBRACE: '{';
@@ -200,9 +218,15 @@ INT: MINUS? DEC_DIGIT+;
 FLOAT: MINUS? DEC_DIGIT+ DOT DEC_DIGIT+ | MINUS? DOT DEC_DIGIT+;
 
 DOT_ID: DOT ID_LITERAL;
-ID:
-	DOT? ID_LETTER (ID_LETTER | DEC_DIGIT | MINUS | STAR | DOT)*;
+ID: DOT? ID_LETTER (ID_LETTER | DEC_DIGIT | MINUS | STAR | DOT)*;
+
+OCTAL: '0' [0-7]+ [lL]?;
+HEX: '0' [xX] [0-9a-fA-F]+ [lL]?;
+INTEGER: ( '0' | [1-9] [0-9]* ) [lLfFdD]?;
+DECIMAL: ( '0' | [1-9] [0-9]* ) (DOT [0-9]+)? ( [eE] [+\-]? [0-9]+ )? [fFdD]?;
+
 STRING: DQUOTA_STRING | SQUOTA_STRING | BQUOTA_STRING;
+REGEX: '/' ( '\\' ~'\n' | ~('/' | '\n') )+? '/' [cilmsUux]* { slashIsRegex() }?;
 
 fragment HEX_DIGIT: [0-9A-Fa-f];
 fragment DEC_DIGIT: [0-9];
@@ -242,3 +266,8 @@ fragment W: [wW];
 fragment X: [xX];
 fragment Y: [yY];
 fragment Z: [zZ];
+
+mode AFTER_DOT;
+
+DOTINTEGER: ( '0' | [1-9] [0-9]* ) -> mode(DEFAULT_MODE);
+DOTID: [_a-zA-Z] [_a-zA-Z0-9]*  -> mode(DEFAULT_MODE);
