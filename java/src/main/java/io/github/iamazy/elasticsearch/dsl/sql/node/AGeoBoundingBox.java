@@ -11,7 +11,7 @@ import java.util.Set;
  * @author iamazy
  * @date 2019/7/27
  * @descrition Geo Bounding Box type set to memory by default
- *             when both {{@link #leftTop}} and {{@link #rightBottom}} both set to 'dr' means that would match entire area
+ *             when {{@link #leftTop}} and {{@link #rightBottom}} both set to 'dr' means that would match entire area
  **/
 public class AGeoBoundingBox extends AExpression {
 
