@@ -57,15 +57,15 @@ expression:
 	| leftExpr = expression operator = (EQ | NE | AEQ) rightExpr = expression				# binary
 	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# bool
 	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# bool
-	| expr = expression operator = BETWEEN leftExpr = expression AND rightExpr = expression	# betweenAnd
+	| expr = expression BETWEEN leftExpr = expression AND rightExpr = expression	# betweenAnd
 	| leftExpr = expression operator = XOR rightExpr = expression							# binary
 	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
 	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional
 	| inClause																			# in
 	| name																				# nameExpr
 	| identity																			# primitive
-	| hasChildClause																	# hasChild
-	| hasParentClause																	# hasParent
+	| hasChildClause																	# join
+	| hasParentClause																	# join
 	| isClause																			# binary
 	| nestedClause																		# nested
 	| likeClause																		# binary
