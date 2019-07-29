@@ -9,22 +9,23 @@ import java.util.Set;
 
 /**
  * @author iamazy
- * @date 2019/7/27
+ * @date 2019/7/29
  * @descrition
  **/
-public class ABoolExpr extends AExpression {
+public class Table extends AExpression {
 
-    private final AExpression leftExpr;
+    private final String indexName;
 
-    private final AExpression rightExpr;
+    private final String alias;
 
-    private final Relation relation;
-
-    public ABoolExpr(Location location,ABoolExpr leftExpr,ABoolExpr rightExpr,Relation relation){
+    public Table(Location location, String indexName, String alias){
         super(location);
-        this.leftExpr=leftExpr;
-        this.rightExpr=rightExpr;
-        this.relation=relation;
+        this.indexName=indexName;
+        this.alias=alias;
+    }
+
+    public String indexName() {
+        return indexName;
     }
 
 
@@ -46,17 +47,5 @@ public class ABoolExpr extends AExpression {
     @Override
     public String toString() {
         return null;
-    }
-
-    public enum Relation{
-        And("and"),
-        Or("or")
-        ;
-
-        private String relation;
-
-        Relation(String relation){
-            this.relation=relation;
-        }
     }
 }

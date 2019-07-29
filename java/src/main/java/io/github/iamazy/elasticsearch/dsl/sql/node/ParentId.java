@@ -4,27 +4,29 @@ import io.github.iamazy.elasticsearch.dsl.sql.Globals;
 import io.github.iamazy.elasticsearch.dsl.sql.Locals;
 import io.github.iamazy.elasticsearch.dsl.sql.MethodWriter;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.join.query.JoinQueryBuilders;
+import org.elasticsearch.join.query.ParentIdQueryBuilder;
 
-import java.util.List;
 import java.util.Set;
 
 /**
  * @author iamazy
- * @date 2019/7/27
+ * @date 2019/7/28
  * @descrition
  **/
-public class FieldList extends ANode{
+public class ParentId extends AExpression {
 
-    private final List<Field> fieldList;
+    private final String type;
 
-    public FieldList(Location location, List<Field> fieldList){
+    private final String id;
+
+    public ParentId(Location location,String type,String id){
         super(location);
-        this.fieldList=fieldList;
+        this.type=type;
+        this.id=id;
     }
 
-    public List<Field> getFieldList() {
-        return fieldList;
-    }
 
     @Override
     void extractVariables(Set<String> variables) {
@@ -45,4 +47,6 @@ public class FieldList extends ANode{
     public String toString() {
         return null;
     }
+
+
 }

@@ -1,8 +1,14 @@
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 
+import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
 import io.github.iamazy.elasticsearch.dsl.sql.node.*;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +21,37 @@ import java.util.List;
  **/
 public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
 
-    private final String sourceName;
+    private final String sql;
 
 
-    public Walker(String sourceName) {
-        this.sourceName = sourceName;
+    public Walker(String sql) {
+        this.sql = sql;
     }
 
+    //TODO: set package access to private
+    public  ElasticsearchParser.SqlContext buildAntlrTree(){
+        if(StringUtils.isBlank(this.sql)){
+            throw new ElasticSql2DslException("blank sql is not allowed");
+        }
+        CharStream stream = CharStreams.fromString(this.sql);
+        ElasticsearchLexer lexer=new EnhanceElasticsearchLexer(stream);
+        ElasticsearchParser parser=new ElasticsearchParser(new CommonTokenStream(lexer));
+        ParserErrorStrategy strategy=new ParserErrorStrategy(this.sql);
+        lexer.removeErrorListeners();
+        parser.removeErrorListeners();
+        parser.setErrorHandler(strategy);
+        return parser.sql();
+    }
+
+    @Override
+    public ANode visit(ParseTree tree) {
+        return super.visit(tree);
+    }
+
+    @Override
+    public ANode visitPrimitive(ElasticsearchParser.PrimitiveContext ctx) {
+        return super.visitPrimitive(ctx);
+    }
 
     @Override
     public ANode visitSql(ElasticsearchParser.SqlContext ctx) {
@@ -72,28 +102,33 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
     public ANode visitFieldList(ElasticsearchParser.FieldListContext ctx) {
         List<Field> fieldList = new ArrayList<>(0);
         for (ElasticsearchParser.NameOperandContext nameOperandContext : ctx.nameOperand()) {
+            boolean highlighter=false;
+            String fieldName;
+            if(nameOperandContext.fieldName instanceof ElasticsearchParser.FieldNameContext){
+                ElasticsearchParser.FieldNameContext fieldCtx=(ElasticsearchParser.FieldNameContext) nameOperandContext.fieldName;
+                if(fieldCtx.highlighter!=null){
+                    highlighter=true;
+                }
+                fieldName=fieldCtx.field.getText();
+            }else{
+                fieldName=nameOperandContext.fieldName.getText();
+            }
             fieldList.add(new Field(location(nameOperandContext),
-                    nameOperandContext.indexName.getText(),
-                    nameOperandContext.fieldName.getText(),
-                    nameOperandContext.alias.getText(),
-                    nameOperandContext.exclude != null));
+                    fieldName,
+                    nameOperandContext.alias!=null?nameOperandContext.alias.getText():null,
+                    nameOperandContext.exclude != null,highlighter));
         }
         return new FieldList(location(ctx),fieldList);
     }
 
     @Override
     public ANode visitNameOperand(ElasticsearchParser.NameOperandContext ctx) {
-        return super.visitNameOperand(ctx);
+        return new Field(location(ctx),ctx.fieldName.getText(),ctx.alias.getText(),ctx.exclude!=null,true);
     }
 
     @Override
     public ANode visitFieldName(ElasticsearchParser.FieldNameContext ctx) {
         return super.visitFieldName(ctx);
-    }
-
-    @Override
-    public ANode visitCompare(ElasticsearchParser.CompareContext ctx) {
-        return super.visitCompare(ctx);
     }
 
     @Override
@@ -113,25 +148,9 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
         return super.visitIn(ctx);
     }
 
-    @Override
-    public ANode visitLike(ElasticsearchParser.LikeContext ctx) {
-        String field=ctx.likeClause().field.getText();
-        String pattern=ctx.likeClause().pattern.getText();
-        return new ALike(location(ctx),field,pattern);
-    }
-
     private AExpression visitExpression(ElasticsearchParser.ExpressionContext ctx){
         if(ctx instanceof ElasticsearchParser.LrExprContext){
             visitLrExpr((ElasticsearchParser.LrExprContext) ctx);
-        }
-        if(ctx instanceof ElasticsearchParser.IsContext){
-            visitIs((ElasticsearchParser.IsContext) ctx);
-        }
-        if(ctx instanceof ElasticsearchParser.BinaryContext){
-            visitBinary((ElasticsearchParser.BinaryContext) ctx);
-        }
-        if(ctx instanceof ElasticsearchParser.CompareContext){
-            visitCompare((ElasticsearchParser.CompareContext)ctx);
         }
         if(ctx instanceof ElasticsearchParser.BoolContext){
             visitBool((ElasticsearchParser.BoolContext)ctx);
@@ -141,18 +160,6 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
         }
         if(ctx instanceof ElasticsearchParser.InContext){
             visitIn((ElasticsearchParser.InContext)ctx);
-        }
-        if(ctx instanceof ElasticsearchParser.IsContext){
-            visitIs((ElasticsearchParser.IsContext)ctx);
-        }
-        if(ctx instanceof ElasticsearchParser.LikeContext){
-            visitLike((ElasticsearchParser.LikeContext)ctx);
-        }
-        if(ctx instanceof ElasticsearchParser.HasChildContext){
-            visitHasChild((ElasticsearchParser.HasChildContext)ctx);
-        }
-        if(ctx instanceof ElasticsearchParser.HasParentContext){
-            visitHasParent((ElasticsearchParser.HasParentContext)ctx);
         }
         if(ctx instanceof ElasticsearchParser.NestedContext){
             visitNested((ElasticsearchParser.NestedContext)ctx);
@@ -173,11 +180,6 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
     }
 
     @Override
-    public ANode visitIs(ElasticsearchParser.IsContext ctx) {
-        return super.visitIs(ctx);
-    }
-
-    @Override
     public ANode visitNested(ElasticsearchParser.NestedContext ctx) {
         return super.visitNested(ctx);
     }
@@ -190,31 +192,6 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
     @Override
     public ANode visitGeo(ElasticsearchParser.GeoContext ctx) {
         return super.visitGeo(ctx);
-    }
-
-    @Override
-    public ANode visitHasChild(ElasticsearchParser.HasChildContext ctx) {
-       return visitHasChildClause(ctx.hasChildClause());
-    }
-
-    @Override
-    public ANode visitBinary(ElasticsearchParser.BinaryContext ctx) {
-        return super.visitBinary(ctx);
-    }
-
-    @Override
-    public ANode visitBetween(ElasticsearchParser.BetweenContext ctx) {
-        return super.visitBetween(ctx);
-    }
-
-    @Override
-    public ANode visitHasParent(ElasticsearchParser.HasParentContext ctx) {
-        return super.visitHasParent(ctx);
-    }
-
-    @Override
-    public ANode visitNotInOp(ElasticsearchParser.NotInOpContext ctx) {
-        return super.visitNotInOp(ctx);
     }
 
     @Override
@@ -248,23 +225,8 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
     }
 
     @Override
-    public ANode visitIsOp(ElasticsearchParser.IsOpContext ctx) {
-        return super.visitIsOp(ctx);
-    }
-
-    @Override
-    public ANode visitIsNotOp(ElasticsearchParser.IsNotOpContext ctx) {
-        return super.visitIsNotOp(ctx);
-    }
-
-    @Override
     public ANode visitInClause(ElasticsearchParser.InClauseContext ctx) {
         return super.visitInClause(ctx);
-    }
-
-    @Override
-    public ANode visitInOp(ElasticsearchParser.InOpContext ctx) {
-        return super.visitInOp(ctx);
     }
 
     @Override
@@ -289,12 +251,12 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
 
     @Override
     public ANode visitHasParentClause(ElasticsearchParser.HasParentClauseContext ctx) {
-        return new AHasParent(location(ctx),ctx.type.getText(),visitExpression(ctx.query));
+        return new HasParent(location(ctx),ctx.type.getText(),visitExpression(ctx.query));
     }
 
     @Override
     public ANode visitHasChildClause(ElasticsearchParser.HasChildClauseContext ctx) {
-        return new AHasChild(location(ctx),ctx.type.getText(),visitExpression(ctx.query));
+        return new HasChild(location(ctx),ctx.type.getText(),visitExpression(ctx.query));
     }
 
     @Override
@@ -304,6 +266,9 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
 
     @Override
     public ANode visitWhereClause(ElasticsearchParser.WhereClauseContext ctx) {
+        if(ctx.expression() instanceof ElasticsearchParser.BoolContext){
+            ElasticsearchParser.BoolContext boolCtx=(ElasticsearchParser.BoolContext)ctx.expression();
+        }
         return super.visitWhereClause(ctx);
     }
 
@@ -313,7 +278,7 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
         for(ElasticsearchParser.NameContext nameCtx:ctx.name()){
             fields.add(nameCtx.getText());
         }
-        return new AGroupBy(location(ctx),fields);
+        return new GroupBy(location(ctx),fields);
     }
 
     @Override
@@ -337,29 +302,30 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
         for(ElasticsearchParser.IdentityContext identityContext:ctx.identity()){
             routings.add(identityContext.getText());
         }
-        return new ARoutingBy(location(ctx),routings);
+        return new RoutingBy(location(ctx),routings);
     }
 
     @Override
     public ANode visitOrderClause(ElasticsearchParser.OrderClauseContext ctx) {
 
-        List<AOrder> orderList=new ArrayList<>(0);
+        List<Order> orderList=new ArrayList<>(0);
         for(ElasticsearchParser.OrderContext orderCtx:ctx.order()){
             if (orderCtx.type!=null) {
-                orderList.add(new AOrder(location(orderCtx), orderCtx.name().getText(),orderCtx.type.getText()));
+                orderList.add(new Order(location(orderCtx), orderCtx.name().getText(),orderCtx.type.getText()));
             }else{
-                orderList.add(new AOrder(location(orderCtx), orderCtx.name().getText(),"desc"));
+                orderList.add(new Order(location(orderCtx), orderCtx.name().getText(),"desc"));
             }
         }
-        return new AOrderBy(location(ctx),orderList);
+
+        return new OrderBy(location(ctx),orderList);
     }
 
     @Override
     public ANode visitOrder(ElasticsearchParser.OrderContext ctx) {
         if(ctx.type!=null){
-            return new AOrder(location(ctx),ctx.name().getText(),ctx.type.getText());
+            return new Order(location(ctx),ctx.name().getText(),ctx.type.getText());
         }
-        return new AOrder(location(ctx),ctx.name().getText(),"desc");
+        return new Order(location(ctx),ctx.name().getText(),"desc");
     }
 
     @Override
@@ -380,16 +346,16 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
 
     @Override
     public ANode visitGeoDistanceClause(ElasticsearchParser.GeoDistanceClauseContext ctx) {
-        return new AGeoDistance(location(ctx),ctx.field.getText(),ctx.coordinate.getText(),ctx.distance.getText());
+        return new GeoDistance(location(ctx),ctx.field.getText(),ctx.coordinate.getText(),ctx.distance.getText());
     }
 
     @Override
     public ANode visitGeoBoundingBoxClause(ElasticsearchParser.GeoBoundingBoxClauseContext ctx) {
-        return new AGeoBoundingBox(location(ctx),ctx.field.getText(),ctx.leftTop.getText(),ctx.rightBottom.getText());
+        return new GeoBoundingBox(location(ctx),ctx.field.getText(),ctx.leftTop.getText(),ctx.rightBottom.getText());
     }
 
 
     private Location location(ParserRuleContext ctx) {
-        return new Location(sourceName, ctx.getStart().getStartIndex());
+        return new Location(sql, ctx.getStart().getStartIndex());
     }
 }

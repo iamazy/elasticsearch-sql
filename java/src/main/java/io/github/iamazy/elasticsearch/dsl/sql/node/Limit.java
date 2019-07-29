@@ -12,16 +12,16 @@ import java.util.Set;
  * @date 2019/7/27
  * @descrition
  **/
-public class Limit extends AExpression{
+public class Limit extends AExpression {
 
     private final int offset;
 
     private final int size;
 
-    public Limit(Location location, int offset, int size){
+    public Limit(Location location, int offset, int size) {
         super(location);
-        this.offset=offset;
-        this.size=size;
+        this.offset = offset;
+        this.size = size;
     }
 
     public int getOffset() {

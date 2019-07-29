@@ -11,42 +11,26 @@ import java.util.Set;
 /**
  * @author iamazy
  * @date 2019/7/27
- * @descrition Function AGeoDistance,Distance type set to {{@link #GeoDistance.ARC}} by default
+ * @descrition
  **/
-public class AGeoDistance extends AExpression{
+public class Like extends AExpression {
 
-    /**
-     * GeoPoint field name
-     */
     private final String field;
 
-    /**
-     * distance unit (ex: 12km)
-     */
-    private final String distance;
+    private final String pattern;
 
-    /**
-     * GeoPoint coordinate,for simply use, It only support geohash or latlon string
-     */
-    private final String coordinate;
-
-    public AGeoDistance(Location location, String field, String coordinate, String distance){
+    public Like(Location location, String field, String pattern){
         super(location);
         this.field=field;
-        this.coordinate=coordinate;
-        this.distance=distance;
+        this.pattern=pattern;
     }
 
     public String getField() {
         return field;
     }
 
-    public String getCoordinate() {
-        return coordinate;
-    }
-
-    public String getDistance() {
-        return distance;
+    public String getPattern() {
+        return pattern;
     }
 
     @Override
@@ -68,4 +52,5 @@ public class AGeoDistance extends AExpression{
     public String toString() {
         return null;
     }
+
 }

@@ -13,17 +13,14 @@ import java.util.Set;
  * @date 2019/7/27
  * @descrition
  **/
-public class FieldList extends ANode{
+public class OrderBy extends AExpression {
 
-    private final List<Field> fieldList;
 
-    public FieldList(Location location, List<Field> fieldList){
+    private final List<Order> orderList;
+
+    public OrderBy(Location location, List<Order> orderList){
         super(location);
-        this.fieldList=fieldList;
-    }
-
-    public List<Field> getFieldList() {
-        return fieldList;
+        this.orderList=orderList;
     }
 
     @Override
@@ -45,4 +42,5 @@ public class FieldList extends ANode{
     public String toString() {
         return null;
     }
+
 }

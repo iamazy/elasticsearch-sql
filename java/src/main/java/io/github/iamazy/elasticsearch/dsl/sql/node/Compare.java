@@ -3,24 +3,29 @@ package io.github.iamazy.elasticsearch.dsl.sql.node;
 import io.github.iamazy.elasticsearch.dsl.sql.Globals;
 import io.github.iamazy.elasticsearch.dsl.sql.Locals;
 import io.github.iamazy.elasticsearch.dsl.sql.MethodWriter;
+import io.github.iamazy.elasticsearch.dsl.sql.Operation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
 
-import java.util.List;
 import java.util.Set;
 
 /**
  * @author iamazy
- * @date 2019/7/27
+ * @date 2019/7/28
  * @descrition
  **/
-public class AOrderBy extends AExpression {
+public class Compare extends AExpression {
 
+    private final AExpression leftExpr;
 
-    private final List<AOrder> orderList;
+    private final AExpression rightExpr;
 
-    public AOrderBy(Location location,List<AOrder> orderList){
+    private final Operation operation;
+
+    public Compare(Location location,AExpression leftExpr,AExpression rightExpr,Operation operation){
         super(location);
-        this.orderList=orderList;
+        this.leftExpr=leftExpr;
+        this.rightExpr=rightExpr;
+        this.operation=operation;
     }
 
     @Override
@@ -42,4 +47,6 @@ public class AOrderBy extends AExpression {
     public String toString() {
         return null;
     }
+
+
 }

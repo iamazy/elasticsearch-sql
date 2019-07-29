@@ -5,6 +5,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.Locals;
 import io.github.iamazy.elasticsearch.dsl.sql.MethodWriter;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
 
+
 import java.util.Set;
 
 /**
@@ -12,24 +13,31 @@ import java.util.Set;
  * @date 2019/7/27
  * @descrition
  **/
-public class ALike extends AExpression {
+public class Order extends AExpression {
 
+    /**
+     * field name
+     */
     private final String field;
 
-    private final String pattern;
+    /**
+     * order type: desc|asc,
+     * desc by default
+     */
+    private final String type;
 
-    public ALike(Location location,String field,String pattern){
+    public Order(Location location, String field, String type){
         super(location);
         this.field=field;
-        this.pattern=pattern;
+        this.type=type;
     }
 
     public String getField() {
         return field;
     }
 
-    public String getPattern() {
-        return pattern;
+    public String getType() {
+        return type;
     }
 
     @Override
@@ -51,4 +59,16 @@ public class ALike extends AExpression {
     public String toString() {
         return null;
     }
+
+
+//    @Override
+//    public SortBuilder parse() {
+//        SortBuilder sortBuilder= SortBuilders.fieldSort(field);
+//        if(this.type.toLowerCase().equals("desc")|| StringUtils.isBlank(type)){
+//            sortBuilder.order(SortOrder.DESC);
+//        }else{
+//            sortBuilder.order(SortOrder.ASC);
+//        }
+//        return sortBuilder;
+//    }
 }

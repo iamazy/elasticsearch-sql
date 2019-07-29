@@ -100,12 +100,19 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIdentity(ElasticsearchParser.IdentityContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code compare}
+	 * Visit a parse tree produced by the {@code geo}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCompare(ElasticsearchParser.CompareContext ctx);
+	T visitGeo(ElasticsearchParser.GeoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code primitive}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrimitive(ElasticsearchParser.PrimitiveContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code bool}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
@@ -128,12 +135,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIn(ElasticsearchParser.InContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code like}
+	 * Visit a parse tree produced by the {@code binary}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLike(ElasticsearchParser.LikeContext ctx);
+	T visitBinary(ElasticsearchParser.BinaryContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lrExpr}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
@@ -142,12 +149,19 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLrExpr(ElasticsearchParser.LrExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code is}
+	 * Visit a parse tree produced by the {@code betweenAnd}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIs(ElasticsearchParser.IsContext ctx);
+	T visitBetweenAnd(ElasticsearchParser.BetweenAndContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code join}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitJoin(ElasticsearchParser.JoinContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code nested}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
@@ -163,41 +177,6 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNameExpr(ElasticsearchParser.NameExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code geo}
-	 * labeled alternative in {@link ElasticsearchParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGeo(ElasticsearchParser.GeoContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code hasChild}
-	 * labeled alternative in {@link ElasticsearchParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHasChild(ElasticsearchParser.HasChildContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code binary}
-	 * labeled alternative in {@link ElasticsearchParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBinary(ElasticsearchParser.BinaryContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code between}
-	 * labeled alternative in {@link ElasticsearchParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBetween(ElasticsearchParser.BetweenContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code hasParent}
-	 * labeled alternative in {@link ElasticsearchParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitHasParent(ElasticsearchParser.HasParentContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#collection}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -210,39 +189,17 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLikeClause(ElasticsearchParser.LikeClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code isOp}
-	 * labeled alternative in {@link ElasticsearchParser#isClause}.
+	 * Visit a parse tree produced by {@link ElasticsearchParser#isClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIsOp(ElasticsearchParser.IsOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code isNotOp}
-	 * labeled alternative in {@link ElasticsearchParser#isClause}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIsNotOp(ElasticsearchParser.IsNotOpContext ctx);
+	T visitIsClause(ElasticsearchParser.IsClauseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#inClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitInClause(ElasticsearchParser.InClauseContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code inOp}
-	 * labeled alternative in {@link ElasticsearchParser#inToken}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInOp(ElasticsearchParser.InOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code notInOp}
-	 * labeled alternative in {@link ElasticsearchParser#inToken}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNotInOp(ElasticsearchParser.NotInOpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#inRightOperandList}.
 	 * @param ctx the parse tree

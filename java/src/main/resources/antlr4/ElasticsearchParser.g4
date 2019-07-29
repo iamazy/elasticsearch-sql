@@ -14,7 +14,11 @@ sql: (
 
 //OPERATIONS
 selectOperation:
-	SELECT fieldList FROM tableRef (COMMA tableRef)* (whereClause)? (routingClause)? (groupClause|aggregateClause)? (orderClause)? (limitClause)?;
+	SELECT fieldList FROM tableRef (COMMA tableRef)* (
+		whereClause
+	)? (routingClause)? (groupClause | aggregateClause)? (
+		orderClause
+	)? (limitClause)?;
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
@@ -24,15 +28,14 @@ updateOperation:
 	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause?;
 
 insertOperation:
-	INSERT INTO tableRef
-	(
+	INSERT INTO tableRef (
 		LPAREN identity (COMMA identity)* RPAREN
 	)? VALUES LPAREN identity (COMMA identity)* RPAREN;
 
-fieldList: STAR | ( nameOperand ( COMMA nameOperand)* );
+fieldList: STAR | ( nameOperand ( COMMA nameOperand)*);
 
 nameOperand: //^field,field
-	exclude = XOR? (indexName = ID DOT)? fieldName = name (
+	exclude = XOR? fieldName = name (
 		AS alias = ID
 	)?;
 
@@ -40,48 +43,42 @@ name:
 	LPAREN name RPAREN														# lrName
 	| DISTINCT fieldName = name												# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
-	| ID collection															# functionName
-	| HIGHLIGHTER? identity													# fieldName;
+	| functionName = ID params = collection									# functionName
+	| highlighter = HIGHLIGHTER? field = ID									# fieldName;
 
-identity:
-	ID
-	| INT
-	| FLOAT
-	| STRING
-;
+identity: ID | number = ( INT | FLOAT ) | str = STRING;
 
 expression:
-	LPAREN expression RPAREN     # lrExpr 
-	| leftExpr = expression operator = ( MUL | DIV | MOD) right = expression		# binary
-	| leftExpr = expression operator = ( PLUS | MINUS) right = expression # binary
-	| leftExpr = expression operator = ( LSH | RSH | USH) right = expression # binary
-	| leftExpr = expression operator = ( LT | LTE | GT | GTE ) right = expression # compare
-	| leftExpr = expression operator = ( EQ | NE |AEQ ) right = expression # compare
-	| leftExpr = expression operator = ( AND | BOOLAND ) right = expression		# bool
-	| leftExpr = expression operator = ( OR | BOOLOR ) right = expression		# bool
-	| leftExpr = expression operator = BETWEEN right = expression	# between
-	| leftExpr = expression operator = XOR right = expression # binary
-	| leftExpr = expression operator = BWOR right = expression # binary
-	| <assoc=right> expr = expression COND left = expression COLON right = expression # conditional
-	| inClause									# in
-	| name										# nameExpr
-	| hasChildClause							# hasChild
-	| hasParentClause							# hasParent
-	| isClause									# is
-	| nestedClause								# nested
-	| likeClause								# like
-	| geoClause									# geo;
-
+	LPAREN expression RPAREN															# lrExpr
+	| leftExpr = expression operator = (MUL | DIV | MOD) rightExpr = expression				# binary
+	| leftExpr = expression operator = (PLUS | MINUS) rightExpr = expression				# binary
+	| leftExpr = expression operator = (LSH | RSH | USH) rightExpr = expression				# binary
+	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# binary
+	| leftExpr = expression operator = (EQ | NE | AEQ) rightExpr = expression				# binary
+	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# bool
+	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# bool
+	| expr = expression BETWEEN leftExpr = expression AND rightExpr = expression	# betweenAnd
+	| leftExpr = expression operator = XOR rightExpr = expression							# binary
+	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
+	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional
+	| inClause																			# in
+	| name																				# nameExpr
+	| identity																			# primitive
+	| hasChildClause																	# join
+	| hasParentClause																	# join
+	| isClause																			# binary
+	| nestedClause																		# nested
+	| likeClause																		# binary
+	| geoClause																			# geo
+;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
-likeClause: field = name LIKE pattern = STRING;
+likeClause: field = name not = NOT? LIKE pattern = STRING;
 
-isClause: field = name ( IS NULL ) # isOp | ( IS NOT NULL ) # isNotOp;
+isClause: field = name IS not = NOT? NULL;
 
-inClause: left = identity inToken right = inRightOperandList;
-
-inToken: IN # inOp | ( NOT IN ) # notInOp;
+inClause: left = identity IN right = inRightOperandList;
 
 inRightOperandList:
 	inRightOperand
@@ -112,16 +109,13 @@ whereClause: WHERE expression;
 
 groupClause: GROUP BY name ( COMMA name)*;
 
-aggregateClause: 
-    AGGREGATE BY aggregateItemClause nestedAggregateClause?
-;
+aggregateClause:
+	AGGREGATE BY aggregateItemClause nestedAggregateClause?;
 
-aggregateItemClause:
-    ID collection (COMMA ID collection)*;
+aggregateItemClause: ID collection (COMMA ID collection)*;
 
 nestedAggregateClause:
-    GT LPAREN aggregateItemClause nestedAggregateClause? RPAREN
-;
+	GT LPAREN aggregateItemClause nestedAggregateClause? RPAREN;
 
 routingClause: ROUTING BY identity ( COMMA identity)*;
 
@@ -133,14 +127,12 @@ limitClause: LIMIT ( offset = INT COMMA)? size = INT;
 
 //Geo Clause
 
-geoClause:
-	geoDistanceClause|geoBoundingBoxClause
-;
+geoClause: geoDistanceClause | geoBoundingBoxClause;
 
 geoDistanceClause:
-	name EQ field = STRING AND (GEOPOINT|GEOHASH) EQ coordinate = STRING AND DISTANCE EQ distance = STRING
-;
+	name EQ field = STRING AND (GEOPOINT | GEOHASH) EQ coordinate = STRING AND DISTANCE EQ distance
+		= STRING;
 
 geoBoundingBoxClause:
 	name EQ field = STRING AND TOP_LEFT EQ leftTop = STRING AND BOTTOM_RIGHT EQ rightBottom = STRING
-;
+		;

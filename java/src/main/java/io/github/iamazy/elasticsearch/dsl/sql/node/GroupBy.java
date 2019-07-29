@@ -13,18 +13,13 @@ import java.util.Set;
  * @date 2019/7/27
  * @descrition
  **/
-public class ARoutingBy extends AExpression {
+public class GroupBy extends AExpression {
 
+    private final List<String> fields;
 
-    private final List<String> routings;
-
-    public ARoutingBy(Location location,List<String> routings){
+    public GroupBy(Location location, List<String> fields){
         super(location);
-        this.routings=routings;
-    }
-
-    public List<String> getRoutings() {
-        return routings;
+        this.fields=fields;
     }
 
     @Override
@@ -46,4 +41,5 @@ public class ARoutingBy extends AExpression {
     public String toString() {
         return null;
     }
+
 }

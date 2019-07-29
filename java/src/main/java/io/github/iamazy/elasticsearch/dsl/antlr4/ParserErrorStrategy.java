@@ -10,10 +10,10 @@ import org.antlr.v4.runtime.*;
  **/
 final class ParserErrorStrategy extends DefaultErrorStrategy {
 
-    final String sourceName;
+    private final String sql;
 
     ParserErrorStrategy(String sourceName) {
-        this.sourceName = sourceName;
+        this.sql = sourceName;
     }
 
     @Override
@@ -36,7 +36,7 @@ final class ParserErrorStrategy extends DefaultErrorStrategy {
             message =  "unexpected token near [" + getTokenErrorDisplay(token) + "].";
         }
 
-        Location location = new Location(sourceName, token == null ? -1 : token.getStartIndex());
+        Location location = new Location(sql, token == null ? -1 : token.getStartIndex());
         throw location.createError(new IllegalArgumentException(message, re));
     }
 
@@ -46,7 +46,7 @@ final class ParserErrorStrategy extends DefaultErrorStrategy {
         final String message = "unexpected token [" + getTokenErrorDisplay(token) + "]" +
                 " was expecting one of [" + recognizer.getExpectedTokens().toString(recognizer.getVocabulary()) + "].";
 
-        Location location = new Location(sourceName, token.getStartIndex());
+        Location location = new Location(sql, token.getStartIndex());
         throw location.createError(new IllegalArgumentException(message));
     }
 

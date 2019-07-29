@@ -5,15 +5,16 @@ import io.github.iamazy.elasticsearch.dsl.sql.Locals;
 import io.github.iamazy.elasticsearch.dsl.sql.MethodWriter;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
 
+
 import java.util.Set;
 
 /**
  * @author iamazy
  * @date 2019/7/27
  * @descrition Geo Bounding Box type set to memory by default
- *             when {{@link #leftTop}} and {{@link #rightBottom}} both set to 'dr' means that would match entire area
+ *             when both {{@link #leftTop}} and {{@link #rightBottom}} both set to 'dr' means that would match entire area
  **/
-public class AGeoBoundingBox extends AExpression {
+public class GeoBoundingBox extends AExpression {
 
     /**
      * GeoPoint field name
@@ -30,7 +31,7 @@ public class AGeoBoundingBox extends AExpression {
      */
     private final String rightBottom;
 
-    public AGeoBoundingBox(Location location,String field,String leftTop,String rightBottom){
+    public GeoBoundingBox(Location location, String field, String leftTop, String rightBottom){
         super(location);
         this.field=field;
         this.leftTop=leftTop;
@@ -68,4 +69,5 @@ public class AGeoBoundingBox extends AExpression {
     public String toString() {
         return null;
     }
+
 }

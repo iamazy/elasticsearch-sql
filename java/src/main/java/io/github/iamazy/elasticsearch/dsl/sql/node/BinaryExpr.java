@@ -3,25 +3,35 @@ package io.github.iamazy.elasticsearch.dsl.sql.node;
 import io.github.iamazy.elasticsearch.dsl.sql.Globals;
 import io.github.iamazy.elasticsearch.dsl.sql.Locals;
 import io.github.iamazy.elasticsearch.dsl.sql.MethodWriter;
+import io.github.iamazy.elasticsearch.dsl.sql.Operation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
 
 import java.util.Set;
 
 /**
  * @author iamazy
- * @date 2019/7/27
+ * @date 2019/7/28
  * @descrition
  **/
-public class AHasParent extends AExpression {
+public class BinaryExpr extends AExpression {
 
-    private final String type;
+    private final AExpression leftExpr;
 
-    private final AExpression expr;
+    private final AExpression rightExpr;
 
-    public AHasParent(Location location, String type, AExpression expr){
+    private final Operation operation;
+
+    private Object result;
+
+    public BinaryExpr(Location location,AExpression leftExpr,AExpression rightExpr,Operation operation){
         super(location);
-        this.type=type;
-        this.expr=expr;
+        this.leftExpr=leftExpr;
+        this.rightExpr=rightExpr;
+        this.operation=operation;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
     }
 
     @Override
@@ -43,4 +53,5 @@ public class AHasParent extends AExpression {
     public String toString() {
         return null;
     }
+
 }

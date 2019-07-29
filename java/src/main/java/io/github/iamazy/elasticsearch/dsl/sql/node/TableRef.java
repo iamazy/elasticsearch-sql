@@ -10,20 +10,16 @@ import java.util.Set;
 
 /**
  * @author iamazy
- * @date 2019/7/27
+ * @date 2019/7/28
  * @descrition
  **/
-public class FieldList extends ANode{
+public class TableRef extends AExpression {
 
-    private final List<Field> fieldList;
+   private List<Table> tables;
 
-    public FieldList(Location location, List<Field> fieldList){
+    public TableRef(Location location,List<Table> tables){
         super(location);
-        this.fieldList=fieldList;
-    }
-
-    public List<Field> getFieldList() {
-        return fieldList;
+        this.tables=tables;
     }
 
     @Override

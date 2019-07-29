@@ -16,20 +16,19 @@ public class Field extends ANode {
 
     private final boolean exclude;
 
-    private final String indexName;
-
     private final String fieldName;
+
+    private final boolean highlight;
 
     private final String alias;
 
-    public Field(Location location, String indexName, String fieldName, String alias, boolean exclude){
+    public Field(Location location, String fieldName, String alias, boolean exclude,boolean highlight){
         super(location);
         this.exclude=exclude;
+        this.highlight=this.exclude!=false?false:highlight;
         this.fieldName=fieldName;
-        this.indexName=indexName;
         this.alias=alias;
     }
-
 
     @Override
     void extractVariables(Set<String> variables) {

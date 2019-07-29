@@ -184,13 +184,25 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCompare(ElasticsearchParser.CompareContext ctx) { }
+	@Override public void enterGeo(ElasticsearchParser.GeoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCompare(ElasticsearchParser.CompareContext ctx) { }
+	@Override public void exitGeo(ElasticsearchParser.GeoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrimitive(ElasticsearchParser.PrimitiveContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrimitive(ElasticsearchParser.PrimitiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -232,13 +244,13 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLike(ElasticsearchParser.LikeContext ctx) { }
+	@Override public void enterBinary(ElasticsearchParser.BinaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLike(ElasticsearchParser.LikeContext ctx) { }
+	@Override public void exitBinary(ElasticsearchParser.BinaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -256,13 +268,25 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIs(ElasticsearchParser.IsContext ctx) { }
+	@Override public void enterBetweenAnd(ElasticsearchParser.BetweenAndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIs(ElasticsearchParser.IsContext ctx) { }
+	@Override public void exitBetweenAnd(ElasticsearchParser.BetweenAndContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJoin(ElasticsearchParser.JoinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJoin(ElasticsearchParser.JoinContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -292,66 +316,6 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGeo(ElasticsearchParser.GeoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitGeo(ElasticsearchParser.GeoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterHasChild(ElasticsearchParser.HasChildContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitHasChild(ElasticsearchParser.HasChildContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBinary(ElasticsearchParser.BinaryContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBinary(ElasticsearchParser.BinaryContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBetween(ElasticsearchParser.BetweenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBetween(ElasticsearchParser.BetweenContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterHasParent(ElasticsearchParser.HasParentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitHasParent(ElasticsearchParser.HasParentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterCollection(ElasticsearchParser.CollectionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -376,25 +340,13 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIsOp(ElasticsearchParser.IsOpContext ctx) { }
+	@Override public void enterIsClause(ElasticsearchParser.IsClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIsOp(ElasticsearchParser.IsOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterIsNotOp(ElasticsearchParser.IsNotOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitIsNotOp(ElasticsearchParser.IsNotOpContext ctx) { }
+	@Override public void exitIsClause(ElasticsearchParser.IsClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -407,30 +359,6 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitInClause(ElasticsearchParser.InClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterInOp(ElasticsearchParser.InOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInOp(ElasticsearchParser.InOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNotInOp(ElasticsearchParser.NotInOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNotInOp(ElasticsearchParser.NotInOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

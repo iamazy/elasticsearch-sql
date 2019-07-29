@@ -38,4 +38,5 @@ public abstract class AExpression extends ANode {
         super(location);
         this.prefix= Objects.requireNonNull(prefix);
     }
+
 }

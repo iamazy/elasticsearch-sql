@@ -13,17 +13,18 @@ import java.util.Set;
  * @date 2019/7/27
  * @descrition
  **/
-public class FieldList extends ANode{
+public class RoutingBy extends AExpression {
 
-    private final List<Field> fieldList;
 
-    public FieldList(Location location, List<Field> fieldList){
+    private final List<String> routings;
+
+    public RoutingBy(Location location, List<String> routings){
         super(location);
-        this.fieldList=fieldList;
+        this.routings=routings;
     }
 
-    public List<Field> getFieldList() {
-        return fieldList;
+    public List<String> getRoutings() {
+        return routings;
     }
 
     @Override
@@ -45,4 +46,5 @@ public class FieldList extends ANode{
     public String toString() {
         return null;
     }
+
 }

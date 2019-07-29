@@ -5,6 +5,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.Locals;
 import io.github.iamazy.elasticsearch.dsl.sql.MethodWriter;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
 
+
 import java.util.Set;
 
 /**
@@ -12,13 +13,13 @@ import java.util.Set;
  * @date 2019/7/27
  * @descrition
  **/
-public class AHasChild extends AExpression {
+public class HasChild extends AExpression {
 
     private final String type;
 
     private final AExpression expr;
 
-    public AHasChild(Location location,String type,AExpression expr){
+    public HasChild(Location location, String type, AExpression expr){
         super(location);
         this.type=type;
         this.expr=expr;
@@ -43,4 +44,5 @@ public class AHasChild extends AExpression {
     public String toString() {
         return null;
     }
+
 }

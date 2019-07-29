@@ -5,7 +5,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.Locals;
 import io.github.iamazy.elasticsearch.dsl.sql.MethodWriter;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
 
-import java.util.List;
+
 import java.util.Set;
 
 /**
@@ -13,13 +13,16 @@ import java.util.Set;
  * @date 2019/7/27
  * @descrition
  **/
-public class AGroupBy extends AExpression {
+public class HasParent extends AExpression {
 
-    private final List<String> fields;
+    private final String type;
 
-    public AGroupBy(Location location,List<String> fields){
+    private final AExpression expr;
+
+    public HasParent(Location location, String type, AExpression expr){
         super(location);
-        this.fields=fields;
+        this.type=type;
+        this.expr=expr;
     }
 
     @Override
@@ -41,4 +44,5 @@ public class AGroupBy extends AExpression {
     public String toString() {
         return null;
     }
+
 }

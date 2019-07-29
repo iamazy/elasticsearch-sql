@@ -63,6 +63,154 @@ public class ElasticSqlParseResult {
     private GetMappingsRequest mappingsRequest;
     private GetFieldMappingsRequest fieldMappingsRequest;
 
+
+    //region Getter and Setter
+    public int getFrom() {
+        return from;
+    }
+
+    public ElasticSqlParseResult setFrom(int from) {
+        this.from = from;
+        return this;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public ElasticSqlParseResult setSize(int size) {
+        this.size = size;
+        return this;
+    }
+
+    public String getScrollExpire() {
+        return scrollExpire;
+    }
+
+    public ElasticSqlParseResult setScrollExpire(String scrollExpire) {
+        this.scrollExpire = scrollExpire;
+        return this;
+    }
+
+    public String getScrollId() {
+        return scrollId;
+    }
+
+    public ElasticSqlParseResult setScrollId(String scrollId) {
+        this.scrollId = scrollId;
+        return this;
+    }
+
+    public List<String> getIndices() {
+        return indices;
+    }
+
+    public ElasticSqlParseResult setIndices(List<String> indices) {
+        this.indices = indices;
+        return this;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public ElasticSqlParseResult setType(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public Set<String> getHighlighter() {
+        return highlighter;
+    }
+
+    public ElasticSqlParseResult setHighlighter(Set<String> highlighter) {
+        this.highlighter = highlighter;
+        return this;
+    }
+
+    public List<String> getRoutingBy() {
+        return routingBy;
+    }
+
+    public ElasticSqlParseResult setRoutingBy(List<String> routingBy) {
+        this.routingBy = routingBy;
+        return this;
+    }
+
+    public List<String> getQueryFieldList() {
+        return queryFieldList;
+    }
+
+    public ElasticSqlParseResult setQueryFieldList(List<String> queryFieldList) {
+        this.queryFieldList = queryFieldList;
+        return this;
+    }
+
+    public BoolQueryBuilder getWhereCondition() {
+        return whereCondition;
+    }
+
+    public ElasticSqlParseResult setWhereCondition(BoolQueryBuilder whereCondition) {
+        this.whereCondition = whereCondition;
+        return this;
+    }
+
+    public BoolQueryBuilder getMatchCondition() {
+        return matchCondition;
+    }
+
+    public ElasticSqlParseResult setMatchCondition(BoolQueryBuilder matchCondition) {
+        this.matchCondition = matchCondition;
+        return this;
+    }
+
+    public List<SortBuilder> getOrderBy() {
+        return orderBy;
+    }
+
+    public ElasticSqlParseResult setOrderBy(List<SortBuilder> orderBy) {
+        this.orderBy = orderBy;
+        return this;
+    }
+
+    public List<AggregationBuilder> getGroupBy() {
+        return groupBy;
+    }
+
+    public ElasticSqlParseResult setGroupBy(List<AggregationBuilder> groupBy) {
+        this.groupBy = groupBy;
+        return this;
+    }
+
+    public SearchSourceBuilder getSearchSourceBuilder() {
+        return searchSourceBuilder;
+    }
+
+    public ElasticSqlParseResult setSearchSourceBuilder(SearchSourceBuilder searchSourceBuilder) {
+        this.searchSourceBuilder = searchSourceBuilder;
+        return this;
+    }
+
+    public GetMappingsRequest getMappingsRequest() {
+        return mappingsRequest;
+    }
+
+    public ElasticSqlParseResult setMappingsRequest(GetMappingsRequest mappingsRequest) {
+        this.mappingsRequest = mappingsRequest;
+        return this;
+    }
+
+    public GetFieldMappingsRequest getFieldMappingsRequest() {
+        return fieldMappingsRequest;
+    }
+
+    public ElasticSqlParseResult setFieldMappingsRequest(GetFieldMappingsRequest fieldMappingsRequest) {
+        this.fieldMappingsRequest = fieldMappingsRequest;
+        return this;
+    }
+
+    //endregion
+
     public DeleteByQueryRequest toDelRequest() {
         DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest().indices());
         deleteByQueryRequest.setQuery(searchSourceBuilder.query());
