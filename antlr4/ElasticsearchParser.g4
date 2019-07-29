@@ -50,17 +50,17 @@ identity: ID | INT | FLOAT | STRING;
 
 expression:
 	LPAREN expression RPAREN															# lrExpr
-	| leftExpr = expression operator = (MUL | DIV | MOD) right = expression				# binary
-	| leftExpr = expression operator = (PLUS | MINUS) right = expression				# binary
-	| leftExpr = expression operator = (LSH | RSH | USH) right = expression				# binary
-	| leftExpr = expression operator = (LT | LTE | GT | GTE) right = expression			# compare
-	| leftExpr = expression operator = (EQ | NE | AEQ) right = expression				# assign
-	| leftExpr = expression operator = (AND | BOOLAND) right = expression				# bool
-	| leftExpr = expression operator = (OR | BOOLOR) right = expression					# bool
-	| leftExpr = expression operator = BETWEEN right = expression						# between
-	| leftExpr = expression operator = XOR right = expression							# binary
-	| leftExpr = expression operator = BWOR right = expression							# binary
-	| <assoc = right> expr = expression COND left = expression COLON right = expression	# conditional
+	| leftExpr = expression operator = (MUL | DIV | MOD) rightExpr = expression				# binary
+	| leftExpr = expression operator = (PLUS | MINUS) rightExpr = expression				# binary
+	| leftExpr = expression operator = (LSH | RSH | USH) rightExpr = expression				# binary
+	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# compare
+	| leftExpr = expression operator = (EQ | NE | AEQ) rightExpr = expression				# assign
+	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# bool
+	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# bool
+	| leftExpr = expression operator = BETWEEN rightExpr = expression						# between
+	| leftExpr = expression operator = XOR rightExpr = expression							# binary
+	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
+	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional
 	| inClause																			# in
 	| name																				# nameExpr
 	| identity																			# primitive
