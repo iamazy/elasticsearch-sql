@@ -46,18 +46,18 @@ name:
 	| functionName = ID params = collection									# functionName
 	| highlighter = HIGHLIGHTER? field = ID									# fieldName;
 
-identity: ID | INT | FLOAT | STRING;
+identity: ID | number = ( INT | FLOAT ) | str = STRING;
 
 expression:
 	LPAREN expression RPAREN															# lrExpr
 	| leftExpr = expression operator = (MUL | DIV | MOD) rightExpr = expression				# binary
 	| leftExpr = expression operator = (PLUS | MINUS) rightExpr = expression				# binary
 	| leftExpr = expression operator = (LSH | RSH | USH) rightExpr = expression				# binary
-	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# compare
-	| leftExpr = expression operator = (EQ | NE | AEQ) rightExpr = expression				# assign
+	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# binary
+	| leftExpr = expression operator = (EQ | NE | AEQ) rightExpr = expression				# binary
 	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# bool
 	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# bool
-	| leftExpr = expression operator = BETWEEN rightExpr = expression						# between
+	| expr = expression operator = BETWEEN leftExpr = expression AND rightExpr = expression	# betweenAnd
 	| leftExpr = expression operator = XOR rightExpr = expression							# binary
 	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
 	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional
@@ -66,10 +66,12 @@ expression:
 	| identity																			# primitive
 	| hasChildClause																	# hasChild
 	| hasParentClause																	# hasParent
-	| isClause																			# is
+	| isClause																			# binary
 	| nestedClause																		# nested
-	| likeClause																		# like
-	| geoClause																			# geo;
+	| likeClause																		# binary
+	| geoClause																			# geo
+	| not = NOT expression																# binary
+;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
@@ -79,9 +81,7 @@ isClause:
 	field = name (IS NULL)	# isOp
 	| ( IS NOT NULL)		# isNotOp;
 
-inClause: left = identity inToken right = inRightOperandList;
-
-inToken: IN # inOp | ( NOT IN) # notInOp;
+inClause: left = identity IN right = inRightOperandList;
 
 inRightOperandList:
 	inRightOperand
