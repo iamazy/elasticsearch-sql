@@ -70,16 +70,13 @@ expression:
 	| nestedClause																		# nested
 	| likeClause																		# binary
 	| geoClause																			# geo
-	| not = NOT expression																# binary
 ;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
-likeClause: field = name LIKE pattern = STRING;
+likeClause: field = name not = NOT? LIKE pattern = STRING;
 
-isClause:
-	field = name (IS NULL)	# isOp
-	| ( IS NOT NULL)		# isNotOp;
+isClause: field = name IS not = NOT? NULL;
 
 inClause: left = identity IN right = inRightOperandList;
 
