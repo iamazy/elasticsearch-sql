@@ -47,13 +47,5 @@
                 <exclude>commons-codec:commons-codec</exclude>
             </excludes>
         </dependencySet>
-        <dependencySet>
-            <outputDirectory/>
-            <useProjectArtifact>true</useProjectArtifact>
-            <useTransitiveFiltering>true</useTransitiveFiltering>
-            <includes>
-                <include>com.alibaba:druid</include>
-            </includes>
-        </dependencySet>
     </dependencySets>
 </assembly>
