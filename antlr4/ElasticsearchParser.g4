@@ -22,15 +22,15 @@ selectOperation:
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
-deleteOperation: DELETE FROM tableRef whereClause?;
+deleteOperation: DELETE FROM tableRef whereClause? routingClause?;
 
 updateOperation:
-	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause?;
+	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause?;
 
 insertOperation:
 	INSERT INTO tableRef (
 		LPAREN identity (COMMA identity)* RPAREN
-	)? VALUES LPAREN identity (COMMA identity)* RPAREN;
+	)? VALUES LPAREN identity (COMMA identity)* RPAREN routingClause?;
 
 fieldList: STAR | ( nameOperand ( COMMA nameOperand)*);
 
