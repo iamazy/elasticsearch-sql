@@ -117,7 +117,7 @@ aggregateItemClause: ID collection (COMMA ID collection)*;
 nestedAggregateClause:
 	GT LPAREN aggregateItemClause nestedAggregateClause? RPAREN;
 
-routingClause: ROUTING BY identity ( COMMA identity)*;
+routingClause: ROUTING BY STRING ( COMMA STRING)*;
 
 orderClause: ORDER BY order ( COMMA order)*;
 
