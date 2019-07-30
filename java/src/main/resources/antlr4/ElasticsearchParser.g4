@@ -22,15 +22,15 @@ selectOperation:
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
-deleteOperation: DELETE FROM tableRef whereClause?;
+deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause?;
 
 updateOperation:
-	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause?;
+	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause?;
 
 insertOperation:
 	INSERT INTO tableRef (
 		LPAREN identity (COMMA identity)* RPAREN
-	)? VALUES LPAREN identity (COMMA identity)* RPAREN;
+	)? VALUES LPAREN identity (COMMA identity)* RPAREN routingClause?;
 
 fieldList: STAR | ( nameOperand ( COMMA nameOperand)*);
 
@@ -55,9 +55,9 @@ expression:
 	| leftExpr = expression operator = (LSH | RSH | USH) rightExpr = expression				# binary
 	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# binary
 	| leftExpr = expression operator = (EQ | NE | AEQ) rightExpr = expression				# binary
-	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# bool
-	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# bool
-	| expr = expression BETWEEN leftExpr = expression AND rightExpr = expression	# betweenAnd
+	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# binary
+	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# binary
+	| expr = identity BETWEEN left = identity AND right = identity							# betweenAnd
 	| leftExpr = expression operator = XOR rightExpr = expression							# binary
 	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
 	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional
@@ -117,7 +117,7 @@ aggregateItemClause: ID collection (COMMA ID collection)*;
 nestedAggregateClause:
 	GT LPAREN aggregateItemClause nestedAggregateClause? RPAREN;
 
-routingClause: ROUTING BY identity ( COMMA identity)*;
+routingClause: ROUTING BY STRING ( COMMA STRING)*;
 
 orderClause: ORDER BY order ( COMMA order)*;
 

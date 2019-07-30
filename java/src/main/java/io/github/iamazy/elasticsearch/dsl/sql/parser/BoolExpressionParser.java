@@ -6,10 +6,12 @@ import com.google.common.collect.Lists;
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlBoolOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionType;
+import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BetweenAndQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BinaryQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoDistanceQueryParser;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -29,6 +31,7 @@ public class BoolExpressionParser {
 
     private final BetweenAndQueryParser betweenAndQueryParser;
     private final BinaryQueryParser binaryQueryParser;
+    private final GeoDistanceQueryParser geoDistanceQueryParser;
 
     private Set<String> highlighter;
 
@@ -36,6 +39,7 @@ public class BoolExpressionParser {
         highlighter = new HashSet<>(0);
         betweenAndQueryParser = new BetweenAndQueryParser();
         binaryQueryParser=new BinaryQueryParser();
+        geoDistanceQueryParser=new GeoDistanceQueryParser();
     }
 
     public BoolQueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext){
@@ -57,19 +61,20 @@ public class BoolExpressionParser {
     }
 
     private SqlCondition recursiveParseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext) {
-        if (expressionContext instanceof ElasticsearchParser.BoolContext) {
-            ElasticsearchParser.BoolContext boolContext = (ElasticsearchParser.BoolContext) expressionContext;
-            String operator = boolContext.operator.getText().toLowerCase();
+        if (expressionContext instanceof ElasticsearchParser.BinaryContext) {
+            ElasticsearchParser.BinaryContext binaryContext = (ElasticsearchParser.BinaryContext) expressionContext;
+            int operatorType = binaryContext.operator.getType();
             SqlBoolOperator boolOperator;
-            if (operator.equals("and") || operator.equals("&&")) {
+            if (operatorType == ElasticsearchParser.AND || operatorType == ElasticsearchParser.BOOLAND) {
                 boolOperator = SqlBoolOperator.AND;
-            } else if (operator.equals("or") || operator.equals("||")) {
+            } else if (operatorType == ElasticsearchParser.OR || operatorType == ElasticsearchParser.BOOLOR) {
                 boolOperator = SqlBoolOperator.OR;
             } else {
-                throw new RuntimeException("not supported operator:" + operator);
+//                throw new ElasticSql2DslException("not supported operator:" + binaryContext.operator.getText());
+                return new SqlCondition(parseQueryCondition(expressionContext),SqlConditionType.Atomic);
             }
-            SqlCondition leftCondition = recursiveParseBoolQueryExpr(boolContext.leftExpr);
-            SqlCondition rightCondition = recursiveParseBoolQueryExpr(boolContext.rightExpr);
+            SqlCondition leftCondition = recursiveParseBoolQueryExpr(binaryContext.leftExpr);
+            SqlCondition rightCondition = recursiveParseBoolQueryExpr(binaryContext.rightExpr);
 
             List<AtomicQuery> queryList = Lists.newArrayList();
             combineQueryBuilder(queryList, leftCondition, boolOperator);
@@ -88,8 +93,18 @@ public class BoolExpressionParser {
         } else if (expressionContext instanceof ElasticsearchParser.LrExprContext) {
             ElasticsearchParser.LrExprContext lrExprContext = (ElasticsearchParser.LrExprContext) expressionContext;
             return parseQueryCondition(lrExprContext.expression());
-        } else {
-            throw new RuntimeException("not support yet");
+        }else if(expressionContext instanceof ElasticsearchParser.GeoContext){
+            ElasticsearchParser.GeoContext geoContext=(ElasticsearchParser.GeoContext)expressionContext;
+            if(geoContext.geoClause().geoDistanceClause()!=null){
+                ElasticsearchParser.GeoDistanceClauseContext geoDistanceClauseContext=geoContext.geoClause().geoDistanceClause();
+                return geoDistanceQueryParser.parse(geoDistanceClauseContext);
+            }else{
+                //FIXME
+                throw new ElasticSql2DslException("not support yet");
+            }
+        }
+        else {
+            throw new ElasticSql2DslException("not support yet");
         }
     }
 
@@ -102,8 +117,22 @@ public class BoolExpressionParser {
                 highlighter.addAll(atomicQuery.getHighlighter());
             }
             if (!atomicQuery.isNestedQuery()) {
+                //only [and] operator can merge bool query builder
                 if (operator == SqlBoolOperator.AND) {
-                    boolQueryBuilder.must(atomicQuery.getQueryBuilder());
+                    if(atomicQuery.getQueryBuilder() instanceof BoolQueryBuilder){
+                        BoolQueryBuilder boolQuery= (BoolQueryBuilder) atomicQuery.getQueryBuilder();
+                        if(CollectionUtils.isNotEmpty(boolQuery.must())){
+                            boolQueryBuilder.must().addAll(boolQuery.must());
+                        }
+                        if(CollectionUtils.isNotEmpty(boolQuery.mustNot())){
+                            boolQueryBuilder.mustNot().addAll(boolQuery.mustNot());
+                        }
+                        if(CollectionUtils.isNotEmpty(boolQuery.should())){
+                            boolQueryBuilder.should().addAll(boolQuery.should());
+                        }
+                    }else{
+                        boolQueryBuilder.must(atomicQuery.getQueryBuilder());
+                    }
                 } else if (operator == SqlBoolOperator.OR) {
                     boolQueryBuilder.should(atomicQuery.getQueryBuilder());
                 }
@@ -113,6 +142,6 @@ public class BoolExpressionParser {
         }
 
         //TODO: merge Nested Query
-        return boolQueryBuilder;
+        return boolQueryBuilder.minimumShouldMatch(1);
     }
 }

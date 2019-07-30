@@ -22,7 +22,7 @@ selectOperation:
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
-deleteOperation: DELETE FROM tableRef whereClause? routingClause?;
+deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause?;
 
 updateOperation:
 	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause?;
@@ -55,9 +55,9 @@ expression:
 	| leftExpr = expression operator = (LSH | RSH | USH) rightExpr = expression				# binary
 	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# binary
 	| leftExpr = expression operator = (EQ | NE | AEQ) rightExpr = expression				# binary
-	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# bool
-	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# bool
-	| expr = expression BETWEEN leftExpr = expression AND rightExpr = expression	# betweenAnd
+	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# binary
+	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# binary
+	| expr = identity BETWEEN left = identity AND right = identity							# betweenAnd
 	| leftExpr = expression operator = XOR rightExpr = expression							# binary
 	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
 	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional

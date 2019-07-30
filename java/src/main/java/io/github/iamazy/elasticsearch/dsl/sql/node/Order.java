@@ -59,16 +59,4 @@ public class Order extends AExpression {
     public String toString() {
         return null;
     }
-
-
-//    @Override
-//    public SortBuilder parse() {
-//        SortBuilder sortBuilder= SortBuilders.fieldSort(field);
-//        if(this.type.toLowerCase().equals("desc")|| StringUtils.isBlank(type)){
-//            sortBuilder.order(SortOrder.DESC);
-//        }else{
-//            sortBuilder.order(SortOrder.ASC);
-//        }
-//        return sortBuilder;
-//    }
 }

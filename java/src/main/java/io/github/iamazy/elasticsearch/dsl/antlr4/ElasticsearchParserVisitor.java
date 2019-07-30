@@ -114,13 +114,6 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrimitive(ElasticsearchParser.PrimitiveContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code bool}
-	 * labeled alternative in {@link ElasticsearchParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBool(ElasticsearchParser.BoolContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code conditional}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree

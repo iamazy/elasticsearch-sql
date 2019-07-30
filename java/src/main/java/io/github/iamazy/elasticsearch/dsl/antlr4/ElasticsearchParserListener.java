@@ -182,18 +182,6 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitPrimitive(ElasticsearchParser.PrimitiveContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code bool}
-	 * labeled alternative in {@link ElasticsearchParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterBool(ElasticsearchParser.BoolContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code bool}
-	 * labeled alternative in {@link ElasticsearchParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitBool(ElasticsearchParser.BoolContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code conditional}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree

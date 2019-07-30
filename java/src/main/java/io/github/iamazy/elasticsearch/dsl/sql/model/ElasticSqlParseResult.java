@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  **/
 public class ElasticSqlParseResult {
 
-    private static Logger log= LoggerFactory.getLogger(ElasticSqlParseResult.class);
+    private static Logger log = LoggerFactory.getLogger(ElasticSqlParseResult.class);
 
     private int from = 0;
     private int size = 15;
@@ -47,13 +47,13 @@ public class ElasticSqlParseResult {
 
     private List<String> indices;
     private String type = "_doc";
-    private String queryAs;
     /**
      * 需要高亮显示的字段
      */
-    private Set<String> highlighter=new HashSet<>(0);
+    private Set<String> highlighter = new HashSet<>(0);
     private List<String> routingBy;
-    private List<String> queryFieldList;
+    private List<String> includeFields;
+    private List<String> excludeFields;
     private transient BoolQueryBuilder whereCondition;
     private transient BoolQueryBuilder matchCondition;
     private transient List<SortBuilder> orderBy;
@@ -137,12 +137,21 @@ public class ElasticSqlParseResult {
         return this;
     }
 
-    public List<String> getQueryFieldList() {
-        return queryFieldList;
+    public List<String> getIncludeFields() {
+        return includeFields;
     }
 
-    public ElasticSqlParseResult setQueryFieldList(List<String> queryFieldList) {
-        this.queryFieldList = queryFieldList;
+    public ElasticSqlParseResult setIncludeFields(List<String> includeFields) {
+        this.includeFields = includeFields;
+        return this;
+    }
+
+    public List<String> getExcludeFields() {
+        return excludeFields;
+    }
+
+    public ElasticSqlParseResult setExcludeFields(List<String> excludeFields) {
+        this.excludeFields = excludeFields;
         return this;
     }
 
@@ -229,11 +238,11 @@ public class ElasticSqlParseResult {
         return deleteByQueryRequest;
     }
 
-    public GetFieldMappingsRequest toFieldMapping(){
+    public GetFieldMappingsRequest toFieldMapping() {
         return fieldMappingsRequest;
     }
 
-    public GetMappingsRequest toMapping(){
+    public GetMappingsRequest toMapping() {
         return mappingsRequest;
     }
 
@@ -252,7 +261,7 @@ public class ElasticSqlParseResult {
 
     public SearchRequest toRequest() {
         SearchRequest searchRequest = new SearchRequest();
-        List<String> indexList=indices.parallelStream().map(index->index.replace("`","")).collect(Collectors.toList());
+        List<String> indexList = indices.parallelStream().map(index -> index.replace("`", "")).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(indexList)) {
             searchRequest.indices(indexList.toArray(new String[0]));
         }
@@ -276,24 +285,15 @@ public class ElasticSqlParseResult {
         }
 
 
-        if(CollectionUtils.isNotEmpty(highlighter)) {
+        if (CollectionUtils.isNotEmpty(highlighter)) {
             HighlightBuilder highlightBuilder = HighlightBuilders.highlighter(highlighter);
             searchSourceBuilder.highlighter(highlightBuilder);
         }
 
         if (whereCondition != null && whereCondition.hasClauses()) {
-            if (matchCondition != null && matchCondition.hasClauses()) {
-                //filter不进行打分
-                searchSourceBuilder.query(matchCondition.filter(whereCondition));
-            } else {
-                searchSourceBuilder.query(QueryBuilders.boolQuery().filter(whereCondition));
-            }
+            searchSourceBuilder.query(whereCondition);
         } else {
-            if (matchCondition != null && matchCondition.hasClauses()) {
-                searchSourceBuilder.query(matchCondition);
-            } else {
-                searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-            }
+            searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         }
 
         if (CollectionUtils.isNotEmpty(orderBy)) {
@@ -302,22 +302,7 @@ public class ElasticSqlParseResult {
             }
         }
 
-        if (CollectionUtils.isNotEmpty(queryFieldList)) {
-            List<String> includes=new ArrayList<>(0);
-            List<String> excludes=new ArrayList<>(0);
-            for(String field:queryFieldList) {
-                if(field.startsWith(CoreConstants.UP_ARROW)){
-                    excludes.add(field.substring(1));
-                }
-                else if(field.startsWith("`^")){
-                    excludes.add(field.replaceAll(CoreConstants.GRAVE_ACCENT,StringUtils.EMPTY).substring(1));
-                }
-                else{
-                    includes.add(field.replaceAll(CoreConstants.GRAVE_ACCENT,StringUtils.EMPTY));
-                }
-            }
-            searchSourceBuilder.fetchSource(includes.toArray(new String[0]), excludes.toArray(new String[0]));
-        }
+        searchSourceBuilder.fetchSource(includeFields.toArray(new String[0]), excludeFields.toArray(new String[0]));
 
         if (CollectionUtils.isNotEmpty(routingBy)) {
             searchRequest.routing(routingBy.toArray(new String[0]));
@@ -352,9 +337,9 @@ public class ElasticSqlParseResult {
 
     @Override
     public String toString() {
-        String ptn = "index:%s,type:%s,query_as:%s,from:%s,size:%s,routing:%s,dsl:%s";
+        String ptn = "index:%s,type:%s,from:%s,size:%s,routing:%s,dsl:%s";
         return String.format(
-                ptn, indices, type, queryAs, from, size,
+                ptn, indices, type, from, size,
                 (routingBy != null ? routingBy.toString() : "[]"), toDsl(toRequest())
         );
     }
