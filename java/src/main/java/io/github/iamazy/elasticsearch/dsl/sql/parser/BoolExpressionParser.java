@@ -44,20 +44,20 @@ public class BoolExpressionParser {
     public BoolExpressionParser() {
         highlighter = new HashSet<>(0);
         betweenAndQueryParser = new BetweenAndQueryParser();
-        binaryQueryParser=new BinaryQueryParser();
-        inListQueryParser=new InListQueryParser();
-        joinQueryParser=new JoinQueryParser();
-        geoQueryParser=new GeoQueryParser();
-        nestedQueryParser=new NestedQueryParser();
+        binaryQueryParser = new BinaryQueryParser();
+        inListQueryParser = new InListQueryParser();
+        joinQueryParser = new JoinQueryParser();
+        geoQueryParser = new GeoQueryParser();
+        nestedQueryParser = new NestedQueryParser();
     }
 
-    public BoolQueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext){
-        SqlCondition sqlCondition=recursiveParseBoolQueryExpr(expressionContext);
-        SqlBoolOperator operator=sqlCondition.getOperator();
-        if(SqlConditionType.Atomic==sqlCondition.getConditionType()){
-            operator=SqlBoolOperator.AND;
+    public BoolQueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext) {
+        SqlCondition sqlCondition = recursiveParseBoolQueryExpr(expressionContext);
+        SqlBoolOperator operator = sqlCondition.getOperator();
+        if (SqlConditionType.Atomic == sqlCondition.getConditionType()) {
+            operator = SqlBoolOperator.AND;
         }
-        return mergeAtomicQuery(sqlCondition.getQueryList(),operator);
+        return mergeAtomicQuery(sqlCondition.getQueryList(), operator);
     }
 
     private void combineQueryBuilder(List<AtomicQuery> combiner, SqlCondition sqlCondition, SqlBoolOperator boolOperator) {
@@ -79,7 +79,7 @@ public class BoolExpressionParser {
             } else if (operatorType == ElasticsearchParser.OR || operatorType == ElasticsearchParser.BOOLOR) {
                 boolOperator = SqlBoolOperator.OR;
             } else {
-                return new SqlCondition(parseQueryCondition(expressionContext),SqlConditionType.Atomic);
+                return new SqlCondition(parseQueryCondition(expressionContext), SqlConditionType.Atomic);
             }
             SqlCondition leftCondition = recursiveParseBoolQueryExpr(binaryContext.leftExpr);
             SqlCondition rightCondition = recursiveParseBoolQueryExpr(binaryContext.rightExpr);
@@ -89,7 +89,7 @@ public class BoolExpressionParser {
             combineQueryBuilder(queryList, rightCondition, boolOperator);
             return new SqlCondition(queryList, boolOperator);
         }
-        return new SqlCondition(parseQueryCondition(expressionContext),SqlConditionType.Atomic);
+        return new SqlCondition(parseQueryCondition(expressionContext), SqlConditionType.Atomic);
     }
 
     private AtomicQuery parseQueryCondition(ElasticsearchParser.ExpressionContext expressionContext) {
@@ -101,18 +101,17 @@ public class BoolExpressionParser {
         } else if (expressionContext instanceof ElasticsearchParser.LrExprContext) {
             ElasticsearchParser.LrExprContext lrExprContext = (ElasticsearchParser.LrExprContext) expressionContext;
             return parseQueryCondition(lrExprContext.expression());
-        }else if(expressionContext instanceof ElasticsearchParser.GeoContext){
-            ElasticsearchParser.GeoContext geoContext=(ElasticsearchParser.GeoContext)expressionContext;
+        } else if (expressionContext instanceof ElasticsearchParser.GeoContext) {
+            ElasticsearchParser.GeoContext geoContext = (ElasticsearchParser.GeoContext) expressionContext;
             return geoQueryParser.parse(geoContext);
-        }else if(expressionContext instanceof ElasticsearchParser.InContext){
-            ElasticsearchParser.InContext inContext=(ElasticsearchParser.InContext)expressionContext;
+        } else if (expressionContext instanceof ElasticsearchParser.InContext) {
+            ElasticsearchParser.InContext inContext = (ElasticsearchParser.InContext) expressionContext;
             return inListQueryParser.parseInListQuery(inContext);
-        }else if(expressionContext instanceof ElasticsearchParser.JoinContext){
+        } else if (expressionContext instanceof ElasticsearchParser.JoinContext) {
             return joinQueryParser.parse((ElasticsearchParser.JoinContext) expressionContext);
-        }else if(expressionContext instanceof ElasticsearchParser.NestedContext){
+        } else if (expressionContext instanceof ElasticsearchParser.NestedContext) {
             return nestedQueryParser.parse((ElasticsearchParser.NestedContext) expressionContext);
-        }
-        else {
+        } else {
             throw new ElasticSql2DslException("not support yet");
         }
     }
@@ -122,35 +121,31 @@ public class BoolExpressionParser {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         ListMultimap<AtomicQuery, QueryBuilder> listMultimap = ArrayListMultimap.create();
         for (AtomicQuery atomicQuery : queryList) {
-            if (CollectionUtils.isNotEmpty(atomicQuery.getHighlighter()) && !atomicQuery.isNestedQuery()) {
+            if (CollectionUtils.isNotEmpty(atomicQuery.getHighlighter())) {
                 highlighter.addAll(atomicQuery.getHighlighter());
             }
-            if (!atomicQuery.isNestedQuery()) {
-                //only [and] operator can merge bool query builder
-                if (operator == SqlBoolOperator.AND) {
-                    if(atomicQuery.getQueryBuilder() instanceof BoolQueryBuilder){
-                        BoolQueryBuilder boolQuery= (BoolQueryBuilder) atomicQuery.getQueryBuilder();
-                        if(CollectionUtils.isNotEmpty(boolQuery.must())){
-                            boolQueryBuilder.must().addAll(boolQuery.must());
-                        }
-                        if(CollectionUtils.isNotEmpty(boolQuery.mustNot())){
-                            boolQueryBuilder.mustNot().addAll(boolQuery.mustNot());
-                        }
-                        if(CollectionUtils.isNotEmpty(boolQuery.should())){
-                            boolQueryBuilder.should().addAll(boolQuery.should());
-                        }
-                    }else{
-                        boolQueryBuilder.must(atomicQuery.getQueryBuilder());
+            //only [and] operator can merge bool query builder
+            if (operator == SqlBoolOperator.AND) {
+                if (atomicQuery.getQueryBuilder() instanceof BoolQueryBuilder) {
+                    BoolQueryBuilder boolQuery = (BoolQueryBuilder) atomicQuery.getQueryBuilder();
+                    if (CollectionUtils.isNotEmpty(boolQuery.must())) {
+                        boolQueryBuilder.must().addAll(boolQuery.must());
                     }
-                } else if (operator == SqlBoolOperator.OR) {
-                    boolQueryBuilder.should(atomicQuery.getQueryBuilder());
+                    if (CollectionUtils.isNotEmpty(boolQuery.mustNot())) {
+                        boolQueryBuilder.mustNot().addAll(boolQuery.mustNot());
+                    }
+                    if (CollectionUtils.isNotEmpty(boolQuery.should())) {
+                        boolQueryBuilder.should().addAll(boolQuery.should());
+                    }
+                } else {
+                    boolQueryBuilder.must(atomicQuery.getQueryBuilder());
                 }
+            } else if (operator == SqlBoolOperator.OR) {
+                boolQueryBuilder.should(atomicQuery.getQueryBuilder());
             } else {
                 listMultimap.put(atomicQuery, atomicQuery.getQueryBuilder());
             }
         }
-
-        //TODO: merge Nested Query
         return boolQueryBuilder.minimumShouldMatch(1);
     }
 }

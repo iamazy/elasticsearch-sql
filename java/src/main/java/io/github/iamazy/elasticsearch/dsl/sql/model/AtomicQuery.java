@@ -5,7 +5,6 @@ import lombok.Data;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,18 +19,8 @@ public class AtomicQuery {
 
     private QueryBuilder queryBuilder;
 
-    private boolean isNestedQuery;
-
-    private List<String> nestedQueryPaths;
 
     public AtomicQuery(QueryBuilder queryBuilder){
         this.queryBuilder=queryBuilder;
-        this.isNestedQuery=false;
-    }
-
-    public AtomicQuery(QueryBuilder queryBuilder,List<String> nestedQueryPaths){
-        this.queryBuilder=queryBuilder;
-        this.isNestedQuery=true;
-        this.nestedQueryPaths=nestedQueryPaths;
     }
 }

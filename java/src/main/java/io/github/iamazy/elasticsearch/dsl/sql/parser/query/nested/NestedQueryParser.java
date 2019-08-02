@@ -31,6 +31,6 @@ public class NestedQueryParser implements ExpressionQueryParser<ElasticsearchPar
 
     @Override
     public boolean isMatchExpressionInvocation(Class clazz) {
-        return false;
+        return ElasticsearchParser.NestedContext.class==clazz;
     }
 }
