@@ -13,7 +13,7 @@ import org.elasticsearch.index.query.QueryBuilders;
  * @date 2019/7/30
  * @descrition
  **/
-public class GeoDistanceQueryParser extends ExpressionQueryParser<ElasticsearchParser.GeoDistanceClauseContext> {
+public class GeoDistanceQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoDistanceClauseContext> {
 
 
     @Override
@@ -30,7 +30,7 @@ public class GeoDistanceQueryParser extends ExpressionQueryParser<ElasticsearchP
     }
 
     @Override
-    public boolean isMatchExpressionInvocation(Class<ElasticsearchParser.GeoDistanceClauseContext> clazz) {
+    public boolean isMatchExpressionInvocation(Class clazz) {
         return ElasticsearchParser.GeoDistanceClauseContext.class == clazz;
     }
 

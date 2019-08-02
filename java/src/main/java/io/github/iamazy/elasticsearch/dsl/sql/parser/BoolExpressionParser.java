@@ -11,7 +11,11 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BetweenAndQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BinaryQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoDistanceQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.InListQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.HasChildQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.HasParentQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -31,7 +35,9 @@ public class BoolExpressionParser {
 
     private final BetweenAndQueryParser betweenAndQueryParser;
     private final BinaryQueryParser binaryQueryParser;
-    private final GeoDistanceQueryParser geoDistanceQueryParser;
+    private final InListQueryParser inListQueryParser;
+    private final JoinQueryParser joinQueryParser;
+    private final GeoQueryParser geoQueryParser;
 
     private Set<String> highlighter;
 
@@ -39,7 +45,9 @@ public class BoolExpressionParser {
         highlighter = new HashSet<>(0);
         betweenAndQueryParser = new BetweenAndQueryParser();
         binaryQueryParser=new BinaryQueryParser();
-        geoDistanceQueryParser=new GeoDistanceQueryParser();
+        inListQueryParser=new InListQueryParser();
+        joinQueryParser=new JoinQueryParser();
+        geoQueryParser=new GeoQueryParser();
     }
 
     public BoolQueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext){
@@ -95,13 +103,12 @@ public class BoolExpressionParser {
             return parseQueryCondition(lrExprContext.expression());
         }else if(expressionContext instanceof ElasticsearchParser.GeoContext){
             ElasticsearchParser.GeoContext geoContext=(ElasticsearchParser.GeoContext)expressionContext;
-            if(geoContext.geoClause().geoDistanceClause()!=null){
-                ElasticsearchParser.GeoDistanceClauseContext geoDistanceClauseContext=geoContext.geoClause().geoDistanceClause();
-                return geoDistanceQueryParser.parse(geoDistanceClauseContext);
-            }else{
-                //FIXME
-                throw new ElasticSql2DslException("not support yet");
-            }
+            return geoQueryParser.parse(geoContext);
+        }else if(expressionContext instanceof ElasticsearchParser.InContext){
+            ElasticsearchParser.InContext inContext=(ElasticsearchParser.InContext)expressionContext;
+            return inListQueryParser.parseInListQuery(inContext);
+        }else if(expressionContext instanceof ElasticsearchParser.JoinContext){
+            return joinQueryParser.parse((ElasticsearchParser.JoinContext) expressionContext);
         }
         else {
             throw new ElasticSql2DslException("not support yet");

@@ -4,7 +4,9 @@ import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoDistanceQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.LikeQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
 import org.elasticsearch.index.query.*;
 
 /**
@@ -14,9 +16,15 @@ import org.elasticsearch.index.query.*;
  **/
 public class BinaryQueryParser extends AbstractExactQueryParser {
 
-    private final GeoDistanceQueryParser geoDistanceQueryParser;
+    private final GeoQueryParser geoQueryParser;
+    private final JoinQueryParser joinQueryParser;
+    private final LikeQueryParser likeQueryParser;
+    private final InListQueryParser inListQueryParser;
     public BinaryQueryParser(){
-        geoDistanceQueryParser=new GeoDistanceQueryParser();
+        geoQueryParser=new GeoQueryParser();
+        joinQueryParser=new JoinQueryParser();
+        likeQueryParser=new LikeQueryParser();
+        inListQueryParser=new InListQueryParser();
     }
 
 
@@ -64,25 +72,10 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                 operatorType == ElasticsearchParser.BOOLOR) {
             ElasticsearchParser.ExpressionContext leftExpr = binaryContext.leftExpr;
             ElasticsearchParser.ExpressionContext rightExpr = binaryContext.rightExpr;
-            if ((leftExpr instanceof ElasticsearchParser.BinaryContext || leftExpr instanceof ElasticsearchParser.LrExprContext)
-                    && (rightExpr instanceof ElasticsearchParser.BinaryContext || rightExpr instanceof ElasticsearchParser.LrExprContext)) {
-                AtomicQuery leftQuery;
-                AtomicQuery rightQuery;
-                if (leftExpr instanceof ElasticsearchParser.BinaryContext) {
-                    ElasticsearchParser.BinaryContext leftBinary = (ElasticsearchParser.BinaryContext) leftExpr;
-                    leftQuery=parseBinaryQuery(leftBinary);
-                } else {
-                    ElasticsearchParser.LrExprContext leftLrExpr = (ElasticsearchParser.LrExprContext) leftExpr;
-                    leftQuery=parseLrExprContext(leftLrExpr);
-                }
+            if (binaryContextMatch(leftExpr)&&binaryContextMatch(rightExpr)) {
+                AtomicQuery leftQuery=parseExpressionContext(leftExpr);
+                AtomicQuery rightQuery=parseExpressionContext(rightExpr);
 
-                if(rightExpr instanceof ElasticsearchParser.BinaryContext){
-                    ElasticsearchParser.BinaryContext rightBinary = (ElasticsearchParser.BinaryContext) rightExpr;
-                    rightQuery=parseBinaryQuery(rightBinary);
-                }else{
-                    ElasticsearchParser.LrExprContext rightLrExpr = (ElasticsearchParser.LrExprContext) rightExpr;
-                    rightQuery=parseLrExprContext(rightLrExpr);
-                }
                 BoolQueryBuilder boolQueryBuilder;
                 if (operatorType == ElasticsearchParser.AND || operatorType == ElasticsearchParser.BOOLAND) {
                     boolQueryBuilder = QueryBuilders.boolQuery().must(leftQuery.getQueryBuilder())
@@ -149,7 +142,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         //LIKE | NOT LIKE
         else if (binaryContext.likeClause() != null) {
             ElasticsearchParser.LikeClauseContext likeClauseContext = binaryContext.likeClause();
-            return parseLikeContext(likeClauseContext);
+            return likeQueryParser.parse(likeClauseContext);
         }
         throw new ElasticSql2DslException("[syntax error] not supported yet");
     }
@@ -171,29 +164,6 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         });
     }
 
-    private AtomicQuery parseLikeContext(ElasticsearchParser.LikeClauseContext likeContext){
-        SqlConditionOperator operator = likeContext.not == null ? SqlConditionOperator.Like : SqlConditionOperator.NotLike;
-        return parseCondition(likeContext, operator, null, (fieldName, operator1, rightParams) -> {
-            String pattern = likeContext.pattern.getText();
-            if (pattern.contains("%")) {
-                pattern = pattern.replaceAll("%", "*");
-            }
-            if (pattern.contains("_")) {
-                pattern = pattern.replaceAll("_", "?");
-            }
-            RegexpQueryBuilder regexpQueryBuilder = QueryBuilders.regexpQuery(fieldName, pattern);
-            switch (operator1) {
-                case Like: {
-                    return regexpQueryBuilder;
-                }
-                default:
-                case NotLike: {
-                    return QueryBuilders.boolQuery().mustNot(regexpQueryBuilder);
-                }
-            }
-        });
-    }
-
     private AtomicQuery parseLrExprContext(ElasticsearchParser.LrExprContext lrExprContext) {
         ElasticsearchParser.ExpressionContext expression = lrExprContext.expression();
         if (expression instanceof ElasticsearchParser.BinaryContext) {
@@ -201,12 +171,45 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         } else if (expression instanceof ElasticsearchParser.LrExprContext) {
             return parseLrExprContext((ElasticsearchParser.LrExprContext) expression);
         }  else if(expression instanceof ElasticsearchParser.GeoContext){
-            if(((ElasticsearchParser.GeoContext) expression).geoClause().geoDistanceClause()!=null){
-                return geoDistanceQueryParser.parse(((ElasticsearchParser.GeoContext) expression).geoClause().geoDistanceClause());
-            }else if(((ElasticsearchParser.GeoContext) expression).geoClause().geoBoundingBoxClause()!=null){
-
-            }
+            return geoQueryParser.parse((ElasticsearchParser.GeoContext) expression);
+        }else if(expression instanceof ElasticsearchParser.JoinContext){
+            return joinQueryParser.parse((ElasticsearchParser.JoinContext) expression);
+        }else if(expression instanceof ElasticsearchParser.InContext){
+            return inListQueryParser.parseInListQuery((ElasticsearchParser.InContext) expression);
         }
         throw new ElasticSql2DslException("LrExprContext must be instance of BinaryContext or LrExprContext");
+    }
+
+    private AtomicQuery parseExpressionContext(ElasticsearchParser.ExpressionContext expressionContext){
+        if (expressionContext instanceof ElasticsearchParser.BinaryContext) {
+            ElasticsearchParser.BinaryContext leftBinary = (ElasticsearchParser.BinaryContext) expressionContext;
+            return parseBinaryQuery(leftBinary);
+        } else if(expressionContext instanceof ElasticsearchParser.LrExprContext){
+            ElasticsearchParser.LrExprContext leftLrExpr = (ElasticsearchParser.LrExprContext) expressionContext;
+            return parseLrExprContext(leftLrExpr);
+        }else if(expressionContext instanceof ElasticsearchParser.GeoContext){
+            ElasticsearchParser.GeoContext geoContext=(ElasticsearchParser.GeoContext)expressionContext;
+            return geoQueryParser.parse(geoContext);
+        }else if(expressionContext instanceof ElasticsearchParser.JoinContext){
+            return joinQueryParser.parse((ElasticsearchParser.JoinContext) expressionContext);
+        }else if(expressionContext instanceof ElasticsearchParser.InContext){
+            return inListQueryParser.parseInListQuery((ElasticsearchParser.InContext) expressionContext);
+        }
+        else{
+            throw new ElasticSql2DslException("not support yet");
+        }
+    }
+
+    private boolean binaryContextMatch(ElasticsearchParser.ExpressionContext expressionContext){
+        if(expressionContext instanceof ElasticsearchParser.BinaryContext){
+            return true;
+        }
+        if(expressionContext instanceof ElasticsearchParser.LrExprContext){
+            return true;
+        }
+        if(expressionContext instanceof ElasticsearchParser.GeoContext){
+            return true;
+        }
+        return expressionContext instanceof ElasticsearchParser.JoinContext;
     }
 }

@@ -30,6 +30,10 @@ public abstract class AbstractExactQueryParser {
             ElasticsearchParser.BetweenAndContext betweenAndContext=(ElasticsearchParser.BetweenAndContext) expression;
             QueryBuilder query = queryBuilder.buildQuery(betweenAndContext.expr.getText(),operator,params);
             return new AtomicQuery(query);
+        }else if(expression instanceof ElasticsearchParser.InClauseContext){
+            ElasticsearchParser.InClauseContext inClauseContext=(ElasticsearchParser.InClauseContext)expression;
+            QueryBuilder query=queryBuilder.buildQuery(inClauseContext.left.getText(),operator,params);
+            return new AtomicQuery(query);
         }
         return null;
     }

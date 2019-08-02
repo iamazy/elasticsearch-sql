@@ -1,13 +1,19 @@
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
+import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
-import io.github.iamazy.elasticsearch.dsl.sql.node.*;
+import io.github.iamazy.elasticsearch.dsl.sql.node.ANode;
+import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author iamazy
@@ -18,9 +24,15 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
 
     private final String sql;
 
+    private ElasticSqlParseResult parseResult;
 
     public Walker(String sql) {
         this.sql = sql;
+        parseResult=new ElasticSqlParseResult();
+    }
+
+    public ElasticSqlParseResult getParseResult() {
+        return parseResult;
     }
 
     //TODO: set package access to private
@@ -240,6 +252,10 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
 
     @Override
     public ANode visitRoutingClause(ElasticsearchParser.RoutingClauseContext ctx) {
+        List<String> routings=new ArrayList<>(0);
+        for(TerminalNode routing:ctx.STRING()){
+            routings.add(StringManager.removeStringSymbol(routing.getText()));
+        }
         return super.visitRoutingClause(ctx);
     }
 

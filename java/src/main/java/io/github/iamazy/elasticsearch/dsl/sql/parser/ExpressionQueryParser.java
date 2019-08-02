@@ -9,8 +9,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
  * @descrition
  **/
 
-public abstract class ExpressionQueryParser<T extends ParserRuleContext> {
-    public abstract AtomicQuery parse(T expression);
+public interface ExpressionQueryParser<T extends ParserRuleContext> {
+    AtomicQuery parse(T expression);
 
-    public abstract boolean isMatchExpressionInvocation(Class<T> clazz);
+    boolean isMatchExpressionInvocation(Class clazz);
 }

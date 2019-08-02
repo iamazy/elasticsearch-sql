@@ -78,7 +78,7 @@ likeClause: field = name not = NOT? LIKE pattern = STRING;
 
 isClause: field = name IS not = NOT? NULL;
 
-inClause: left = identity IN right = inRightOperandList;
+inClause: left = identity NOT? IN right = inRightOperandList;
 
 inRightOperandList:
 	inRightOperand
