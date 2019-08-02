@@ -13,9 +13,8 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BetweenAndQuery
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BinaryQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.InListQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.HasChildQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.HasParentQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.nested.NestedQueryParser;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -38,6 +37,7 @@ public class BoolExpressionParser {
     private final InListQueryParser inListQueryParser;
     private final JoinQueryParser joinQueryParser;
     private final GeoQueryParser geoQueryParser;
+    private final NestedQueryParser nestedQueryParser;
 
     private Set<String> highlighter;
 
@@ -48,6 +48,7 @@ public class BoolExpressionParser {
         inListQueryParser=new InListQueryParser();
         joinQueryParser=new JoinQueryParser();
         geoQueryParser=new GeoQueryParser();
+        nestedQueryParser=new NestedQueryParser();
     }
 
     public BoolQueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext){
@@ -78,7 +79,6 @@ public class BoolExpressionParser {
             } else if (operatorType == ElasticsearchParser.OR || operatorType == ElasticsearchParser.BOOLOR) {
                 boolOperator = SqlBoolOperator.OR;
             } else {
-//                throw new ElasticSql2DslException("not supported operator:" + binaryContext.operator.getText());
                 return new SqlCondition(parseQueryCondition(expressionContext),SqlConditionType.Atomic);
             }
             SqlCondition leftCondition = recursiveParseBoolQueryExpr(binaryContext.leftExpr);
@@ -109,6 +109,8 @@ public class BoolExpressionParser {
             return inListQueryParser.parseInListQuery(inContext);
         }else if(expressionContext instanceof ElasticsearchParser.JoinContext){
             return joinQueryParser.parse((ElasticsearchParser.JoinContext) expressionContext);
+        }else if(expressionContext instanceof ElasticsearchParser.NestedContext){
+            return nestedQueryParser.parse((ElasticsearchParser.NestedContext) expressionContext);
         }
         else {
             throw new ElasticSql2DslException("not support yet");

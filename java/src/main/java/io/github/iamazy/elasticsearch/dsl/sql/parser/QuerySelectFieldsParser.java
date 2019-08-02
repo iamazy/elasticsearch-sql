@@ -39,10 +39,10 @@ public class QuerySelectFieldsParser implements QueryParser{
             }
         }
         if(CollectionUtils.isNotEmpty(includeFields)){
-            dslContext.getParseResult().setIncludeFields(includeFields);
+            dslContext.getParseResult().getIncludeFields().addAll(includeFields);
         }
         if(CollectionUtils.isNotEmpty(excludeFields)){
-            dslContext.getParseResult().setExcludeFields(excludeFields);
+            dslContext.getParseResult().getExcludeFields().addAll(excludeFields);
         }
     }
 }

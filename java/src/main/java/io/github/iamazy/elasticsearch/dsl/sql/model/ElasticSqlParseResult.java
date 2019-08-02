@@ -52,8 +52,8 @@ public class ElasticSqlParseResult {
      */
     private Set<String> highlighter = new HashSet<>(0);
     private List<String> routingBy;
-    private List<String> includeFields;
-    private List<String> excludeFields;
+    private List<String> includeFields=new ArrayList<>(0);
+    private List<String> excludeFields=new ArrayList<>(0);
     private transient BoolQueryBuilder whereCondition;
     private transient BoolQueryBuilder matchCondition;
     private transient List<SortBuilder> orderBy;
@@ -141,18 +141,8 @@ public class ElasticSqlParseResult {
         return includeFields;
     }
 
-    public ElasticSqlParseResult setIncludeFields(List<String> includeFields) {
-        this.includeFields = includeFields;
-        return this;
-    }
-
     public List<String> getExcludeFields() {
         return excludeFields;
-    }
-
-    public ElasticSqlParseResult setExcludeFields(List<String> excludeFields) {
-        this.excludeFields = excludeFields;
-        return this;
     }
 
     public BoolQueryBuilder getWhereCondition() {
