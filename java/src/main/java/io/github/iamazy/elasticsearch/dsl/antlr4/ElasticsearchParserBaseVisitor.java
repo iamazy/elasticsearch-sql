@@ -304,6 +304,13 @@ public class ElasticsearchParserBaseVisitor<T> extends AbstractParseTreeVisitor<
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitAggregateItemClause(ElasticsearchParser.AggregateItemClauseContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

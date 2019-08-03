@@ -454,6 +454,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitAggregateClause(ElasticsearchParser.AggregateClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#nestedAggregateClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#nestedAggregateClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#aggregateItemClause}.
 	 * @param ctx the parse tree
 	 */
