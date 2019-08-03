@@ -20,13 +20,13 @@ public class FullTextQueryParser implements ExpressionQueryParser<ElasticsearchP
     @Override
     public AtomicQuery parse(ElasticsearchParser.FullTextContext expression) {
         if (expression.fullTextClause().queryStringClause()!=null){
-            queryStringQueryParser.parse(expression.fullTextClause().queryStringClause());
+            return queryStringQueryParser.parse(expression.fullTextClause().queryStringClause());
         }
         return null;
     }
 
     @Override
     public boolean isMatchExpressionInvocation(Class clazz) {
-        return false;
+        return ElasticsearchParser.FullTextContext.class==clazz;
     }
 }

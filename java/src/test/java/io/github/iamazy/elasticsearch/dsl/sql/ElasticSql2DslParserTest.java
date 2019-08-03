@@ -22,11 +22,13 @@ public class ElasticSql2DslParserTest {
     @Test
     public void nested(){
         long now=System.currentTimeMillis();
-        String sql="select name from student where ([class1, age>1 and [class1.class2, name='hhha']] and c=1) or b~=='hhhhh' limit 2,5";
+        String sql="select name from student where (([class1, age>1 and [class1.class2, name='hhha']] and c=1) or b~=='hhhhh') and query by 'apppple' limit 2,5";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
     }
+
+
 
 }
