@@ -98,7 +98,7 @@ inRightOperand:
 
 tableRef: indexName = ID ( AS alias = ID)?;
 
-fullTextClause: queryString = queryStringClause;
+fullTextClause: queryStringClause;
 
 queryStringClause: QUERY BY STRING | INT | FLOAT;
 

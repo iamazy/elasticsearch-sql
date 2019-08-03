@@ -2553,7 +2553,6 @@ public class ElasticsearchParser extends Parser {
 	}
 
 	public static class FullTextClauseContext extends ParserRuleContext {
-		public QueryStringClauseContext queryString;
 		public QueryStringClauseContext queryStringClause() {
 			return getRuleContext(QueryStringClauseContext.class,0);
 		}
@@ -2583,7 +2582,7 @@ public class ElasticsearchParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(356);
-			((FullTextClauseContext)_localctx).queryString = queryStringClause();
+			queryStringClause();
 			}
 		}
 		catch (RecognitionException re) {
