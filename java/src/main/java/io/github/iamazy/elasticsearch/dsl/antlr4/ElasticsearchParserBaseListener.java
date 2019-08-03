@@ -520,18 +520,6 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterRoutingClause(ElasticsearchParser.RoutingClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}

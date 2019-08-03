@@ -281,12 +281,6 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAggregateItemClause(ElasticsearchParser.AggregateItemClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#nestedAggregateClause}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#routingClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

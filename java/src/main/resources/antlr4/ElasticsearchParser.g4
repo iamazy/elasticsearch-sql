@@ -116,12 +116,9 @@ whereClause: WHERE expression;
 groupClause: GROUP BY name ( COMMA name)*;
 
 aggregateClause:
-	AGGREGATE BY aggregateItemClause nestedAggregateClause?;
+	AGGREGATE BY aggregateItemClause;
 
-aggregateItemClause: ID collection (COMMA ID collection)*;
-
-nestedAggregateClause:
-	GT LPAREN aggregateItemClause nestedAggregateClause? RPAREN;
+aggregateItemClause: ID collection ((COMMA aggregateItemClause)* | GT LPAREN aggregateItemClause RPAREN);
 
 routingClause: ROUTING BY STRING ( COMMA STRING)*;
 
