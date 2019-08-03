@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
+import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 
@@ -22,7 +23,7 @@ public class FullTextQueryParser implements ExpressionQueryParser<ElasticsearchP
         if (expression.fullTextClause().queryStringClause()!=null){
             return queryStringQueryParser.parse(expression.fullTextClause().queryStringClause());
         }
-        return null;
+        throw new ElasticSql2DslException("not support yet");
     }
 
     @Override
