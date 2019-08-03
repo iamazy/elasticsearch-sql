@@ -1,4 +1,4 @@
-// Generated from E:/workspace/Work/spring-cloud/elasticsql/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
+// Generated from /Users/iamazy/Documents/GitHub/elasticsql/java/src/main/resources/antlr4/ElasticsearchParser.g4 by ANTLR 4.7.2
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -242,6 +242,18 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitBetweenAnd(ElasticsearchParser.BetweenAndContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code fullText}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFullText(ElasticsearchParser.FullTextContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code fullText}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFullText(ElasticsearchParser.FullTextContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code join}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
@@ -361,6 +373,26 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTableRef(ElasticsearchParser.TableRefContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#fullTextClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterFullTextClause(ElasticsearchParser.FullTextClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#fullTextClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitFullTextClause(ElasticsearchParser.FullTextClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#queryStringClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterQueryStringClause(ElasticsearchParser.QueryStringClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#queryStringClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitQueryStringClause(ElasticsearchParser.QueryStringClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#hasParentClause}.
 	 * @param ctx the parse tree

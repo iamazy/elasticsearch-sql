@@ -4,6 +4,8 @@ import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
+import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.FullTextQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.LikeQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
@@ -22,12 +24,16 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
     private final LikeQueryParser likeQueryParser;
     private final InListQueryParser inListQueryParser;
     private final NestedQueryParser nestedQueryParser;
+    private final FullTextQueryParser fullTextQueryParser;
+    private final BetweenAndQueryParser betweenAndQueryParser;
     public BinaryQueryParser(){
         geoQueryParser=new GeoQueryParser();
         joinQueryParser=new JoinQueryParser();
         likeQueryParser=new LikeQueryParser();
         inListQueryParser=new InListQueryParser();
         nestedQueryParser=new NestedQueryParser();
+        fullTextQueryParser=new FullTextQueryParser();
+        betweenAndQueryParser=new BetweenAndQueryParser();
     }
 
 
@@ -35,7 +41,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         int operatorType = binaryContext.operator.getType();
         //EQ NEQ AEQ
         // Will any one query by `not approximately equal` ?  no !!!
-        if (operatorType == ElasticsearchParser.EQ || operatorType == ElasticsearchParser.NE || operatorType == ElasticsearchParser.AEQ) {
+        if (operatorType == ElasticsearchParser.EQ || operatorType == ElasticsearchParser.NE || operatorType == ElasticsearchParser.AEQ||operatorType==ElasticsearchParser.TEQ) {
             String targetVal = binaryContext.rightExpr.getText();
             SqlConditionOperator operator;
             switch (operatorType) {
@@ -45,6 +51,10 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                 }
                 case ElasticsearchParser.AEQ: {
                     operator = SqlConditionOperator.ApproximatelyEqual;
+                    break;
+                }
+                case ElasticsearchParser.TEQ:{
+                    operator = SqlConditionOperator.MatchPrase;
                     break;
                 }
                 default:
@@ -60,6 +70,9 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                     }
                     case ApproximatelyEqual: {
                         return QueryBuilders.matchQuery(fieldName, rightParams[0]);
+                    }
+                    case MatchPrase:{
+                        return QueryBuilders.matchPhraseQuery(fieldName,rightParams[0]);
                     }
                     default:
                     case Equality: {
@@ -167,31 +180,13 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         });
     }
 
-    private AtomicQuery parseLrExprContext(ElasticsearchParser.LrExprContext lrExprContext) {
-        ElasticsearchParser.ExpressionContext expression = lrExprContext.expression();
-        if (expression instanceof ElasticsearchParser.BinaryContext) {
-            return parseBinaryQuery((ElasticsearchParser.BinaryContext) expression);
-        } else if (expression instanceof ElasticsearchParser.LrExprContext) {
-            return parseLrExprContext((ElasticsearchParser.LrExprContext) expression);
-        }  else if(expression instanceof ElasticsearchParser.GeoContext){
-            return geoQueryParser.parse((ElasticsearchParser.GeoContext) expression);
-        }else if(expression instanceof ElasticsearchParser.JoinContext){
-            return joinQueryParser.parse((ElasticsearchParser.JoinContext) expression);
-        }else if(expression instanceof ElasticsearchParser.InContext){
-            return inListQueryParser.parseInListQuery((ElasticsearchParser.InContext) expression);
-        }else if(expression instanceof ElasticsearchParser.NestedContext){
-            return nestedQueryParser.parse((ElasticsearchParser.NestedContext) expression);
-        }
-        throw new ElasticSql2DslException("LrExprContext must be instance of BinaryContext or LrExprContext");
-    }
-
-    private AtomicQuery parseExpressionContext(ElasticsearchParser.ExpressionContext expressionContext){
+    public AtomicQuery parseExpressionContext(ElasticsearchParser.ExpressionContext expressionContext){
         if (expressionContext instanceof ElasticsearchParser.BinaryContext) {
             ElasticsearchParser.BinaryContext leftBinary = (ElasticsearchParser.BinaryContext) expressionContext;
             return parseBinaryQuery(leftBinary);
         } else if(expressionContext instanceof ElasticsearchParser.LrExprContext){
             ElasticsearchParser.LrExprContext leftLrExpr = (ElasticsearchParser.LrExprContext) expressionContext;
-            return parseLrExprContext(leftLrExpr);
+            return parseExpressionContext(leftLrExpr.expression());
         }else if(expressionContext instanceof ElasticsearchParser.GeoContext){
             ElasticsearchParser.GeoContext geoContext=(ElasticsearchParser.GeoContext)expressionContext;
             return geoQueryParser.parse(geoContext);
@@ -201,6 +196,8 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             return inListQueryParser.parseInListQuery((ElasticsearchParser.InContext) expressionContext);
         }else if(expressionContext instanceof ElasticsearchParser.NestedContext){
             return nestedQueryParser.parse((ElasticsearchParser.NestedContext) expressionContext);
+        }else if(expressionContext instanceof ElasticsearchParser.FullTextContext){
+            return fullTextQueryParser.parse((ElasticsearchParser.FullTextContext) expressionContext);
         }
         else{
             throw new ElasticSql2DslException("not support yet");
@@ -218,6 +215,9 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             return true;
         }
         if(expressionContext instanceof ElasticsearchParser.NestedContext){
+            return true;
+        }
+        if(expressionContext instanceof ElasticsearchParser.FullTextContext){
             return true;
         }
         return expressionContext instanceof ElasticsearchParser.JoinContext;

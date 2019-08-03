@@ -12,6 +12,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BetweenAndQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BinaryQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.InListQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.FullTextQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.nested.NestedQueryParser;
@@ -32,23 +33,13 @@ import java.util.Set;
 public class BoolExpressionParser {
 
 
-    private final BetweenAndQueryParser betweenAndQueryParser;
     private final BinaryQueryParser binaryQueryParser;
-    private final InListQueryParser inListQueryParser;
-    private final JoinQueryParser joinQueryParser;
-    private final GeoQueryParser geoQueryParser;
-    private final NestedQueryParser nestedQueryParser;
 
     private Set<String> highlighter;
 
     public BoolExpressionParser() {
         highlighter = new HashSet<>(0);
-        betweenAndQueryParser = new BetweenAndQueryParser();
         binaryQueryParser = new BinaryQueryParser();
-        inListQueryParser = new InListQueryParser();
-        joinQueryParser = new JoinQueryParser();
-        geoQueryParser = new GeoQueryParser();
-        nestedQueryParser = new NestedQueryParser();
     }
 
     public BoolQueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext) {
@@ -79,7 +70,7 @@ public class BoolExpressionParser {
             } else if (operatorType == ElasticsearchParser.OR || operatorType == ElasticsearchParser.BOOLOR) {
                 boolOperator = SqlBoolOperator.OR;
             } else {
-                return new SqlCondition(parseQueryCondition(expressionContext), SqlConditionType.Atomic);
+                return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
             }
             SqlCondition leftCondition = recursiveParseBoolQueryExpr(binaryContext.leftExpr);
             SqlCondition rightCondition = recursiveParseBoolQueryExpr(binaryContext.rightExpr);
@@ -89,31 +80,7 @@ public class BoolExpressionParser {
             combineQueryBuilder(queryList, rightCondition, boolOperator);
             return new SqlCondition(queryList, boolOperator);
         }
-        return new SqlCondition(parseQueryCondition(expressionContext), SqlConditionType.Atomic);
-    }
-
-    private AtomicQuery parseQueryCondition(ElasticsearchParser.ExpressionContext expressionContext) {
-
-        if (expressionContext instanceof ElasticsearchParser.BinaryContext) {
-            return binaryQueryParser.parseBinaryQuery((ElasticsearchParser.BinaryContext) expressionContext);
-        } else if (expressionContext instanceof ElasticsearchParser.BetweenAndContext) {
-            return betweenAndQueryParser.parseBetweenAndQuery((ElasticsearchParser.BetweenAndContext) expressionContext);
-        } else if (expressionContext instanceof ElasticsearchParser.LrExprContext) {
-            ElasticsearchParser.LrExprContext lrExprContext = (ElasticsearchParser.LrExprContext) expressionContext;
-            return parseQueryCondition(lrExprContext.expression());
-        } else if (expressionContext instanceof ElasticsearchParser.GeoContext) {
-            ElasticsearchParser.GeoContext geoContext = (ElasticsearchParser.GeoContext) expressionContext;
-            return geoQueryParser.parse(geoContext);
-        } else if (expressionContext instanceof ElasticsearchParser.InContext) {
-            ElasticsearchParser.InContext inContext = (ElasticsearchParser.InContext) expressionContext;
-            return inListQueryParser.parseInListQuery(inContext);
-        } else if (expressionContext instanceof ElasticsearchParser.JoinContext) {
-            return joinQueryParser.parse((ElasticsearchParser.JoinContext) expressionContext);
-        } else if (expressionContext instanceof ElasticsearchParser.NestedContext) {
-            return nestedQueryParser.parse((ElasticsearchParser.NestedContext) expressionContext);
-        } else {
-            throw new ElasticSql2DslException("not support yet");
-        }
+        return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
     }
 
 

@@ -1,4 +1,4 @@
-// Generated from E:/workspace/Work/spring-cloud/elasticsql/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
+// Generated from /Users/iamazy/Documents/GitHub/elasticsql/java/src/main/resources/antlr4/ElasticsearchParser.g4 by ANTLR 4.7.2
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -149,6 +149,13 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBetweenAnd(ElasticsearchParser.BetweenAndContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code fullText}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFullText(ElasticsearchParser.FullTextContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code join}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
@@ -219,6 +226,18 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTableRef(ElasticsearchParser.TableRefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#fullTextClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFullTextClause(ElasticsearchParser.FullTextClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#queryStringClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitQueryStringClause(ElasticsearchParser.QueryStringClauseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#hasParentClause}.
 	 * @param ctx the parse tree

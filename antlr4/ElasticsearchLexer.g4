@@ -172,6 +172,8 @@ COND: '?';
 EQ: '=';
 // ~= -> match
 AEQ: '~=';
+// ~== -> match_phrase
+TEQ: '~==';
 EQEQ: '==';
 NE: '!=';
 GT: '>';

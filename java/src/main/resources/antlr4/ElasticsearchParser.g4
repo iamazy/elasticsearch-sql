@@ -54,7 +54,7 @@ expression:
 	| leftExpr = expression operator = (PLUS | MINUS) rightExpr = expression				# binary
 	| leftExpr = expression operator = (LSH | RSH | USH) rightExpr = expression				# binary
 	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# binary
-	| leftExpr = expression operator = (EQ | NE | AEQ) rightExpr = expression				# binary
+	| leftExpr = expression operator = (EQ | NE | AEQ | TEQ) rightExpr = expression				# binary
 	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# binary
 	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# binary
 	| expr = identity BETWEEN left = identity AND right = identity							# betweenAnd
@@ -70,6 +70,8 @@ expression:
 	| nestedClause																		# nested
 	| likeClause																		# binary
 	| geoClause																			# geo
+	| fullTextClause																	# fullText
+	| not = NOT expression																# binary
 ;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
@@ -95,6 +97,10 @@ inRightOperand:
 	) right = inRightOperand # arithmeticLiteral;
 
 tableRef: indexName = ID ( AS alias = ID)?;
+
+fullTextClause: queryString = queryStringClause;
+
+queryStringClause: QUERY BY STRING | INT | FLOAT;
 
 hasParentClause:
 	HAS_PARENT LPAREN type = name COMMA query = expression RPAREN;

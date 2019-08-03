@@ -1,4 +1,4 @@
-// Generated from E:/workspace/Work/spring-cloud/elasticsql/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
+// Generated from /Users/iamazy/Documents/GitHub/elasticsql/java/src/main/resources/antlr4/ElasticsearchParser.g4 by ANTLR 4.7.2
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -268,6 +268,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFullText(ElasticsearchParser.FullTextContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFullText(ElasticsearchParser.FullTextContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterJoin(ElasticsearchParser.JoinContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -395,6 +407,30 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTableRef(ElasticsearchParser.TableRefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFullTextClause(ElasticsearchParser.FullTextClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFullTextClause(ElasticsearchParser.FullTextClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterQueryStringClause(ElasticsearchParser.QueryStringClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitQueryStringClause(ElasticsearchParser.QueryStringClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
