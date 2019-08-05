@@ -1,6 +1,14 @@
 # 说明
 将[elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql)使用**antlr4**进行重写，并添加多语言实现
 
+
+# 版本
+|elasticsql|es version|
+|----|-----|
+|master|7.2.0|
+
+
+
 # wiki
 [elasticsql-wiki](https://github.com/iamazy/elasticsql/wiki)
 
