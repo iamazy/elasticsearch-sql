@@ -1,13 +1,41 @@
 # 说明
 将[elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql)使用**antlr4**进行重写，并添加多语言实现
 
-
 # 版本
 |elasticsql|es version|
 |----|-----|
 |master|7.2.0|
 
+# 插件(isql)
+#### 版本
 
+| elasticsearch version | latest version | remark | isql version | 
+| ---- | ---- | ---- | ---- | 
+| 7.x | 7.2.0 | | 7.2.0.beta |
+
+#### 安装
+
+Elasticsearch {7.x}
+```
+./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/{isql-version}/elasticsearch-sql-plugin-{isql-version}.zip
+```
+
+#### 使用
+
+##### 1. 使用sql语句直接查询elasticsearch里面的数据集
+```
+POST _isql
+{
+    "sql":"select * from fruit"
+}
+```
+##### 2. 将sql解析成elasticsearch的dsl
+```
+POST _isql/_explain
+{
+    "sql":"select * from fruit"
+}
+```
 
 # wiki
 [elasticsql-wiki](https://github.com/iamazy/elasticsql/wiki)
@@ -105,11 +133,6 @@ TODO
 - [ ] ES Boosting
 - [ ] ES Function Score
 - [ ] ...
-
-
-使用文档
---------------------
-[elasticsql-wiki](https://github.com/iamazy/elasticsql/wiki)
 
 # 示例
 ### 1. select,include,exclude,from,where,in,and,or,has_parent,geo_distance,limit
