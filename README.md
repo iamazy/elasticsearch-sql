@@ -12,8 +12,8 @@
 - [x] SQL Between And
 - [x] SQL Is
 - [x] SQL Not
-- [-] SQL Null
-- [-] SQL Nvl
+- [ ] SQL Null
+- [ ] SQL Nvl
 - [x] SQL Max
 - [x] SQL Min
 - [x] SQL Sum
@@ -23,12 +23,12 @@
 - [x] ES Match
 - [x] ES MultiMatch
 - [x] ES QueryString
-- [-] ES SimpleQueryString
+- [ ] ES SimpleQueryString
 - [x] ES HasParent
 - [x] ES HasChild
 - [x] ES Join
 - [x] ES Script
-- [-] ES Fuzzy
+- [ ] ES Fuzzy
 - [x] ES Prefix
 - [x] ES Regex
 - [x] ES Term
@@ -48,13 +48,13 @@
 - [x] ES Nested
 - [x] ES GeoDistance
 - [x] 支持嵌套深层聚类
-- [-] ES Scroll Id
+- [ ] ES Scroll Id
 - [x] ES 支持多层嵌套查询
-- [-] ES Highlighter
-- [-] ES Boosting
-- [-] ES Function Score
+- [ ] ES Highlighter
+- [ ] ES Boosting
+- [ ] ES Function Score
 - [x] SQL Like
-- [-] SQL Desc
+- [ ] SQL Desc
 - [x] ES Excludes
 
 使用文档
