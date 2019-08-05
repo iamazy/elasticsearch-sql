@@ -5,7 +5,7 @@
 - [x] SQL Select  
 - [x] SQL Where  
 - [x] SQL Order by (Asc & Desc)
-- [x] SQL Group by (Terms & Range)
+- [ ] SQL Group by (Terms & Range)
 - [x] ES Aggregate by
 - [x] SQL And & Or
 - [x] SQL In
