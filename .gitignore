@@ -241,3 +241,4 @@ java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/M
 java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/MinAggregationParser.class
 java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/SumAggregationParser.class
 java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/pipeline/DerivativeAggregationParser.class
+*.atn

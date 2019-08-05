@@ -1,6 +1,29 @@
 # 说明
 将`elasticsearch-sql`使用**antlr4**进行重写，并添加多语言实现
 
+# 特点
+#### 1. 基于antlr4
+> 自定义语法完全可控 <br/>
+> 可以直接的分析抽象语法树(AST)的遍历过程和各个token之间的关联关系
+
+ ### 抽象语法树示例图
+ ```sql
+ select name from student aggregate by terms(name,1)>(terms(aa,2),[apple,cardinality(ip),terms(aaa,1)>(terms(cc,10)>(terms(hh,3
+)))]) limit 2,5
+ ```
+ ![ast](./data/images/ast.png)
+
+ ### Token之间的关联关系
+ ![graph](./data/images/graph.png)
+ 
+
+#### 2. 基于elasticsearch java rest high level client
+> 可以直接由第三方http组件请求 <br/>
+> 跨语言 <br/>
+> 支持x-pack <br/>
+> 无需池化请求 <br/>
+
+
 # 功能点
 - [x] SQL Select  
 - [x] SQL Where  
