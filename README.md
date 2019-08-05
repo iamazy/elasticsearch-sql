@@ -12,7 +12,7 @@
 - [x] SQL Between And
 - [x] SQL Is
 - [x] SQL Not
-- [ ] SQL Null
+- [x] SQL Null
 - [ ] SQL Nvl
 - [x] SQL Max
 - [x] SQL Min
