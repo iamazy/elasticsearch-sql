@@ -42,7 +42,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void nestedAgg(){
         long now=System.currentTimeMillis();
-        String sql="select name from student aggregate by terms(name,1)>(terms(aa,2),[apple,cardinality(ip),terms(aaa,1)>(terms(bb,1),terms(cc,10)>(terms(hh,3),avg(age)),terms(vv,1))])";
+        String sql="select name from student aggregate by terms(name,1)>(terms(aa,2),[apple,cardinality(ip),terms(aaa,1)>(terms(bb,1),terms(cc,10)>(terms(hh,3),avg(age)),terms(vv,1))]) limit 2,5";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
@@ -22,11 +23,11 @@ public class LikeQueryParser extends AbstractExactQueryParser implements Express
         SqlConditionOperator operator = expression.not == null ? SqlConditionOperator.Like : SqlConditionOperator.NotLike;
         return parseCondition(expression, operator, null, (fieldName, operator1, rightParams) -> {
             String pattern = expression.pattern.getText();
-            if (pattern.contains("%")) {
-                pattern = pattern.replaceAll("%", "*");
+            if (pattern.contains(CoreConstants.MODULE)) {
+                pattern = pattern.replaceAll(CoreConstants.MODULE, CoreConstants.STAR);
             }
-            if (pattern.contains("_")) {
-                pattern = pattern.replaceAll("_", "?");
+            if (pattern.contains(CoreConstants.UNDERLINE)) {
+                pattern = pattern.replaceAll(CoreConstants.UNDERLINE, CoreConstants.COND);
             }
             RegexpQueryBuilder regexpQueryBuilder = QueryBuilders.regexpQuery(fieldName, pattern);
             switch (operator1) {

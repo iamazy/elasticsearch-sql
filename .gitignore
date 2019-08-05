@@ -237,3 +237,7 @@ java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/C
 java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/TopHitsAggregationParser.class
 java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/QueryOrderByParser.class
 java/target/classes/META-INF/elasticsql.kotlin_module
+java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/MaxAggregationParser.class
+java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/MinAggregationParser.class
+java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/SumAggregationParser.class
+java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/pipeline/DerivativeAggregationParser.class

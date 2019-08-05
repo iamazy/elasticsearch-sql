@@ -15,6 +15,10 @@ public interface CoreConstants {
     String COMMA = ",";
     String COLON = ":";
     String DOLLAR = "$";
+    String MODULE = "%";
+    String STAR = "*";
+    String UNDERLINE = "_";
+    String COND = "?";
     String DOT=".";
     String GRAVE_ACCENT="`";
     String UP_ARROW="^";
