@@ -19,7 +19,7 @@
 - [x] SQL Sum
 - [x] SQL Avg
 - [x] SQL > & < & >= & <=
-- [] ES Explain
+- [ ] ES Explain
 - [x] ES FullText
 - [x] ES Match
 - [x] ES MultiMatch
@@ -60,13 +60,13 @@
 
 TODO
 --------------------
-- [] SQL Delete
-- [] SQL Update
-- [] SQL Insert
-- [] SQL Desc
-- [] SQL Customise Function
-- [] ES Analysis
-- [] ...
+- [ ] SQL Delete
+- [ ] SQL Update
+- [ ] SQL Insert
+- [ ] SQL Desc
+- [ ] SQL Customise Function
+- [ ] ES Analysis
+- [ ] ...
 
 
 使用文档
