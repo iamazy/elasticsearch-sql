@@ -144,7 +144,7 @@ select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(
 }
 ```
 
-### 2. nested(~),query_string,match(~==)
+### 2. nested,query_string,match(~==)
 ```sql
 select name from student where (([class1, age>1 and [class1.class2, name='hhha']] and c=1) or b~=='hhhhh') and query by 'apppple' limit 2,5
 ```
