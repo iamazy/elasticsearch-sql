@@ -66,6 +66,8 @@ TODO
 - [ ] SQL Desc
 - [ ] SQL Customise Function
 - [ ] ES Analysis
+- [ ] ES Boosting
+- [ ] ES Function Score
 - [ ] ...
 
 
