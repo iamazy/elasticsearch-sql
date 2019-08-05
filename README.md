@@ -19,6 +19,7 @@
 - [x] SQL Sum
 - [x] SQL Avg
 - [x] SQL > & < & >= & <=
+- [] ES Explain
 - [x] ES FullText
 - [x] ES Match
 - [x] ES MultiMatch
@@ -42,7 +43,7 @@
 - [x] ES MatchAll
 - [x] ES MatchPhrase
 - [x] ES MatchPhrasePrefix
-- [-] ES DeleteByQuery
+- [ ] ES DeleteByQuery
 - [x] ES Cardinality (目前不支持Script的方式)
 - [x] ES TopHits
 - [x] ES Nested
@@ -56,6 +57,17 @@
 - [x] SQL Like
 - [ ] SQL Desc
 - [x] ES Excludes
+
+TODO
+--------------------
+- [] SQL Delete
+- [] SQL Update
+- [] SQL Insert
+- [] SQL Desc
+- [] SQL Customise Function
+- [] ES Analysis
+- [] ...
+
 
 使用文档
 --------------------
