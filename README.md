@@ -23,6 +23,7 @@
 #### 2. 基于elasticsearch java rest high level client
 > 可以直接由第三方http组件请求 <br/>
 > 跨语言 <br/>
+> 支持将sql解析成elasticsearch dsl
 > 支持x-pack <br/>
 > 无需池化请求 <br/>
 
