@@ -231,26 +231,6 @@ public class Walker extends ElasticsearchParserBaseVisitor<ANode> {
     }
 
     @Override
-    public ANode visitGroupClause(ElasticsearchParser.GroupClauseContext ctx) {
-        return super.visitGroupClause(ctx);
-    }
-
-    @Override
-    public ANode visitAggregateClause(ElasticsearchParser.AggregateClauseContext ctx) {
-        return super.visitAggregateClause(ctx);
-    }
-
-    @Override
-    public ANode visitAggregateItemClause(ElasticsearchParser.AggregateItemClauseContext ctx) {
-        return super.visitAggregateItemClause(ctx);
-    }
-
-    @Override
-    public ANode visitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx) {
-        return super.visitNestedAggregateClause(ctx);
-    }
-
-    @Override
     public ANode visitRoutingClause(ElasticsearchParser.RoutingClauseContext ctx) {
         List<String> routings=new ArrayList<>(0);
         for(TerminalNode routing:ctx.STRING()){

@@ -34,7 +34,7 @@ public class QueryRoutingsParser implements QueryParser {
             addRouting(deleteOperationContext.routingClause(), routings);
         }
         if (CollectionUtils.isNotEmpty(routings)) {
-            dslContext.getParseResult().setRoutingBy(routings);
+            dslContext.getParseResult().getRoutingBy().addAll(routings);
         }
     }
 

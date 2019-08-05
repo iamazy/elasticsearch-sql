@@ -15,6 +15,9 @@ public class QueryLimitParser implements QueryParser{
     public void parse(ElasticDslContext dslContext) {
         if(dslContext.getSqlContext().selectOperation()!=null){
             ElasticsearchParser.LimitClauseContext limitClauseContext=dslContext.getSqlContext().selectOperation().limitClause();
+            if(limitClauseContext==null){
+                return;
+            }
             if(limitClauseContext.offset!=null){
                 dslContext.getParseResult().setFrom(Integer.parseInt(limitClauseContext.offset.getText()));
             }

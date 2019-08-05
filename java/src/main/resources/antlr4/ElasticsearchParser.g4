@@ -16,7 +16,7 @@ sql: (
 selectOperation:
 	SELECT fieldList FROM tableRef (COMMA tableRef)* (
 		whereClause
-	)? (routingClause)? (groupClause | aggregateClause)? (
+	)? (routingClause)? (groupByClause | aggregateByClause)? (
 		orderClause
 	)? (limitClause)?;
 
@@ -100,7 +100,7 @@ tableRef: indexName = ID ( AS alias = ID)?;
 
 fullTextClause: queryStringClause;
 
-queryStringClause: QUERY BY STRING | INT | FLOAT;
+queryStringClause: QUERY BY STRING;
 
 hasParentClause:
 	HAS_PARENT LPAREN type = name COMMA query = expression RPAREN;
@@ -109,26 +109,30 @@ hasChildClause:
 	HAS_CHILD LPAREN type = name COMMA query = expression RPAREN;
 
 nestedClause:
-	LBRACKET nestedPath = identity COMMA query = expression RBRACKET;
+	LBRACKET nestedPath = ID COMMA query = expression RBRACKET;
 
 whereClause: WHERE expression;
 
-groupClause: GROUP BY name ( COMMA name)*;
+groupByClause: GROUP BY name ( COMMA name)*;
 
-aggregateClause:
-	AGGREGATE BY aggregateItemClause|nestedAggregateClause;
+aggregateByClause:
+	AGGREGATE BY aggregationClause;
 
-nestedAggregateClause:
-	LBRACKET nestedPath = identity COMMA  aggregateItemClause|nestedAggregateClause RBRACKET
+aggregationClause: aggregateItemClause | nestedAggregationClause ;
+
+nestedAggregationClause:
+	LBRACKET nestedPath = ID COMMA  aggregationClause RBRACKET
 ;
 
-aggregateItemClause: ID collection ((COMMA aggregateItemClause|nestedAggregateClause)* | (GT LPAREN aggregateItemClause | nestedAggregateClause RPAREN));
+subAggregationClause: GT LPAREN aggregationClause RPAREN;
+
+aggregateItemClause: ID collection ((COMMA aggregationClause)| subAggregationClause)*;
 
 routingClause: ROUTING BY STRING ( COMMA STRING)*;
 
 orderClause: ORDER BY order ( COMMA order)*;
 
-order: name type = ( ASC | DESC)?;
+order: name ASC?;
 
 limitClause: LIMIT ( offset = INT COMMA)? size = INT;
 

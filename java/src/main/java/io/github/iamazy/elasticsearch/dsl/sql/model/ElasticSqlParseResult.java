@@ -51,13 +51,13 @@ public class ElasticSqlParseResult {
      * 需要高亮显示的字段
      */
     private Set<String> highlighter = new HashSet<>(0);
-    private List<String> routingBy;
+    private List<String> routingBy=new ArrayList<>(0);
     private List<String> includeFields=new ArrayList<>(0);
     private List<String> excludeFields=new ArrayList<>(0);
     private transient BoolQueryBuilder whereCondition;
     private transient BoolQueryBuilder matchCondition;
-    private transient List<SortBuilder> orderBy;
-    private transient List<AggregationBuilder> groupBy;
+    private transient List<SortBuilder> orderBy=new ArrayList<>(0);
+    private transient List<AggregationBuilder> groupBy=new ArrayList<>(0);
     private transient SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
     private GetMappingsRequest mappingsRequest;
@@ -132,11 +132,6 @@ public class ElasticSqlParseResult {
         return routingBy;
     }
 
-    public ElasticSqlParseResult setRoutingBy(List<String> routingBy) {
-        this.routingBy = routingBy;
-        return this;
-    }
-
     public List<String> getIncludeFields() {
         return includeFields;
     }
@@ -167,18 +162,8 @@ public class ElasticSqlParseResult {
         return orderBy;
     }
 
-    public ElasticSqlParseResult setOrderBy(List<SortBuilder> orderBy) {
-        this.orderBy = orderBy;
-        return this;
-    }
-
     public List<AggregationBuilder> getGroupBy() {
         return groupBy;
-    }
-
-    public ElasticSqlParseResult setGroupBy(List<AggregationBuilder> groupBy) {
-        this.groupBy = groupBy;
-        return this;
     }
 
     public SearchSourceBuilder getSearchSourceBuilder() {

@@ -290,21 +290,35 @@ public class ElasticsearchParserBaseVisitor<T> extends AbstractParseTreeVisitor<
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitGroupClause(ElasticsearchParser.GroupClauseContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGroupByClause(ElasticsearchParser.GroupByClauseContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitAggregateClause(ElasticsearchParser.AggregateClauseContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAggregateByClause(ElasticsearchParser.AggregateByClauseContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAggregationClause(ElasticsearchParser.AggregationClauseContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitNestedAggregationClause(ElasticsearchParser.NestedAggregationClauseContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSubAggregationClause(ElasticsearchParser.SubAggregationClauseContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

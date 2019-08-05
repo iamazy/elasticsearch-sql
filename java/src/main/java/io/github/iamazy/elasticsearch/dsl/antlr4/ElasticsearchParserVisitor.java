@@ -263,23 +263,35 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhereClause(ElasticsearchParser.WhereClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#groupClause}.
+	 * Visit a parse tree produced by {@link ElasticsearchParser#groupByClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitGroupClause(ElasticsearchParser.GroupClauseContext ctx);
+	T visitGroupByClause(ElasticsearchParser.GroupByClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#aggregateClause}.
+	 * Visit a parse tree produced by {@link ElasticsearchParser#aggregateByClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAggregateClause(ElasticsearchParser.AggregateClauseContext ctx);
+	T visitAggregateByClause(ElasticsearchParser.AggregateByClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#nestedAggregateClause}.
+	 * Visit a parse tree produced by {@link ElasticsearchParser#aggregationClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx);
+	T visitAggregationClause(ElasticsearchParser.AggregationClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#nestedAggregationClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNestedAggregationClause(ElasticsearchParser.NestedAggregationClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#subAggregationClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSubAggregationClause(ElasticsearchParser.SubAggregationClauseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#aggregateItemClause}.
 	 * @param ctx the parse tree

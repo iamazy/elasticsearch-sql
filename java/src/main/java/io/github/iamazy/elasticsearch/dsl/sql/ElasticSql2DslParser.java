@@ -7,6 +7,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.*;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.AggregateByQueryParser;
 
 import java.util.Set;
 
@@ -38,6 +39,8 @@ public class ElasticSql2DslParser {
                 new QueryFromParser(),
                 new QueryWhereConditionParser(),
                 new QueryRoutingsParser(),
+                new AggregateByQueryParser(),
+                new QueryOrderByParser(),
                 new QueryLimitParser()
         );
     }

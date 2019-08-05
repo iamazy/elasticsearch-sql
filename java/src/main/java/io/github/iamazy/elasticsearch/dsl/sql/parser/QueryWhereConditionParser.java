@@ -15,9 +15,12 @@ public class QueryWhereConditionParser extends BoolExpressionParser implements Q
     @Override
     public void parse(ElasticDslContext dslContext) {
         if(dslContext.getSqlContext().selectOperation()!=null){
-            ElasticsearchParser.ExpressionContext expression = dslContext.getSqlContext().selectOperation().whereClause().expression();
-            BoolQueryBuilder boolQueryBuilder = parseBoolQueryExpr(expression);
-            dslContext.getParseResult().setWhereCondition(boolQueryBuilder);
+            ElasticsearchParser.WhereClauseContext whereClauseContext = dslContext.getSqlContext().selectOperation().whereClause();
+            if(whereClauseContext!=null) {
+                ElasticsearchParser.ExpressionContext expression = whereClauseContext.expression();
+                BoolQueryBuilder boolQueryBuilder = parseBoolQueryExpr(expression);
+                dslContext.getParseResult().setWhereCondition(boolQueryBuilder);
+            }
         }else if(dslContext.getSqlContext().deleteOperation()!=null){
 
         }else if(dslContext.getSqlContext().updateOperation()!=null){

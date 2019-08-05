@@ -484,37 +484,61 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGroupClause(ElasticsearchParser.GroupClauseContext ctx) { }
+	@Override public void enterGroupByClause(ElasticsearchParser.GroupByClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGroupClause(ElasticsearchParser.GroupClauseContext ctx) { }
+	@Override public void exitGroupByClause(ElasticsearchParser.GroupByClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAggregateClause(ElasticsearchParser.AggregateClauseContext ctx) { }
+	@Override public void enterAggregateByClause(ElasticsearchParser.AggregateByClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAggregateClause(ElasticsearchParser.AggregateClauseContext ctx) { }
+	@Override public void exitAggregateByClause(ElasticsearchParser.AggregateByClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx) { }
+	@Override public void enterAggregationClause(ElasticsearchParser.AggregationClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx) { }
+	@Override public void exitAggregationClause(ElasticsearchParser.AggregationClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNestedAggregationClause(ElasticsearchParser.NestedAggregationClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNestedAggregationClause(ElasticsearchParser.NestedAggregationClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSubAggregationClause(ElasticsearchParser.SubAggregationClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSubAggregationClause(ElasticsearchParser.SubAggregationClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -434,35 +434,55 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitWhereClause(ElasticsearchParser.WhereClauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#groupClause}.
+	 * Enter a parse tree produced by {@link ElasticsearchParser#groupByClause}.
 	 * @param ctx the parse tree
 	 */
-	void enterGroupClause(ElasticsearchParser.GroupClauseContext ctx);
+	void enterGroupByClause(ElasticsearchParser.GroupByClauseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#groupClause}.
+	 * Exit a parse tree produced by {@link ElasticsearchParser#groupByClause}.
 	 * @param ctx the parse tree
 	 */
-	void exitGroupClause(ElasticsearchParser.GroupClauseContext ctx);
+	void exitGroupByClause(ElasticsearchParser.GroupByClauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#aggregateClause}.
+	 * Enter a parse tree produced by {@link ElasticsearchParser#aggregateByClause}.
 	 * @param ctx the parse tree
 	 */
-	void enterAggregateClause(ElasticsearchParser.AggregateClauseContext ctx);
+	void enterAggregateByClause(ElasticsearchParser.AggregateByClauseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#aggregateClause}.
+	 * Exit a parse tree produced by {@link ElasticsearchParser#aggregateByClause}.
 	 * @param ctx the parse tree
 	 */
-	void exitAggregateClause(ElasticsearchParser.AggregateClauseContext ctx);
+	void exitAggregateByClause(ElasticsearchParser.AggregateByClauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#nestedAggregateClause}.
+	 * Enter a parse tree produced by {@link ElasticsearchParser#aggregationClause}.
 	 * @param ctx the parse tree
 	 */
-	void enterNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx);
+	void enterAggregationClause(ElasticsearchParser.AggregationClauseContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#nestedAggregateClause}.
+	 * Exit a parse tree produced by {@link ElasticsearchParser#aggregationClause}.
 	 * @param ctx the parse tree
 	 */
-	void exitNestedAggregateClause(ElasticsearchParser.NestedAggregateClauseContext ctx);
+	void exitAggregationClause(ElasticsearchParser.AggregationClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#nestedAggregationClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterNestedAggregationClause(ElasticsearchParser.NestedAggregationClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#nestedAggregationClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitNestedAggregationClause(ElasticsearchParser.NestedAggregationClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#subAggregationClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterSubAggregationClause(ElasticsearchParser.SubAggregationClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#subAggregationClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitSubAggregationClause(ElasticsearchParser.SubAggregationClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#aggregateItemClause}.
 	 * @param ctx the parse tree
