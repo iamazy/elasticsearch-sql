@@ -27,6 +27,7 @@
 > 支持x-pack <br/>
 > 无需池化请求 <br/>
 
+#### 3. 可作为插件集成进elasticsearch(isql)
 
 # 功能点
 - [x] SQL Select  
