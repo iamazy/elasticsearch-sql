@@ -1,6 +1,9 @@
 # 说明
 将`elasticsearch-sql`使用**antlr4**进行重写，并添加多语言实现
 
+# wiki
+[elasticsql-wiki](https://github.com/iamazy/elasticsql/wiki)
+
 # 特点
 #### 1. 基于antlr4
 > 自定义语法完全可控 <br/>
