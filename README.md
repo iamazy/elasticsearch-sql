@@ -1,5 +1,5 @@
 # 说明
-将[elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql)使用**antlr4**进行重写，并添加多语言实现
+将[elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql)使用**antlr4**进行重写
 
 # 版本
 |elasticsql|es version|
