@@ -13,12 +13,12 @@ import java.util.List;
  * @date 2019/7/30
  * @descrition sql operation must be selection
  **/
-public class QuerySelectFieldsParser implements QueryParser{
+public class QuerySelectFieldsParser implements QueryParser {
 
     @Override
     public void parse(ElasticDslContext dslContext) {
 
-        if(dslContext.getSqlContext().selectOperation().groupByClause()==null) {
+        if (dslContext.getSqlContext().selectOperation().groupByClause() == null) {
             List<String> includeFields = new ArrayList<>(0);
             List<String> excludeFields = new ArrayList<>(0);
             ElasticsearchParser.SelectOperationContext selectOperationContext = dslContext.getSqlContext().selectOperation();
@@ -34,16 +34,14 @@ public class QuerySelectFieldsParser implements QueryParser{
                     } else {
                         if (fieldName.fieldName instanceof ElasticsearchParser.FieldNameContext) {
                             includeFields.add(((ElasticsearchParser.FieldNameContext) fieldName.fieldName).field.getText());
-                        } else if(fieldName.fieldName instanceof ElasticsearchParser.DistinctNameContext){
-                            ElasticsearchParser.DistinctNameContext distinctNameContext=(ElasticsearchParser.DistinctNameContext)fieldName.fieldName;
+                        } else if (fieldName.fieldName instanceof ElasticsearchParser.DistinctNameContext) {
+                            ElasticsearchParser.DistinctNameContext distinctNameContext = (ElasticsearchParser.DistinctNameContext) fieldName.fieldName;
                             String distinctName = distinctNameContext.fieldName.getText();
-                            if(dslContext.getParseResult().getCollapseBuilder()==null) {
+                            if (dslContext.getParseResult().getCollapseBuilder() == null) {
                                 dslContext.getParseResult().setCollapseBuilder(new CollapseBuilder(distinctName));
-                            }else{
-                                includeFields.add(distinctName);
                             }
-                        }
-                        else {
+                            includeFields.add(distinctName);
+                        } else {
                             includeFields.add(fieldName.fieldName.getText());
                         }
                     }

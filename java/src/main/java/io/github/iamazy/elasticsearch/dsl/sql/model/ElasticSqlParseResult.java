@@ -281,6 +281,9 @@ public class ElasticSqlParseResult {
             searchSourceBuilder.query(QueryBuilders.matchAllQuery());
         }
 
+        if(collapseBuilder!=null){
+            searchSourceBuilder.collapse(collapseBuilder);
+        }
         if (CollectionUtils.isNotEmpty(orderBy)) {
             for (SortBuilder sortBuilder : orderBy) {
                 searchSourceBuilder.sort(sortBuilder);
