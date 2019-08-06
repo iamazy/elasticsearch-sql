@@ -19,6 +19,7 @@ import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.slf4j.Logger;
@@ -56,6 +57,7 @@ public class ElasticSqlParseResult {
     private List<String> excludeFields=new ArrayList<>(0);
     private transient BoolQueryBuilder whereCondition;
     private transient BoolQueryBuilder matchCondition;
+    private transient CollapseBuilder collapseBuilder;
     private transient List<SortBuilder> orderBy=new ArrayList<>(0);
     private transient List<AggregationBuilder> groupBy=new ArrayList<>(0);
     private transient SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -164,6 +166,14 @@ public class ElasticSqlParseResult {
 
     public List<AggregationBuilder> getGroupBy() {
         return groupBy;
+    }
+
+    public void setCollapseBuilder(CollapseBuilder collapseBuilder) {
+        this.collapseBuilder = collapseBuilder;
+    }
+
+    public CollapseBuilder getCollapseBuilder() {
+        return collapseBuilder;
     }
 
     public SearchSourceBuilder getSearchSourceBuilder() {

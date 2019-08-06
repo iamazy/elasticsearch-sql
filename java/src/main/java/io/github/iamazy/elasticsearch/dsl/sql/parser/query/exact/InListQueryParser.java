@@ -15,7 +15,7 @@ import java.util.List;
  **/
 public class InListQueryParser extends AbstractExactQueryParser{
 
-    public AtomicQuery parseInListQuery(ElasticsearchParser.InContext inContext){
+    public AtomicQuery parse(ElasticsearchParser.InContext inContext){
         SqlConditionOperator operator = inContext.inClause().NOT() == null ? SqlConditionOperator.In:SqlConditionOperator.NotIn;
         List<Object> inList=new ArrayList<>(0);
         for(ElasticsearchParser.InRightOperandContext rightCtx:inContext.inClause().right.inRightOperand()){

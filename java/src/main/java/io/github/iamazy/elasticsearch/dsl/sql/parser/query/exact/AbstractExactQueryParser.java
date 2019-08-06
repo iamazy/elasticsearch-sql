@@ -34,6 +34,10 @@ public abstract class AbstractExactQueryParser {
             ElasticsearchParser.InClauseContext inClauseContext=(ElasticsearchParser.InClauseContext)expression;
             QueryBuilder query=queryBuilder.buildQuery(inClauseContext.left.getText(),operator,params);
             return new AtomicQuery(query);
+        }else if(expression instanceof ElasticsearchParser.LikeClauseContext){
+            ElasticsearchParser.LikeClauseContext likeClauseContext=(ElasticsearchParser.LikeClauseContext) expression;
+            QueryBuilder query=queryBuilder.buildQuery(likeClauseContext.field.getText(),operator,params);
+            return new AtomicQuery(query);
         }
         return null;
     }

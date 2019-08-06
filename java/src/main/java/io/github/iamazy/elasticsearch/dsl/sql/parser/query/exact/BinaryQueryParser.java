@@ -4,7 +4,6 @@ import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
-import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.FullTextQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.LikeQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
@@ -38,117 +37,119 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
 
 
     public AtomicQuery parseBinaryQuery(ElasticsearchParser.BinaryContext binaryContext) {
-        int operatorType = binaryContext.operator.getType();
-        //EQ NEQ AEQ
-        // Will any one query by `not approximately equal` ?  no !!!
-        if (operatorType == ElasticsearchParser.EQ || operatorType == ElasticsearchParser.NE || operatorType == ElasticsearchParser.AEQ||operatorType==ElasticsearchParser.TEQ) {
-            String targetVal = binaryContext.rightExpr.getText();
-            SqlConditionOperator operator;
-            switch (operatorType) {
-                case ElasticsearchParser.NE: {
-                    operator = SqlConditionOperator.NotEqual;
-                    break;
-                }
-                case ElasticsearchParser.AEQ: {
-                    operator = SqlConditionOperator.ApproximatelyEqual;
-                    break;
-                }
-                case ElasticsearchParser.TEQ:{
-                    operator = SqlConditionOperator.MatchPrase;
-                    break;
-                }
-                default:
-                case ElasticsearchParser.EQ: {
-                    operator = SqlConditionOperator.Equality;
-                    break;
-                }
-            }
-            return parseCondition(binaryContext.leftExpr, operator, new Object[]{targetVal}, (fieldName, operator1, rightParams) -> {
-                switch (operator1) {
-                    case NotEqual: {
-                        return QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery(fieldName, rightParams[0]));
+        if(binaryContext.operator!=null) {
+            int operatorType = binaryContext.operator.getType();
+            //EQ NEQ AEQ
+            // Will any one query by `not approximately equal` ?  no !!!
+            if (operatorType == ElasticsearchParser.EQ || operatorType == ElasticsearchParser.NE || operatorType == ElasticsearchParser.AEQ || operatorType == ElasticsearchParser.TEQ) {
+                String targetVal = binaryContext.rightExpr.getText();
+                SqlConditionOperator operator;
+                switch (operatorType) {
+                    case ElasticsearchParser.NE: {
+                        operator = SqlConditionOperator.NotEqual;
+                        break;
                     }
-                    case ApproximatelyEqual: {
-                        return QueryBuilders.matchQuery(fieldName, rightParams[0]);
+                    case ElasticsearchParser.AEQ: {
+                        operator = SqlConditionOperator.ApproximatelyEqual;
+                        break;
                     }
-                    case MatchPrase:{
-                        return QueryBuilders.matchPhraseQuery(fieldName,rightParams[0]);
+                    case ElasticsearchParser.TEQ: {
+                        operator = SqlConditionOperator.MatchPrase;
+                        break;
                     }
                     default:
-                    case Equality: {
-                        return QueryBuilders.termQuery(fieldName, rightParams[0]);
+                    case ElasticsearchParser.EQ: {
+                        operator = SqlConditionOperator.Equality;
+                        break;
                     }
                 }
-            });
-        }
-        // AND OR && ||
-        else if (operatorType == ElasticsearchParser.AND ||
-                operatorType == ElasticsearchParser.BOOLAND ||
-                operatorType == ElasticsearchParser.OR ||
-                operatorType == ElasticsearchParser.BOOLOR) {
-            ElasticsearchParser.ExpressionContext leftExpr = binaryContext.leftExpr;
-            ElasticsearchParser.ExpressionContext rightExpr = binaryContext.rightExpr;
-            if (binaryContextMatch(leftExpr)&&binaryContextMatch(rightExpr)) {
-                AtomicQuery leftQuery=parseExpressionContext(leftExpr);
-                AtomicQuery rightQuery=parseExpressionContext(rightExpr);
+                return parseCondition(binaryContext.leftExpr, operator, new Object[]{targetVal}, (fieldName, operator1, rightParams) -> {
+                    switch (operator1) {
+                        case NotEqual: {
+                            return QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery(fieldName, rightParams[0]));
+                        }
+                        case ApproximatelyEqual: {
+                            return QueryBuilders.matchQuery(fieldName, rightParams[0]);
+                        }
+                        case MatchPrase: {
+                            return QueryBuilders.matchPhraseQuery(fieldName, rightParams[0]);
+                        }
+                        default:
+                        case Equality: {
+                            return QueryBuilders.termQuery(fieldName, rightParams[0]);
+                        }
+                    }
+                });
+            }
+            // AND OR && ||
+            else if (operatorType == ElasticsearchParser.AND ||
+                    operatorType == ElasticsearchParser.BOOLAND ||
+                    operatorType == ElasticsearchParser.OR ||
+                    operatorType == ElasticsearchParser.BOOLOR) {
+                ElasticsearchParser.ExpressionContext leftExpr = binaryContext.leftExpr;
+                ElasticsearchParser.ExpressionContext rightExpr = binaryContext.rightExpr;
+                if (binaryContextMatch(leftExpr) && binaryContextMatch(rightExpr)) {
+                    AtomicQuery leftQuery = parseExpressionContext(leftExpr);
+                    AtomicQuery rightQuery = parseExpressionContext(rightExpr);
 
-                BoolQueryBuilder boolQueryBuilder;
-                if (operatorType == ElasticsearchParser.AND || operatorType == ElasticsearchParser.BOOLAND) {
-                    boolQueryBuilder = QueryBuilders.boolQuery().must(leftQuery.getQueryBuilder())
-                            .must(rightQuery.getQueryBuilder());
+                    BoolQueryBuilder boolQueryBuilder;
+                    if (operatorType == ElasticsearchParser.AND || operatorType == ElasticsearchParser.BOOLAND) {
+                        boolQueryBuilder = QueryBuilders.boolQuery().must(leftQuery.getQueryBuilder())
+                                .must(rightQuery.getQueryBuilder());
+                    } else {
+                        boolQueryBuilder = QueryBuilders.boolQuery().should(leftQuery.getQueryBuilder())
+                                .should(rightQuery.getQueryBuilder());
+                    }
+                    return new AtomicQuery(boolQueryBuilder);
                 } else {
-                    boolQueryBuilder = QueryBuilders.boolQuery().should(leftQuery.getQueryBuilder())
-                            .should(rightQuery.getQueryBuilder());
-                }
-                return new AtomicQuery(boolQueryBuilder);
-            } else {
-                throw new ElasticSql2DslException("expressions on  both sides of [and or && ||] must be binary context");
-            }
-        }
-        // GT GTE LT LTE
-        else if (operatorType == ElasticsearchParser.GT ||
-                operatorType == ElasticsearchParser.GTE ||
-                operatorType == ElasticsearchParser.LT ||
-                operatorType == ElasticsearchParser.LTE) {
-            SqlConditionOperator operator;
-            switch (operatorType) {
-                case ElasticsearchParser.GT: {
-                    operator = SqlConditionOperator.GreaterThan;
-                    break;
-                }
-                case ElasticsearchParser.GTE: {
-                    operator = SqlConditionOperator.GreaterThanOrEqual;
-                    break;
-                }
-                case ElasticsearchParser.LT: {
-                    operator = SqlConditionOperator.LessThan;
-                    break;
-                }
-                default:
-                case ElasticsearchParser.LTE: {
-                    operator = SqlConditionOperator.LessThanOrEqual;
-                    break;
+                    throw new ElasticSql2DslException("expressions on  both sides of [and or && ||] must be binary context");
                 }
             }
-            String targetVal = binaryContext.rightExpr.getText();
-            return parseCondition(binaryContext.leftExpr, operator, new Object[]{targetVal}, (fieldName, operator1, rightParams) -> {
-                RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(fieldName);
-                switch (operator1) {
-                    case GreaterThan: {
-                        return rangeQuery.gt(rightParams[0]);
+            // GT GTE LT LTE
+            else if (operatorType == ElasticsearchParser.GT ||
+                    operatorType == ElasticsearchParser.GTE ||
+                    operatorType == ElasticsearchParser.LT ||
+                    operatorType == ElasticsearchParser.LTE) {
+                SqlConditionOperator operator;
+                switch (operatorType) {
+                    case ElasticsearchParser.GT: {
+                        operator = SqlConditionOperator.GreaterThan;
+                        break;
                     }
-                    case GreaterThanOrEqual: {
-                        return rangeQuery.gte(rightParams[0]);
+                    case ElasticsearchParser.GTE: {
+                        operator = SqlConditionOperator.GreaterThanOrEqual;
+                        break;
                     }
-                    case LessThan: {
-                        return rangeQuery.lt(rightParams[0]);
+                    case ElasticsearchParser.LT: {
+                        operator = SqlConditionOperator.LessThan;
+                        break;
                     }
                     default:
-                    case LessThanOrEqual: {
-                        return rangeQuery.lte(rightParams[1]);
+                    case ElasticsearchParser.LTE: {
+                        operator = SqlConditionOperator.LessThanOrEqual;
+                        break;
                     }
                 }
-            });
+                String targetVal = binaryContext.rightExpr.getText();
+                return parseCondition(binaryContext.leftExpr, operator, new Object[]{targetVal}, (fieldName, operator1, rightParams) -> {
+                    RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(fieldName);
+                    switch (operator1) {
+                        case GreaterThan: {
+                            return rangeQuery.gt(rightParams[0]);
+                        }
+                        case GreaterThanOrEqual: {
+                            return rangeQuery.gte(rightParams[0]);
+                        }
+                        case LessThan: {
+                            return rangeQuery.lt(rightParams[0]);
+                        }
+                        default:
+                        case LessThanOrEqual: {
+                            return rangeQuery.lte(rightParams[1]);
+                        }
+                    }
+                });
+            }
         }
         //IS | IS NOT
         else if (binaryContext.isClause() != null) {
@@ -193,11 +194,13 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         }else if(expressionContext instanceof ElasticsearchParser.JoinContext){
             return joinQueryParser.parse((ElasticsearchParser.JoinContext) expressionContext);
         }else if(expressionContext instanceof ElasticsearchParser.InContext){
-            return inListQueryParser.parseInListQuery((ElasticsearchParser.InContext) expressionContext);
+            return inListQueryParser.parse((ElasticsearchParser.InContext) expressionContext);
         }else if(expressionContext instanceof ElasticsearchParser.NestedContext){
             return nestedQueryParser.parse((ElasticsearchParser.NestedContext) expressionContext);
         }else if(expressionContext instanceof ElasticsearchParser.FullTextContext){
             return fullTextQueryParser.parse((ElasticsearchParser.FullTextContext) expressionContext);
+        }else if(expressionContext instanceof ElasticsearchParser.BetweenAndContext){
+            return betweenAndQueryParser.parse((ElasticsearchParser.BetweenAndContext) expressionContext);
         }
         else{
             throw new ElasticSql2DslException("not support yet");

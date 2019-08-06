@@ -6,16 +6,9 @@ import com.google.common.collect.Lists;
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlBoolOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionType;
-import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BetweenAndQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BinaryQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.InListQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.FullTextQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.nested.NestedQueryParser;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -63,22 +56,26 @@ public class BoolExpressionParser {
     private SqlCondition recursiveParseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext) {
         if (expressionContext instanceof ElasticsearchParser.BinaryContext) {
             ElasticsearchParser.BinaryContext binaryContext = (ElasticsearchParser.BinaryContext) expressionContext;
-            int operatorType = binaryContext.operator.getType();
-            SqlBoolOperator boolOperator;
-            if (operatorType == ElasticsearchParser.AND || operatorType == ElasticsearchParser.BOOLAND) {
-                boolOperator = SqlBoolOperator.AND;
-            } else if (operatorType == ElasticsearchParser.OR || operatorType == ElasticsearchParser.BOOLOR) {
-                boolOperator = SqlBoolOperator.OR;
-            } else {
+            if(binaryContext.operator!=null) {
+                int operatorType = binaryContext.operator.getType();
+                SqlBoolOperator boolOperator;
+                if (operatorType == ElasticsearchParser.AND || operatorType == ElasticsearchParser.BOOLAND) {
+                    boolOperator = SqlBoolOperator.AND;
+                } else if (operatorType == ElasticsearchParser.OR || operatorType == ElasticsearchParser.BOOLOR) {
+                    boolOperator = SqlBoolOperator.OR;
+                } else {
+                    return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
+                }
+                SqlCondition leftCondition = recursiveParseBoolQueryExpr(binaryContext.leftExpr);
+                SqlCondition rightCondition = recursiveParseBoolQueryExpr(binaryContext.rightExpr);
+
+                List<AtomicQuery> queryList = Lists.newArrayList();
+                combineQueryBuilder(queryList, leftCondition, boolOperator);
+                combineQueryBuilder(queryList, rightCondition, boolOperator);
+                return new SqlCondition(queryList, boolOperator);
+            }else{
                 return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
             }
-            SqlCondition leftCondition = recursiveParseBoolQueryExpr(binaryContext.leftExpr);
-            SqlCondition rightCondition = recursiveParseBoolQueryExpr(binaryContext.rightExpr);
-
-            List<AtomicQuery> queryList = Lists.newArrayList();
-            combineQueryBuilder(queryList, leftCondition, boolOperator);
-            combineQueryBuilder(queryList, rightCondition, boolOperator);
-            return new SqlCondition(queryList, boolOperator);
         }
         return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
     }

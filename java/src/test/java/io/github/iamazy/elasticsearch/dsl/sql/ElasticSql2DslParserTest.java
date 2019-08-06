@@ -49,4 +49,24 @@ public class ElasticSql2DslParserTest {
         System.out.println(System.currentTimeMillis()-now);
     }
 
+    @Test
+    public void distinct(){
+        long now=System.currentTimeMillis();
+        String sql="select distinct name from student where a like '%appl%' limit 2,5";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void betweenAnd(){
+        long now=System.currentTimeMillis();
+        String sql="select distinct name from student where a between 1 and 2 limit 2,5";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
 }

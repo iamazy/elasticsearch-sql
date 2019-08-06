@@ -243,3 +243,4 @@ java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/metrics/S
 java/target/classes/io/github/iamazy/elasticsearch/dsl/sql/parser/aggs/pipeline/DerivativeAggregationParser.class
 *.atn
 *.html
+*.class

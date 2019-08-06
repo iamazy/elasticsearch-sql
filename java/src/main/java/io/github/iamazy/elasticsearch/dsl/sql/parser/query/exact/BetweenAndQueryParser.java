@@ -13,7 +13,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 public class BetweenAndQueryParser extends AbstractExactQueryParser {
 
 
-    public AtomicQuery parseBetweenAndQuery(ElasticsearchParser.BetweenAndContext betweenAndContext) {
+    public AtomicQuery parse(ElasticsearchParser.BetweenAndContext betweenAndContext) {
         return parseCondition(betweenAndContext, SqlConditionOperator.BetweenAnd,
                 new Object[]{betweenAndContext.left.getText(), betweenAndContext.right.getText()},
                 (field, operator, params) -> QueryBuilders.rangeQuery(field).gte(params[0]).lte(params[1]));
