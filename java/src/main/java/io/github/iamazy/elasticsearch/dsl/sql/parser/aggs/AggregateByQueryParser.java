@@ -38,6 +38,7 @@ public class AggregateByQueryParser implements QueryParser {
             ElasticsearchParser.AggregateItemClauseContext aggregateItemClauseContext = aggregationClauseContext.aggregateItemClause();
             return parseAggregateItemClauseContext(aggregateItemClauseContext);
         } else if (aggregationClauseContext.nestedAggregationClause() != null) {
+            aggregationBuilders.add(parseNestedAggregationClauseContext(aggregationClauseContext.nestedAggregationClause()));
             return aggregationBuilders;
         }
         return aggregationBuilders;
