@@ -121,7 +121,7 @@ aggregateByClause:
 aggregationClause: aggregateItemClause | nestedAggregationClause ;
 
 nestedAggregationClause:
-	LBRACKET nestedPath = ID COMMA  aggregationClause RBRACKET
+	LBRACKET nestedPath = ID COMMA  aggregationClause RBRACKET ((COMMA aggregationClause)| subAggregationClause)*
 ;
 
 subAggregationClause: GT LPAREN aggregationClause RPAREN;

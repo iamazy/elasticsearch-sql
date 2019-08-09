@@ -38,7 +38,7 @@ public class AggregateByQueryParser implements QueryParser {
             ElasticsearchParser.AggregateItemClauseContext aggregateItemClauseContext = aggregationClauseContext.aggregateItemClause();
             return parseAggregateItemClauseContext(aggregateItemClauseContext);
         } else if (aggregationClauseContext.nestedAggregationClause() != null) {
-            aggregationBuilders.add(parseNestedAggregationClauseContext(aggregationClauseContext.nestedAggregationClause()));
+            combineNestedLastAggregation(aggregationBuilders,aggregationClauseContext.nestedAggregationClause());
             return aggregationBuilders;
         }
         return aggregationBuilders;
@@ -70,7 +70,7 @@ public class AggregateByQueryParser implements QueryParser {
                     aggregationBuilders.addAll(parseAggregateItemClauseContext(aggregationClauseContext.aggregateItemClause()));
                 }
                 if (aggregationClauseContext.nestedAggregationClause() != null) {
-                    aggregationBuilders.add(parseNestedAggregationClauseContext(aggregationClauseContext.nestedAggregationClause()));
+                    combineNestedLastAggregation(aggregationBuilders,aggregationClauseContext.nestedAggregationClause());
                 }
             }
         }
@@ -79,21 +79,36 @@ public class AggregateByQueryParser implements QueryParser {
         return aggregationBuilders;
     }
 
+    private void combineNestedLastAggregation(List<AggregationBuilder> aggregationBuilders,ElasticsearchParser.NestedAggregationClauseContext nestedAggregationClauseContext){
+        aggregationBuilders.add(parseNestedAggregationClauseContext(nestedAggregationClauseContext));
+        for (int i=1;i<nestedAggregationClauseContext.aggregationClause().size();i++){
+            aggregationBuilders.addAll(parseAggregationClauseContext(nestedAggregationClauseContext.aggregationClause(i)));
+        }
+    }
+
     private AggregationBuilder parseNestedAggregationClauseContext(ElasticsearchParser.NestedAggregationClauseContext nestedAggregationClauseContext) {
         String nestedPath = nestedAggregationClauseContext.nestedPath.getText();
         String nestedName = "nested_" + nestedPath;
-        if (nestedAggregationClauseContext.aggregationClause().nestedAggregationClause() != null) {
-            AggregationBuilder nestedAggregationBuilder = parseNestedAggregationClauseContext(nestedAggregationClauseContext.aggregationClause().nestedAggregationClause());
-            return AggregationBuilders.nested(nestedName, nestedPath).subAggregation(nestedAggregationBuilder);
-        } else if (nestedAggregationClauseContext.aggregationClause().aggregateItemClause() != null) {
-            List<AggregationBuilder> aggregationBuilders = parseAggregateItemClauseContext(nestedAggregationClauseContext.aggregationClause().aggregateItemClause());
+        AggregationBuilder aggregationBuilder=null;
+        if (nestedAggregationClauseContext.aggregationClause(0).nestedAggregationClause() != null) {
+            AggregationBuilder nestedAggregationBuilder = parseNestedAggregationClauseContext(nestedAggregationClauseContext.aggregationClause(0).nestedAggregationClause());
+            aggregationBuilder = AggregationBuilders.nested(nestedName, nestedPath).subAggregation(nestedAggregationBuilder);
+        } else if (nestedAggregationClauseContext.aggregationClause(0).aggregateItemClause() != null) {
+            List<AggregationBuilder> aggregationBuilders = parseAggregateItemClauseContext(nestedAggregationClauseContext.aggregationClause(0).aggregateItemClause());
             AggregationBuilder nestAggregationBuilder = AggregationBuilders.nested(nestedName, nestedPath);
             for (AggregationBuilder agg : aggregationBuilders) {
                 nestAggregationBuilder.subAggregation(agg);
             }
-            return nestAggregationBuilder;
+            aggregationBuilder = nestAggregationBuilder;
         }
-        throw new ElasticSql2DslException("[syntax error] nested aggregation not support this query format of the sql");
+        if(aggregationBuilder!=null){
+            if(nestedAggregationClauseContext.subAggregationClause().size()>0){
+                parseSubAggregationClauseContext(aggregationBuilder,nestedAggregationClauseContext.subAggregationClause());
+            }
+            return aggregationBuilder;
+        }else {
+            throw new ElasticSql2DslException("[syntax error] nested aggregation not support this query format of the sql");
+        }
     }
 
     private AggregationBuilder parseSubAggregationClauseContext(AggregationBuilder aggregationBuilder, List<ElasticsearchParser.SubAggregationClauseContext> subAggregationClauseContexts) {

@@ -62,11 +62,30 @@ public class ElasticSql2DslParserTest {
     @Test
     public void betweenAnd(){
         long now=System.currentTimeMillis();
-        String sql="select distinct name from student where a between 1 and 2 aggregate by [apple,terms(a,1)] limit 2,5";
+        String sql="select distinct name from student where a between 1 and 2 aggregate by [apple,terms(a,1)],terms(b,1) limit 2,5";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
     }
 
+    @Test
+    public void agg1(){
+        long now=System.currentTimeMillis();
+        String sql="select distinct name from student aggregate by [apple,terms(a,1)],terms(bb,2),cardinality(ip) limit 2,5";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void agg2(){
+        long now=System.currentTimeMillis();
+        String sql="select distinct name from student aggregate by terms(bb,2)>([apple,terms(a,1)]),cardinality(ip) limit 2,5";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
 }
