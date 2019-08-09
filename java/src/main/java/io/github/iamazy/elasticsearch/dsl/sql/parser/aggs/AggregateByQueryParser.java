@@ -121,7 +121,14 @@ public class AggregateByQueryParser implements QueryParser {
                 return aggregationBuilder;
             } else if (subAggregationClauseContext.aggregationClause().nestedAggregationClause() != null) {
                 AggregationBuilder nestedAggregationBuilder = parseNestedAggregationClauseContext(subAggregationClauseContext.aggregationClause().nestedAggregationClause());
-                return aggregationBuilder.subAggregation(nestedAggregationBuilder);
+                aggregationBuilder.subAggregation(nestedAggregationBuilder);
+                for(int i=1;i<subAggregationClauseContext.aggregationClause().nestedAggregationClause().aggregationClause().size();i++){
+                    for(AggregationBuilder agg:parseAggregationClauseContext(subAggregationClauseContext.aggregationClause().nestedAggregationClause().aggregationClause(i))){
+                        aggregationBuilder.subAggregation(agg);
+                    }
+                }
+                return aggregationBuilder;
+
             }
         }
         throw new ElasticSql2DslException("not support yet");
