@@ -2,7 +2,7 @@
 rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**
 
 ## Changelog
-2019-08-10: add desc,delete by query support
+[Changelog](https://github.com/iamazy/elasticsearch-sql/CHANGELOG)
 
 ## Version
 |elasticsearch-sql|es version|
