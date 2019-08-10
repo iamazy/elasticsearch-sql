@@ -1,52 +1,52 @@
-# DESCRIPTION
-rewrite [elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql) with **antlr4**
+# 说明
+使用**antlr4**进行重写[elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql)
 
 # CHANGELOG
 2019-08-10: add desc,delete by query support
 
-# VERSION
+# 版本
 |elasticsql|es version|
 |----|-----|
 |master|7.2.0|
 
-# PLUGIN(isql)
-#### VERSION
+# 插件(isql)
+#### 版本
 
 | elasticsearch version | latest version | remark | isql version | 
 | ---- | ---- | ---- | ---- | 
 | 7.x | 7.2.0 | | 7.2.0.beta |
 
-#### INSTALL
+#### 安装
 
 Elasticsearch {7.x}
 ```
 ./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/{isql-version}/elasticsearch-sql-plugin-{isql-version}.zip
 ```
 
-#### USAGE
+#### 使用
 
-##### 1. query dataset with sql
+##### 1. 使用sql语句直接查询elasticsearch里面的数据集
 ```
 POST _isql
 {
     "sql":"select * from fruit"
 }
 ```
-##### 2. parse sql into elasticsearch dsl
+##### 2. 将sql解析成elasticsearch的dsl
 ```
 POST _isql/_explain
 {
     "sql":"select * from fruit"
 }
 ```
-##### 3. query index mapping
+##### 3. 查询索引的mapping
 ```
 POST _isql
 {
     "sql":"desc student"
 }
 ```
-##### 4. query field mapping
+##### 4. 查询字段的mapping
 ```
 POST _isql/_explain
 {
@@ -54,35 +54,35 @@ POST _isql/_explain
 }
 ```
 
-# WIKI
+# wiki
 [elasticsql-wiki](https://github.com/iamazy/elasticsql/wiki)
 
-# FEATURES
-#### 1. Based on antlr4
-> customize grammer of elasticsearch sql <br/>
+# 特点
+#### 1. 基于antlr4
+> 自定义语法完全可控 <br/>
 > 可以直接的分析抽象语法树(AST)的遍历过程和各个token之间的关联关系
 
- ### AST
+ ### 抽象语法树示例图
  ```sql
  select name from student aggregate by terms(name,1)>(terms(aa,2),[apple,cardinality(ip),terms(aaa,1)>(terms(cc,10)>(terms(hh,3
 )))]) limit 2,5
  ```
  ![ast](./data/images/ast.png)
 
- ### Relation of Tokens
+ ### Token之间的关联关系
  ![graph](./data/images/graph.png)
  
 
-#### 2. Based on elasticsearch java rest high level client
-> support thirdparty http component request <br/>
-> cross-language <br/>
-> support parse sql into elasticsearch dsl <br/>
-> support x-pack <br/>
-> don't need request pool <br/>
+#### 2. 基于elasticsearch java rest high level client
+> 可以直接由第三方http组件请求 <br/>
+> 跨语言 <br/>
+> 支持将sql解析成elasticsearch dsl <br/>
+> 支持x-pack <br/>
+> 无需池化请求 <br/>
 
-#### 3. Integrte into elasticsearch(isql)
+#### 3. 可作为插件集成进elasticsearch(isql)
 
-###### features
+# 功能点
 - [x] SQL Select  
 - [x] SQL Where  
 - [x] SQL Order by (Asc & Desc)
@@ -151,12 +151,12 @@ TODO
 - [ ] ES Function Score
 - [ ] ...
 
-# Examples
+# 示例
 ### 1. select,include,exclude,from,where,in,and,or,has_parent,geo_distance,limit
 ```sql
 select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(apple,bb~='fruit')) and c=1 and (location = 'geoaaa' and geopoint = '40.0,30.0' and distance = '1km' or t='bb') limit 2,5
 ```
-> generate dsl
+> 生成dsl
 ```json
 {
   "from" : 2,
@@ -238,7 +238,7 @@ select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(
 ```sql
 select name from student where (([class1, age>1 and [class1.class2, name='hhha']] and c=1) or b~=='hhhhh') and query by 'apppple' limit 2,5
 ```
-> generate dsl
+> 生成dsl
 ```json
 {
   "from" : 2,
@@ -349,7 +349,7 @@ select name from student where (([class1, age>1 and [class1.class2, name='hhha']
 ```sql
 select name from student aggregate by terms(name,1)>(terms(aa,2),terms(bb,3)>(terms(cc,4))),terms(age,10)>(terms(weight,10))
 ```
-> generate dsl
+> 生成dsl
 ```json
 {
   "from" : 0,
@@ -462,7 +462,7 @@ select name from student aggregate by terms(name,1)>(terms(aa,2),terms(bb,3)>(te
 ```sql
 select name from student aggregate by terms(name,1)>(terms(aa,2),[apple,cardinality(ip),terms(aaa,1)>(terms(bb,1),terms(cc,10)>(terms(hh,3),avg(age)),terms(vv,1))]) limit 2,5
 ```
-> generate dsl
+> 生成dsl
 ```json
 {
   "from" : 2,
