@@ -9,6 +9,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.LikeQueryPar
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.nested.NestedQueryParser;
+import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.elasticsearch.index.query.*;
 
 /**
@@ -69,14 +70,14 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                             return QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery(fieldName, rightParams[0]));
                         }
                         case ApproximatelyEqual: {
-                            return QueryBuilders.matchQuery(fieldName, rightParams[0]);
+                            return QueryBuilders.matchQuery(fieldName, StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
                         case MatchPrase: {
-                            return QueryBuilders.matchPhraseQuery(fieldName, rightParams[0]);
+                            return QueryBuilders.matchPhraseQuery(fieldName, StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
                         default:
                         case Equality: {
-                            return QueryBuilders.termQuery(fieldName, rightParams[0]);
+                            return QueryBuilders.termQuery(fieldName, StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
                     }
                 });
