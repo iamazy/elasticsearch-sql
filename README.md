@@ -1,29 +1,29 @@
-# DESCRIPTION
+## Description
 rewrite [elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql) with **antlr4**
 
-# CHANGELOG
+## Changelog
 2019-08-10: add desc,delete by query support
 
-# VERSION
+## Version
 |elasticsql|es version|
 |----|-----|
 |master|7.2.0|
 
-# PLUGIN(isql)
-#### VERSION
+## Plugin(isql)
+#### Version
 
 | elasticsearch version | latest version | remark | isql version | 
 | ---- | ---- | ---- | ---- | 
 | 7.x | 7.2.0 | | 7.2.0.beta |
 
-#### INSTALL
+#### Installing
 
 Elasticsearch {7.x}
 ```
 ./bin/elasticsearch-plugin install https://github.com/iamazy/elasticsearch-sql/releases/download/{isql-version}/elasticsearch-sql-plugin-{isql-version}.zip
 ```
 
-#### USAGE
+#### Usage
 
 ##### 1. query dataset with sql
 ```
@@ -54,15 +54,15 @@ POST _isql/_explain
 }
 ```
 
-# WIKI
+## Wiki
 [elasticsql-wiki](https://github.com/iamazy/elasticsql/wiki)
 
-# FEATURES
+## Features
 #### 1. Based on antlr4
 > customize grammer of elasticsearch sql <br/>
 > support analyse the walk of sql ast and the relation of tokens
 
- ### AST
+ ### Ast
  ```sql
  select name from student aggregate by terms(name,1)>(terms(aa,2),[apple,cardinality(ip),terms(aaa,1)>(terms(cc,10)>(terms(hh,3
 )))]) limit 2,5
@@ -150,7 +150,7 @@ TODO
 - [ ] ES Function Score
 - [ ] ...
 
-# Examples
+## Examples
 ### 1. select,include,exclude,from,where,in,and,or,has_parent,geo_distance,limit
 ```sql
 select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(apple,bb~='fruit')) and c=1 and (location = 'geoaaa' and geopoint = '40.0,30.0' and distance = '1km' or t='bb') limit 2,5
