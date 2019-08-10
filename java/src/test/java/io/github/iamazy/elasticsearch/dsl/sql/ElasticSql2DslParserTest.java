@@ -98,4 +98,15 @@ public class ElasticSql2DslParserTest {
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
     }
+
+    @Test
+    public void agg4(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student aggregate by terms(bb,2)>(terms(cc,2)),[apple,terms(a,1)],cardinality(ip) limit 2,5";
+
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
 }
