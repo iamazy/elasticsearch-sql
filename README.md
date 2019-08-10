@@ -1,11 +1,11 @@
 ## Description
-rewrite [elasticsearch-sql](https://github.com/iamazy/elasticsearch-sql) with **antlr4**
+rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**
 
 ## Changelog
 2019-08-10: add desc,delete by query support
 
 ## Version
-|elasticsql|es version|
+|elasticsearch-sql|es version|
 |----|-----|
 |master|7.2.0|
 
@@ -55,7 +55,7 @@ POST _isql/_explain
 ```
 
 ## Wiki
-[elasticsql-wiki](https://github.com/iamazy/elasticsql/wiki)
+[elasticsearch-sql-wiki](https://github.com/iamazy/elasticsearch-sql/wiki)
 
 ## Features
 #### 1. Based on antlr4
