@@ -110,14 +110,14 @@ POST _isql/_explain
 - [x] ES HasChild
 - [x] ES Join
 - [x] ES Script
-- [ ] ES Fuzzy
+- [x] ES Fuzzy
 - [x] ES Prefix
 - [x] ES Regex
 - [x] ES Term
 - [x] ES Wildcard
 - [x] ES Routing
 - [x] ES Nested
-- [x] ES Include[fields]
+- [x] ES Include & Exclude
 - [x] ES From
 - [x] ES Size
 - [x] ES Range(Number,Date)
@@ -125,13 +125,12 @@ POST _isql/_explain
 - [x] ES MatchPhrase
 - [x] ES MatchPhrasePrefix
 - [x] ES DeleteByQuery
-- [x] ES Cardinality (目前不支持Script的方式)
+- [x] ES Cardinality
 - [x] ES TopHits
 - [x] ES Nested
 - [x] ES GeoDistance
-- [x] 支持嵌套深层聚类
+- [x] ES SubAggregation
 - [ ] ES Scroll Id
-- [x] ES 支持多层嵌套查询
 - [ ] ES Highlighter
 - [ ] ES Boosting
 - [ ] ES Function Score
