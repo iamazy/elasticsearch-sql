@@ -2,7 +2,7 @@
 rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**
 
 ## Changelog
-[Changelog](https://github.com/iamazy/elasticsearch-sql/CHANGELOG)
+[Changelog](https://github.com/iamazy/elasticsearch-sql/blob/master/CHANGELOG)
 
 ## Version
 |elasticsearch-sql|es version|
