@@ -17,12 +17,12 @@ public class QuerySelectFieldsParser implements QueryParser {
 
     @Override
     public void parse(ElasticDslContext dslContext) {
-        List<String> includeFields = new ArrayList<>(0);
-        List<String> excludeFields = new ArrayList<>(0);
-        if (dslContext.getSqlContext().selectOperation().groupByClause() == null) {
+        if (dslContext.getSqlContext().selectOperation()!=null&&dslContext.getSqlContext().selectOperation().groupByClause() == null) {
             ElasticsearchParser.SelectOperationContext selectOperationContext = dslContext.getSqlContext().selectOperation();
             ElasticsearchParser.FieldListContext fieldListContext = selectOperationContext.fieldList();
             if (fieldListContext.nameOperand().size() > 0) {
+                List<String> includeFields = new ArrayList<>(0);
+                List<String> excludeFields = new ArrayList<>(0);
                 for (ElasticsearchParser.NameOperandContext fieldName : fieldListContext.nameOperand()) {
                     if (fieldName.exclude != null) {
                         if (fieldName.fieldName instanceof ElasticsearchParser.FieldNameContext) {
@@ -45,14 +45,14 @@ public class QuerySelectFieldsParser implements QueryParser {
                         }
                     }
                 }
+                if (CollectionUtils.isNotEmpty(includeFields)) {
+                    dslContext.getParseResult().getIncludeFields().addAll(includeFields);
+                }
+                if (CollectionUtils.isNotEmpty(excludeFields)) {
+                    dslContext.getParseResult().getExcludeFields().addAll(excludeFields);
+                }
             }
 
-        }
-        if (CollectionUtils.isNotEmpty(includeFields)) {
-            dslContext.getParseResult().getIncludeFields().addAll(includeFields);
-        }
-        if (CollectionUtils.isNotEmpty(excludeFields)) {
-            dslContext.getParseResult().getExcludeFields().addAll(excludeFields);
         }
     }
 }

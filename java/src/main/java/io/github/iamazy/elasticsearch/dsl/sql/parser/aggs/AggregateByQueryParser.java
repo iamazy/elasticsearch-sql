@@ -25,7 +25,7 @@ public class AggregateByQueryParser implements QueryParser {
 
     @Override
     public void parse(ElasticDslContext dslContext) {
-        if (dslContext.getSqlContext().selectOperation().aggregateByClause() != null) {
+        if (dslContext.getSqlContext().selectOperation()!=null&&dslContext.getSqlContext().selectOperation().aggregateByClause() != null) {
             ElasticsearchParser.AggregateByClauseContext aggregateByClauseContext = dslContext.getSqlContext().selectOperation().aggregateByClause();
             dslContext.getParseResult().getGroupBy().addAll(parseAggregationClauseContext(aggregateByClauseContext.aggregationClause()));
         }

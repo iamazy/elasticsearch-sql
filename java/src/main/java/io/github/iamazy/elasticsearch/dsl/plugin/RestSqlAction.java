@@ -48,7 +48,7 @@ public class RestSqlAction extends BaseRestHandler {
         try {
             String sql = restRequest.param("sql");
             if (StringUtils.isBlank(sql)) {
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\"error\":\"sql语句不能为空!!!\"}"));
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\"error\":\"sql can not be empty!!!\"}"));
             }
             ElasticSql2DslParser sql2DslParser = new ElasticSql2DslParser();
             ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
@@ -64,7 +64,7 @@ public class RestSqlAction extends BaseRestHandler {
                     for (ObjectObjectCursor<String, MappingMetaData> objectObjectCursor : objectObjectCursors) {
                         return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(objectObjectCursor.value.getSourceAsMap())));
                     }
-                    throw new ElasticSql2DslException("sql语句解析失败!!!");
+                    return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\"error\":\"sql parse failed!!!\"}"));
                 } else {
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.search(parseResult.toRequest()).actionGet())));
                 }

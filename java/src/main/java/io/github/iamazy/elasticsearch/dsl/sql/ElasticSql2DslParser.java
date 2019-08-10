@@ -43,7 +43,9 @@ public class ElasticSql2DslParser {
                 new AggregateByQueryParser(),
                 new QueryOrderByParser(),
                 new QueryLimitParser(),
-                new GroupByQueryParser()
+                new GroupByQueryParser(),
+
+                new QueryDescParser()
         );
     }
 }
