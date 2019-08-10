@@ -82,7 +82,7 @@ POST _isql/_explain
 
 #### 3. Integrte into elasticsearch(isql)
 
-###### features
+#### Features
 - [x] SQL Select  
 - [x] SQL Where  
 - [x] SQL Order by (Asc & Desc)
@@ -138,8 +138,7 @@ POST _isql/_explain
 - [x] SQL Desc
 - [x] ES Excludes
 
-TODO
---------------------
+#### Todo
 - [x] SQL Delete
 - [ ] SQL Update
 - [ ] SQL Insert
