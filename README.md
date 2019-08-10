@@ -60,7 +60,7 @@ POST _isql/_explain
 # FEATURES
 #### 1. Based on antlr4
 > customize grammer of elasticsearch sql <br/>
-> 可以直接的分析抽象语法树(AST)的遍历过程和各个token之间的关联关系
+> support analyse the walk of sql ast and the relation of tokens
 
  ### AST
  ```sql
@@ -74,11 +74,11 @@ POST _isql/_explain
  
 
 #### 2. Based on elasticsearch java rest high level client
-> support thirdparty http component request <br/>
+> support for request from third-party http component <br/>
 > cross-language <br/>
-> support parse sql into elasticsearch dsl <br/>
+> support for parsing sql into elasticsearch dsl <br/>
 > support x-pack <br/>
-> don't need request pool <br/>
+> no need for request pool <br/>
 
 #### 3. Integrte into elasticsearch(isql)
 
