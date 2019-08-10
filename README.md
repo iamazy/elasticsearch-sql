@@ -141,10 +141,10 @@ POST _isql/_explain
 
 TODO
 --------------------
-- [ ] SQL Delete
+- [x] SQL Delete
 - [ ] SQL Update
 - [ ] SQL Insert
-- [ ] SQL Desc
+- [x] SQL Desc
 - [ ] SQL Customise Function
 - [ ] ES Analysis
 - [ ] ES Boosting
