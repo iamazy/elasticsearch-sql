@@ -1,4 +1,4 @@
-elasticsearch-sql
+Elasticsearch-SQL
 -----------------
 
 ## Build status
