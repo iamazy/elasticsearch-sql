@@ -29,6 +29,7 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 |6.1.2.1|6.1.2|
 |6.1.3.1|6.1.3|
 |6.1.4.1|6.1.4|
+|6.2.0.1|6.2.0|
 |master|7.2.0|
 
 ## Maven
