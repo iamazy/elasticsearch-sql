@@ -133,7 +133,7 @@ POST _isql/_explain
 - [ ] ES Scroll Id
 - [ ] ES Highlighter
 - [ ] ES Boosting
-- [ ] ES Function Score
+- [x] ES Function Score
 - [x] SQL Like
 - [x] SQL Desc
 - [x] ES Excludes
@@ -146,7 +146,7 @@ POST _isql/_explain
 - [ ] SQL Customise Function
 - [ ] ES Analysis
 - [ ] ES Boosting
-- [ ] ES Function Score
+- [x] ES Function Score
 - [ ] ...
 
 ## Examples
