@@ -1,0 +1,14 @@
+language: java
+
+jdk:
+  - openjdk8
+
+before_install:
+  - cd java
+
+install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dgpg.skip=true
+
+script:
+  - ulimit -a
+  - mvn test
