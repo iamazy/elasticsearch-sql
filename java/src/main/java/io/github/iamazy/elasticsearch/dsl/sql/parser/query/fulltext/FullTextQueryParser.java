@@ -12,7 +12,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
  **/
 public class FullTextQueryParser implements ExpressionQueryParser<ElasticsearchParser.FullTextContext> {
 
-    private QueryStringQueryParser queryStringQueryParser;
+    private final QueryStringQueryParser queryStringQueryParser;
 
     public FullTextQueryParser(){
         this.queryStringQueryParser=new QueryStringQueryParser();

@@ -14,6 +14,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.Scroll;
@@ -56,8 +57,8 @@ public class ElasticSqlParseResult {
     private List<String> routingBy=new ArrayList<>(0);
     private List<String> includeFields=new ArrayList<>(0);
     private List<String> excludeFields=new ArrayList<>(0);
-    private transient BoolQueryBuilder whereCondition;
-    private transient BoolQueryBuilder matchCondition;
+    private transient QueryBuilder whereCondition;
+    private transient QueryBuilder matchCondition;
     private transient CollapseBuilder collapseBuilder;
     private transient List<SortBuilder> orderBy=new ArrayList<>(0);
     private transient List<AggregationBuilder> groupBy=new ArrayList<>(0);
@@ -143,20 +144,20 @@ public class ElasticSqlParseResult {
         return excludeFields;
     }
 
-    public BoolQueryBuilder getWhereCondition() {
+    public QueryBuilder getWhereCondition() {
         return whereCondition;
     }
 
-    public ElasticSqlParseResult setWhereCondition(BoolQueryBuilder whereCondition) {
+    public ElasticSqlParseResult setWhereCondition(QueryBuilder whereCondition) {
         this.whereCondition = whereCondition;
         return this;
     }
 
-    public BoolQueryBuilder getMatchCondition() {
+    public QueryBuilder getMatchCondition() {
         return matchCondition;
     }
 
-    public ElasticSqlParseResult setMatchCondition(BoolQueryBuilder matchCondition) {
+    public ElasticSqlParseResult setMatchCondition(QueryBuilder matchCondition) {
         this.matchCondition = matchCondition;
         return this;
     }
@@ -276,7 +277,7 @@ public class ElasticSqlParseResult {
             searchSourceBuilder.highlighter(highlightBuilder);
         }
 
-        if (whereCondition != null && whereCondition.hasClauses()) {
+        if (whereCondition != null) {
             searchSourceBuilder.query(whereCondition);
         } else {
             searchSourceBuilder.query(QueryBuilders.matchAllQuery());

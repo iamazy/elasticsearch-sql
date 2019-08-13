@@ -35,13 +35,17 @@ public class BoolExpressionParser {
         binaryQueryParser = new BinaryQueryParser();
     }
 
-    public BoolQueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext) {
+    public QueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext) {
         SqlCondition sqlCondition = recursiveParseBoolQueryExpr(expressionContext);
         SqlBoolOperator operator = sqlCondition.getOperator();
         if (SqlConditionType.Atomic == sqlCondition.getConditionType()) {
             operator = SqlBoolOperator.AND;
         }
-        return mergeAtomicQuery(sqlCondition.getQueryList(), operator);
+        if(sqlCondition.getQueryList().size()>1) {
+            return mergeAtomicQuery(sqlCondition.getQueryList(), operator);
+        }else{
+            return sqlCondition.getQueryList().get(0).getQueryBuilder();
+        }
     }
 
     private void combineQueryBuilder(List<AtomicQuery> combiner, SqlCondition sqlCondition, SqlBoolOperator boolOperator) {

@@ -3,6 +3,7 @@ package io.github.iamazy.elasticsearch.dsl.sql.parser;
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 
 /**
  * @author iamazy
@@ -29,8 +30,8 @@ public class QueryWhereConditionParser extends BoolExpressionParser implements Q
     private void parseWhereCondition(ElasticDslContext dslContext,ElasticsearchParser.WhereClauseContext whereClauseContext){
         if(whereClauseContext!=null) {
             ElasticsearchParser.ExpressionContext expression = whereClauseContext.expression();
-            BoolQueryBuilder boolQueryBuilder = parseBoolQueryExpr(expression);
-            dslContext.getParseResult().setWhereCondition(boolQueryBuilder);
+            QueryBuilder queryBuilder = parseBoolQueryExpr(expression);
+            dslContext.getParseResult().setWhereCondition(queryBuilder);
         }
     }
 }

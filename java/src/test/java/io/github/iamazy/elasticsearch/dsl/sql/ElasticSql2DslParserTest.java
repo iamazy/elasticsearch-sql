@@ -5,7 +5,8 @@ import org.junit.Test;
 /**
  * @author iamazy
  * @date 2019/7/26
- * @descrition
+ * @descrition 注意：为了展示友好的json格式，使用jackson对json进行了pretty了，所以显示在解析时间不是真正的elasticsearch-sql解析成dsl的时间 <br/>
+ *             需要将parseResult.toPrettyDsl()变成parseResult.toDsl()
  **/
 public class ElasticSql2DslParserTest {
 
@@ -127,6 +128,16 @@ public class ElasticSql2DslParserTest {
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toMapping());
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void functionScore(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student where age> 10 and query weight between 80 and 90 and color = 'red' func_score high > 160 && name ='小明' aggregate by terms(name,10),terms(age,10)>(cardinality(clazz))";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
     }
 }

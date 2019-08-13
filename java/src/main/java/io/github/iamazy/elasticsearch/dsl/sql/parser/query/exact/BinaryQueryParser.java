@@ -9,6 +9,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.LikeQueryPar
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.nested.NestedQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.score.ScoreQueryParser;
 import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.elasticsearch.index.query.*;
 
@@ -25,6 +26,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
     private final InListQueryParser inListQueryParser;
     private final NestedQueryParser nestedQueryParser;
     private final FullTextQueryParser fullTextQueryParser;
+    private final ScoreQueryParser scoreQueryParser;
     private final BetweenAndQueryParser betweenAndQueryParser;
     public BinaryQueryParser(){
         geoQueryParser=new GeoQueryParser();
@@ -33,6 +35,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         inListQueryParser=new InListQueryParser();
         nestedQueryParser=new NestedQueryParser();
         fullTextQueryParser=new FullTextQueryParser();
+        scoreQueryParser=new ScoreQueryParser();
         betweenAndQueryParser=new BetweenAndQueryParser();
     }
 
@@ -200,6 +203,8 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             return fullTextQueryParser.parse((ElasticsearchParser.FullTextContext) expressionContext);
         }else if(expressionContext instanceof ElasticsearchParser.BetweenAndContext){
             return betweenAndQueryParser.parse((ElasticsearchParser.BetweenAndContext) expressionContext);
+        }else if(expressionContext instanceof ElasticsearchParser.ScoreContext){
+            return scoreQueryParser.parse((ElasticsearchParser.ScoreContext) expressionContext);
         }
         else{
             throw new ElasticSql2DslException("not support yet");

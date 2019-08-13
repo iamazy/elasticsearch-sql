@@ -24,8 +24,8 @@ public class HasChildQueryParser implements ExpressionQueryParser<ElasticsearchP
         if(boolExpressionParser==null){
             boolExpressionParser=new BoolExpressionParser();
         }
-        BoolQueryBuilder boolQueryBuilder = boolExpressionParser.parseBoolQueryExpr(expression.query);
-        QueryBuilder hasChildQueryBuilder=JoinQueryBuilders.hasChildQuery(type,boolQueryBuilder, ScoreMode.Avg);
+        QueryBuilder queryBuilder = boolExpressionParser.parseBoolQueryExpr(expression.query);
+        QueryBuilder hasChildQueryBuilder=JoinQueryBuilders.hasChildQuery(type,queryBuilder, ScoreMode.Avg);
         return new AtomicQuery(hasChildQueryBuilder);
     }
 

@@ -13,7 +13,7 @@ import org.elasticsearch.index.query.QueryBuilder;
  **/
 public abstract class AbstractExactQueryParser {
 
-    public AtomicQuery parseCondition(ParserRuleContext expression, SqlConditionOperator operator, Object[] params, IConditionExactQueryBuilder queryBuilder){
+    protected AtomicQuery parseCondition(ParserRuleContext expression, SqlConditionOperator operator, Object[] params, IConditionExactQueryBuilder queryBuilder){
         if (expression instanceof ElasticsearchParser.NameExprContext){
             ElasticsearchParser.NameExprContext nameExprContext= (ElasticsearchParser.NameExprContext) expression;
             ElasticsearchParser.NameContext nameContext = nameExprContext.name();

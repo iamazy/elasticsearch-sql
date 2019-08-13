@@ -12,8 +12,8 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
  **/
 public class JoinQueryParser implements ExpressionQueryParser<ElasticsearchParser.JoinContext> {
 
-    private HasParentQueryParser hasParentQueryParser;
-    private HasChildQueryParser hasChildQueryParser;
+    private final HasParentQueryParser hasParentQueryParser;
+    private final HasChildQueryParser hasChildQueryParser;
 
     public JoinQueryParser(){
         this.hasChildQueryParser=new HasChildQueryParser();

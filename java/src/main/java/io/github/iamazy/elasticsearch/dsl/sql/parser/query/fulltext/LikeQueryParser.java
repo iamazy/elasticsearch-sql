@@ -16,8 +16,6 @@ import org.elasticsearch.index.query.RegexpQueryBuilder;
  **/
 public class LikeQueryParser extends AbstractExactQueryParser implements ExpressionQueryParser<ElasticsearchParser.LikeClauseContext> {
 
-
-
     @Override
     public AtomicQuery parse(ElasticsearchParser.LikeClauseContext expression) {
         SqlConditionOperator operator = expression.not == null ? SqlConditionOperator.Like : SqlConditionOperator.NotLike;
