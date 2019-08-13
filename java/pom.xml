@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
-    <artifactId>elasticsql</artifactId>
-    <version>${elasticsearch.version}.1</version>
+    <artifactId>elasticsearch-sql</artifactId>
+    <version>${elasticsearch.version}.4</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
     <url>https://github.com/iamazy/elasticsearch-sql</url>
 
     <properties>
-        <elasticsearch.version>7.3.0</elasticsearch.version>
+        <elasticsearch.version>7.2.0</elasticsearch.version>
         <java.version>1.8</java.version>
         <antlr4.version>4.7.2</antlr4.version>
         <maven.compiler.target>${java.version}</maven.compiler.target>
