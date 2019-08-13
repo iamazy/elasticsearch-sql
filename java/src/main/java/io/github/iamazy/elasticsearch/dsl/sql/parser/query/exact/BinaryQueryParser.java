@@ -37,7 +37,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
     }
 
 
-    public AtomicQuery parseBinaryQuery(ElasticsearchParser.BinaryContext binaryContext) {
+    private AtomicQuery parseBinaryQuery(ElasticsearchParser.BinaryContext binaryContext) {
         if(binaryContext.operator!=null) {
             int operatorType = binaryContext.operator.getType();
             //EQ NEQ AEQ
