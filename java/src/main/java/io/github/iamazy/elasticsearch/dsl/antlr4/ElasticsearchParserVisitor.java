@@ -246,6 +246,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitQueryStringClause(ElasticsearchParser.QueryStringClauseContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#multiMatchClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#hasParentClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

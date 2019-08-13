@@ -448,6 +448,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterHasParentClause(ElasticsearchParser.HasParentClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}

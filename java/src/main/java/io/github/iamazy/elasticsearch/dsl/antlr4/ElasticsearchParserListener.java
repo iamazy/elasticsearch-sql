@@ -406,6 +406,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitQueryStringClause(ElasticsearchParser.QueryStringClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#multiMatchClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#multiMatchClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#hasParentClause}.
 	 * @param ctx the parse tree
 	 */

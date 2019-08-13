@@ -99,9 +99,13 @@ inRightOperand:
 
 tableRef: indexName = ID ( AS alias = ID)?;
 
-fullTextClause: queryStringClause;
+fullTextClause: queryStringClause|multiMatchClause;
 
 queryStringClause: QUERY BY STRING;
+
+multiMatchClause:
+	LPAREN ID (COMMA ID)*  RPAREN AEQ value = STRING
+;
 
 hasParentClause:
 	HAS_PARENT LPAREN type = name COMMA query = expression RPAREN;
