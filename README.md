@@ -7,7 +7,18 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 ## Version
 |elasticsearch-sql|es version|
 |----|-----|
+|7.2.0.2|7.2.0|
+|7.2.0.3|7.2.0|
 |master|7.2.0|
+
+## Maven
+```xml
+<dependency>
+    <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
+    <artifactId>elasticsearch-sql</artifactId>
+    <version>${elasticsearch.version}.4</version>
+</dependency>
+```
 
 ## Plugin(isql)
 #### Version
