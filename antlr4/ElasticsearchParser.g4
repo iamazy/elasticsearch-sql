@@ -99,12 +99,16 @@ inRightOperand:
 
 tableRef: indexName = ID ( AS alias = ID)?;
 
-fullTextClause: queryStringClause|multiMatchClause;
+fullTextClause: queryStringClause|multiMatchClause|disMaxClause;
 
 queryStringClause: QUERY BY STRING;
 
 multiMatchClause:
 	LPAREN ID (COMMA ID)*  RPAREN AEQ value = STRING
+;
+
+disMaxClause:
+	DIS_MAX expression (BOOLAND expression)* (AND TIE_BREAKER EQ FLOAT)?
 ;
 
 hasParentClause:
