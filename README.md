@@ -36,6 +36,7 @@ Elasticsearch-SQL
 **6.8.1** [![6.8.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=6.8.1)](https://travis-ci.org/iamazy/elasticsearch-sql)
 **6.8.2** [![6.8.2 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=6.8.2)](https://travis-ci.org/iamazy/elasticsearch-sql)
 **7.0.0** [![7.0.0 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.0.0)](https://travis-ci.org/iamazy/elasticsearch-sql)
+**7.0.1** [![7.0.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.0.1)](https://travis-ci.org/iamazy/elasticsearch-sql)
 
 ## Description
 rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**
@@ -81,6 +82,7 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 |6.8.1.1|6.8.1|
 |6.8.2.1|6.8.2|
 |7.0.0.1|7.0.0|
+|7.0.1.1|7.0.1|
 |master|7.2.0|
 
 ## Maven
