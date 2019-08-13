@@ -1,4 +1,4 @@
-// Generated from /Users/iamazy/Documents/GitHub/elasticsql/java/src/main/resources/antlr4/ElasticsearchParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/iamazy/Documents/GitHub/elasticsearch-sql/java/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -563,4 +563,14 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGeoBoundingBoxClause(ElasticsearchParser.GeoBoundingBoxClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx);
 }

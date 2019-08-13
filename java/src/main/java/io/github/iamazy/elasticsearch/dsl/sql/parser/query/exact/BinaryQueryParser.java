@@ -84,9 +84,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             }
             // AND OR && ||
             else if (operatorType == ElasticsearchParser.AND ||
-                    operatorType == ElasticsearchParser.BOOLAND ||
-                    operatorType == ElasticsearchParser.OR ||
-                    operatorType == ElasticsearchParser.BOOLOR) {
+                    operatorType == ElasticsearchParser.OR) {
                 ElasticsearchParser.ExpressionContext leftExpr = binaryContext.leftExpr;
                 ElasticsearchParser.ExpressionContext rightExpr = binaryContext.rightExpr;
                 if (binaryContextMatch(leftExpr) && binaryContextMatch(rightExpr)) {
@@ -94,7 +92,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                     AtomicQuery rightQuery = parseExpressionContext(rightExpr);
 
                     BoolQueryBuilder boolQueryBuilder;
-                    if (operatorType == ElasticsearchParser.AND || operatorType == ElasticsearchParser.BOOLAND) {
+                    if (operatorType == ElasticsearchParser.AND) {
                         boolQueryBuilder = QueryBuilders.boolQuery().must(leftQuery.getQueryBuilder())
                                 .must(rightQuery.getQueryBuilder());
                     } else {

@@ -1,4 +1,4 @@
-// Generated from /Users/iamazy/Documents/GitHub/elasticsql/java/src/main/resources/antlr4/ElasticsearchParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/iamazy/Documents/GitHub/elasticsearch-sql/java/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -635,6 +635,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitGeoBoundingBoxClause(ElasticsearchParser.GeoBoundingBoxClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

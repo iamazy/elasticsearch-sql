@@ -16,7 +16,7 @@ sql: (
 selectOperation:
 	SELECT fieldList FROM tableRef (COMMA tableRef)* (
 		whereClause
-	)? (routingClause)? (groupByClause | aggregateByClause)? (
+	)? (functionScoreClause)? (routingClause)? (groupByClause | aggregateByClause)? (
 		orderClause
 	)? (limitClause)?;
 
@@ -55,8 +55,8 @@ expression:
 	| leftExpr = expression operator = (LSH | RSH | USH) rightExpr = expression				# binary
 	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# binary
 	| leftExpr = expression operator = (EQ | NE | AEQ | TEQ) rightExpr = expression				# binary
-	| leftExpr = expression operator = (AND | BOOLAND) rightExpr = expression				# binary
-	| leftExpr = expression operator = (OR | BOOLOR) rightExpr = expression					# binary
+	| leftExpr = expression operator = AND rightExpr = expression				# binary
+	| leftExpr = expression operator = OR rightExpr = expression					# binary
 	| expr = identity BETWEEN left = identity AND right = identity							# betweenAnd
 	| leftExpr = expression operator = XOR rightExpr = expression							# binary
 	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
@@ -147,3 +147,8 @@ geoDistanceClause:
 geoBoundingBoxClause:
 	name EQ field = STRING AND TOP_LEFT EQ leftTop = STRING AND BOTTOM_RIGHT EQ rightBottom = STRING
 		;
+
+//Score
+functionScoreClause:
+	FUNCTION_SCORE expression (BOOLAND expression)*
+;
