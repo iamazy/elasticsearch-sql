@@ -205,9 +205,13 @@ public class ElasticSqlParseResult {
     //endregion
 
     public DeleteByQueryRequest toDelRequest() {
-        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest());
+        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest().indices());
         if (StringUtils.isNotBlank(type)) {
             deleteByQueryRequest.types(type);
+        }
+        deleteByQueryRequest.setQuery(searchSourceBuilder.query());
+        if(CollectionUtils.isNotEmpty(routingBy)){
+            deleteByQueryRequest.setRouting(routingBy.get(0));
         }
         if (size < 0) {
             deleteByQueryRequest.setSize(15);
