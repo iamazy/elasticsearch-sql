@@ -16,7 +16,7 @@ sql: (
 selectOperation:
 	SELECT fieldList FROM tableRef (COMMA tableRef)* (
 		whereClause
-	)? (functionScoreClause)? (routingClause)? (groupByClause | aggregateByClause)? (
+	)? (routingClause)? (groupByClause | aggregateByClause)? (
 		orderClause
 	)? (limitClause)?;
 
@@ -72,6 +72,7 @@ expression:
 	| geoClause																			# geo
 	| fullTextClause																	# fullText
 	| not = NOT expression																# binary
+	| functionScoreClause																# score									
 ;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
@@ -150,5 +151,5 @@ geoBoundingBoxClause:
 
 //Score
 functionScoreClause:
-	FUNCTION_SCORE expression (BOOLAND expression)*
+ 	QUERY expression FUNCTION_SCORE expression (BOOLAND expression)*
 ;

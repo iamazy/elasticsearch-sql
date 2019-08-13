@@ -170,6 +170,18 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitGeo(ElasticsearchParser.GeoContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code score}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterScore(ElasticsearchParser.ScoreContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code score}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitScore(ElasticsearchParser.ScoreContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code primitive}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree

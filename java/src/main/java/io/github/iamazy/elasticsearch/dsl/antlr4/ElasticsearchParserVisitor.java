@@ -107,6 +107,13 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGeo(ElasticsearchParser.GeoContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code score}
+	 * labeled alternative in {@link ElasticsearchParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitScore(ElasticsearchParser.ScoreContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code primitive}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
 	 * @param ctx the parse tree
