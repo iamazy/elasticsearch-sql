@@ -10,10 +10,8 @@ import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchScrollRequest;
-import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
@@ -21,7 +19,6 @@ import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
-import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.slf4j.Logger;
@@ -208,15 +205,10 @@ public class ElasticSqlParseResult {
     //endregion
 
     public DeleteByQueryRequest toDelRequest() {
-        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest().indices());
-        deleteByQueryRequest.setQuery(searchSourceBuilder.query());
+        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest());
         if (StringUtils.isNotBlank(type)) {
             deleteByQueryRequest.types(type);
         }
-        if (CollectionUtils.isNotEmpty(routingBy)) {
-            deleteByQueryRequest.setRouting(routingBy.get(0));
-        }
-
         if (size < 0) {
             deleteByQueryRequest.setSize(15);
         } else {
@@ -233,15 +225,15 @@ public class ElasticSqlParseResult {
         return mappingsRequest;
     }
 
-    public SearchResponse toResponse(RestHighLevelClient restHighLevelClient, RequestOptions requestOptions) throws IOException {
+    public SearchResponse toResponse(RestHighLevelClient restHighLevelClient) throws IOException{
         if (StringUtils.isNotBlank(scrollExpire) && StringUtils.isBlank(scrollId)) {
-            return restHighLevelClient.search(toRequest(), requestOptions);
+            return restHighLevelClient.search(toRequest());
         } else if (StringUtils.isNotBlank(scrollExpire) && StringUtils.isNotBlank(scrollId)) {
             SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
             scrollRequest.scroll(toRequest().scroll());
-            return restHighLevelClient.scroll(scrollRequest, requestOptions);
+            return restHighLevelClient.searchScroll(scrollRequest);
         } else if (StringUtils.isBlank(scrollExpire)) {
-            return restHighLevelClient.search(toRequest(), requestOptions);
+            return restHighLevelClient.search(toRequest());
         }
         throw new ElasticSql2DslException("[syntax error] response error,please check your sql");
     }
