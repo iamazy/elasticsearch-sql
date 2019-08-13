@@ -138,7 +138,6 @@ order: name ASC?;
 limitClause: LIMIT ( offset = INT COMMA)? size = INT;
 
 //Geo Clause
-
 geoClause: geoDistanceClause | geoBoundingBoxClause;
 
 geoDistanceClause:
