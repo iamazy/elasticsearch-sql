@@ -26,7 +26,7 @@ public class FunctionScoreQueryParser implements ExpressionQueryParser<Elasticse
         int size=expression.expression().size();
         FunctionScoreQueryBuilder.FilterFunctionBuilder[] filterFunctionBuilders=new FunctionScoreQueryBuilder.FilterFunctionBuilder[size-1];
         for(int i=1;i<size;i++){
-            WeightBuilder weightBuilder= ScoreFunctionBuilders.weightFactorFunction((size-i+1)*5);
+            WeightBuilder weightBuilder= ScoreFunctionBuilders.weightFactorFunction((size-i)*5);
             FunctionScoreQueryBuilder.FilterFunctionBuilder filterFunctionBuilder=new FunctionScoreQueryBuilder.FilterFunctionBuilder(boolExpressionParser.parseBoolQueryExpr(expression.expression(i)),weightBuilder);
             filterFunctionBuilders[i-1]=filterFunctionBuilder;
         }
