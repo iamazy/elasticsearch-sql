@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
+import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import org.elasticsearch.action.admin.indices.mapping.get.GetFieldMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
@@ -16,6 +17,7 @@ public class QueryDescParser implements QueryParser {
     @Override
     public void parse(ElasticDslContext dslContext) {
         if(dslContext.getSqlContext().descOperation()!=null){
+            dslContext.getParseResult().setSqlOperation(SqlOperation.DESC);
             GetFieldMappingsRequest getFieldMappingsRequest = new GetFieldMappingsRequest();
             GetMappingsRequest getMappingsRequest = new GetMappingsRequest();
             ElasticsearchParser.TableRefContext tableRefContext=dslContext.getSqlContext().descOperation().tableRef();
