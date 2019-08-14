@@ -150,7 +150,7 @@ public class ElasticSql2DslParserTest {
         String sql="desc student/xiaoming";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
-        System.out.println(parseResult.toMapping());
+        System.out.println(parseResult.getMappingsRequest());
         System.out.println(System.currentTimeMillis()-now);
     }
 
@@ -177,10 +177,10 @@ public class ElasticSql2DslParserTest {
     @Test
     public void reindex(){
         long now=System.currentTimeMillis();
-        String sql="insert into port_info_v1 select * from port_info";
+        String sql="insert into port_info_v1 select * from port_info where a=1";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
-        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(parseResult.getReindexRequest());
         System.out.println(System.currentTimeMillis()-now);
     }
 }
