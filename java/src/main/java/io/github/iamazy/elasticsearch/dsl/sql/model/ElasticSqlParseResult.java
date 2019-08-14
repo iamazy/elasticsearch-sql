@@ -17,6 +17,8 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.ReindexRequest;
+import org.elasticsearch.index.reindex.ReindexRequestBuilder;
 import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -63,6 +65,7 @@ public class ElasticSqlParseResult {
     private transient List<SortBuilder> orderBy=new ArrayList<>(0);
     private transient List<AggregationBuilder> groupBy=new ArrayList<>(0);
     private transient SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    private transient ReindexRequest reindexRequest;
 
     private GetMappingsRequest mappingsRequest;
     private GetFieldMappingsRequest fieldMappingsRequest;
@@ -150,6 +153,15 @@ public class ElasticSqlParseResult {
 
     public ElasticSqlParseResult setWhereCondition(QueryBuilder whereCondition) {
         this.whereCondition = whereCondition;
+        return this;
+    }
+
+    public ReindexRequest getReindexRequest() {
+        return reindexRequest;
+    }
+
+    public ElasticSqlParseResult setReindexRequest(ReindexRequest reindexRequest) {
+        this.reindexRequest = reindexRequest;
         return this;
     }
 
