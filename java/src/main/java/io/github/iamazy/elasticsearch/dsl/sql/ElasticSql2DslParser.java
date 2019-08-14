@@ -9,6 +9,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.*;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.AggregateByQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.GroupByQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.reindex.ReindexQueryParser;
 
 import java.util.Set;
 
@@ -45,7 +46,8 @@ public class ElasticSql2DslParser {
                 new QueryLimitParser(),
                 new GroupByQueryParser(),
 
-                new QueryDescParser()
+                new QueryDescParser(),
+                new ReindexQueryParser()
         );
     }
 }
