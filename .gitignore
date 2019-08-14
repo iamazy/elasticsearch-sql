@@ -119,3 +119,5 @@ java/target/
 .idea/libraries/Maven__org_elasticsearch_plugin_lang_mustache_client_7_2_0.xml
 .idea/libraries/Maven__org_elasticsearch_plugin_parent_join_client_7_2_0.xml
 .idea/libraries/Maven__org_elasticsearch_plugin_rank_eval_client_7_2_0.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/uiDesigner.xml
