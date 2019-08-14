@@ -2,6 +2,7 @@ package io.github.iamazy.elasticsearch.dsl.sql.model;
 
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.elastic.HighlightBuilders;
+import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -13,17 +14,14 @@ import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ReindexRequest;
-import org.elasticsearch.index.reindex.ReindexRequestBuilder;
 import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
-import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.slf4j.Logger;
@@ -51,7 +49,14 @@ public class ElasticSqlParseResult {
     private String scrollId;
 
     private List<String> indices;
+
+    @Deprecated
     private String type = "_doc";
+
+
+    private SqlOperation sqlOperation = SqlOperation.SELECT;
+
+
     /**
      * 需要高亮显示的字段
      */
@@ -72,6 +77,17 @@ public class ElasticSqlParseResult {
 
 
     //region Getter and Setter
+
+
+    public ElasticSqlParseResult setSqlOperation(SqlOperation sqlOperation) {
+        this.sqlOperation = sqlOperation;
+        return this;
+    }
+
+    public SqlOperation getSqlOperation() {
+        return sqlOperation;
+    }
+
     public int getFrom() {
         return from;
     }
@@ -230,20 +246,13 @@ public class ElasticSqlParseResult {
         }
 
         if (size < 0) {
-            deleteByQueryRequest.setSize(15);
+            deleteByQueryRequest.setMaxDocs(15);
         } else {
-            deleteByQueryRequest.setSize(size);
+            deleteByQueryRequest.setMaxDocs(size);
         }
         return deleteByQueryRequest;
     }
 
-    public GetFieldMappingsRequest toFieldMapping() {
-        return fieldMappingsRequest;
-    }
-
-    public GetMappingsRequest toMapping() {
-        return mappingsRequest;
-    }
 
     public SearchResponse toResponse(RestHighLevelClient restHighLevelClient, RequestOptions requestOptions) throws IOException {
         if (StringUtils.isNotBlank(scrollExpire) && StringUtils.isBlank(scrollId)) {
@@ -263,6 +272,8 @@ public class ElasticSqlParseResult {
         List<String> indexList = indices.parallelStream().map(index -> index.replace("`", "")).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(indexList)) {
             searchRequest.indices(indexList.toArray(new String[0]));
+        }else{
+            throw new ElasticSql2DslException("[syntax error] indices name must be set");
         }
         if (StringUtils.isNotBlank(type)) {
             searchRequest.types(type);
