@@ -12,6 +12,7 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentParser;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.index.reindex.ReindexAction;
 import org.elasticsearch.rest.*;
@@ -19,6 +20,8 @@ import org.elasticsearch.tasks.LoggingTaskListener;
 import org.elasticsearch.tasks.Task;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -46,12 +49,12 @@ public class RestSqlAction extends BaseRestHandler {
         try (XContentParser parser = restRequest.contentOrSourceParamParser()) {
             parser.mapStrings().forEach((k, v) -> restRequest.params().putIfAbsent(k, v));
         } catch (IOException e) {
-            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "please use json format params, like: {\"sql\":\"select * from test\"}"));
+            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "please use json format params, like: {\"sql\":\"select * from student\"}"));
         }
         try {
             String sql = restRequest.param("sql");
             if (StringUtils.isBlank(sql)) {
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\"error\":\"sql can not be empty!!!\"}"));
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"sql can not be empty!!!\"\n}"));
             }
             ElasticSql2DslParser sql2DslParser = new ElasticSql2DslParser();
             ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
@@ -68,18 +71,19 @@ public class RestSqlAction extends BaseRestHandler {
                             for (ObjectObjectCursor<String, MappingMetaData> objectObjectCursor : objectObjectCursors) {
                                 return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(objectObjectCursor.value.getSourceAsMap())));
                             }
-                            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\"error\":\"sql parse failed!!!\"}"));
+                            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"sql parse failed!!!\"\n}"));
                         }
                     }
                     case REINDEX:{
                         return sendTask(nodeClient.getLocalNodeId(), nodeClient.executeLocally(ReindexAction.INSTANCE, parseResult.getReindexRequest(), LoggingTaskListener.instance()));
                     }
                     case DELETE:{
-                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,builder.value(nodeClient.executeLocally(DeleteByQueryAction.INSTANCE,parseResult.toDelRequest(),LoggingTaskListener.instance()))));
+                        BulkByScrollResponse bulkByScrollResponse = nodeClient.execute(DeleteByQueryAction.INSTANCE, parseResult.toDelRequest()).actionGet();
+                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,XContentType.JSON.mediaType(),"{\n\t\"delete doc count\": "+bulkByScrollResponse.getDeleted()+"\n}"));
                     }
                     case INSERT:
                     case UPDATE:{
-                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\"error\":\"not support yet!!!\"}"));
+                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support yet!!!\"\n}"));
                     }
                     default:
                     case SELECT:{
@@ -89,7 +93,7 @@ public class RestSqlAction extends BaseRestHandler {
 
             }
         } catch (Exception e) {
-            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.INTERNAL_SERVER_ERROR, XContentType.JSON.mediaType(), "{\"error\":\"" + e.getMessage() + "\"}"));
+            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.INTERNAL_SERVER_ERROR, XContentType.JSON.mediaType(), "{\n\t\"error\":\"" + e.getMessage() + "\"\n}"));
         }
     }
 
