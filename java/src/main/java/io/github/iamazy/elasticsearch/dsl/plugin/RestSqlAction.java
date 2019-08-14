@@ -13,9 +13,15 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentParser;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.reindex.BulkByScrollTask;
+import org.elasticsearch.index.reindex.ReindexAction;
 import org.elasticsearch.rest.*;
+import org.elasticsearch.tasks.LoggingTaskListener;
+import org.elasticsearch.tasks.Task;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -55,16 +61,17 @@ public class RestSqlAction extends BaseRestHandler {
             XContentBuilder builder = XContentFactory.jsonBuilder().prettyPrint();
             if (restRequest.path().endsWith("/_explain")) {
                 return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
-            }
-            else {
+            } else {
                 if (parseResult.toFieldMapping() != null) {
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.admin().indices().getFieldMappings(parseResult.toFieldMapping()).actionGet())));
-                } else if (parseResult.toMapping()!=null) {
-                    ImmutableOpenMap<String, MappingMetaData> objectObjectCursors = nodeClient.admin().indices().getMappings(parseResult.toMapping()).actionGet().mappings().get(parseResult.getIndices().get(0));
+                } else if (parseResult.toMapping() != null) {
+                    ImmutableOpenMap<String, MappingMetaData> objectObjectCursors = nodeClient.admin().indices().getMappings(parseResult.toMapping()).actionGet().mappings().get(parseResult.getMappingsRequest().indices()[0]);
                     for (ObjectObjectCursor<String, MappingMetaData> objectObjectCursor : objectObjectCursors) {
                         return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(objectObjectCursor.value.getSourceAsMap())));
                     }
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\"error\":\"sql parse failed!!!\"}"));
+                } else if (parseResult.getReindexRequest() != null) {
+                    return sendTask(nodeClient.getLocalNodeId(), nodeClient.executeLocally(ReindexAction.INSTANCE, parseResult.getReindexRequest(), LoggingTaskListener.instance()));
                 } else {
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.search(parseResult.toRequest()).actionGet())));
                 }
@@ -74,5 +81,16 @@ public class RestSqlAction extends BaseRestHandler {
         }
     }
 
-
+    private RestChannelConsumer sendTask(String localNodeId, Task task) {
+        return channel -> {
+            try (XContentBuilder builder = channel.newBuilder()) {
+                builder.startObject();
+                builder.field("task", localNodeId + ":" + task.getId());
+                builder.endObject();
+                channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder));
+            }
+        };
+    }
 }
+
+
