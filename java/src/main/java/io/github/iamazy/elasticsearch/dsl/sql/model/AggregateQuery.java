@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.model;
 
 import lombok.Data;
+import org.elasticsearch.index.reindex.ReindexRequestBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 
 /**
@@ -12,6 +13,4 @@ import org.elasticsearch.search.aggregations.AggregationBuilder;
 public class AggregateQuery {
 
     private AggregationBuilder aggregationBuilder;
-
-
 }
