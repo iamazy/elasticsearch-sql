@@ -2,6 +2,9 @@ package io.github.iamazy.elasticsearch.dsl.sql;
 
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import org.junit.Test;
+
+import java.util.Arrays;
+
 /**
  * @author iamazy
  * @date 2019/7/26
@@ -24,6 +27,26 @@ public class ElasticSql2DslParserTest {
     public void nested(){
         long now=System.currentTimeMillis();
         String sql="select name from student where (([class1, age>1 and [class1.class2, name='hhha']] and c=1) or b~=='hhhhh') and query by 'apppple' limit 2,5";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void nested2(){
+        long now=System.currentTimeMillis();
+        String sql="select * from class where [student,student.name is null]";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void exists(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student where name is not null";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -145,6 +168,16 @@ public class ElasticSql2DslParserTest {
     public void multiMatch(){
         long now=System.currentTimeMillis();
         String sql="select * from student where (name,age) ~= 'hahah'";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void reindex(){
+        long now=System.currentTimeMillis();
+        String sql="insert into port_info_v1 select * from port_info";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
