@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.reindex;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
+import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.BoolExpressionParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.QueryParser;
@@ -30,6 +31,7 @@ public class ReindexQueryParser implements QueryParser {
     @Override
     public void parse(ElasticDslContext dslContext) {
         if (dslContext.getSqlContext().reindexOperation() != null) {
+            dslContext.getParseResult().setSqlOperation(SqlOperation.REINDEX);
             ElasticsearchParser.ReindexOperationContext reindexOperationContext = dslContext.getSqlContext().reindexOperation();
             String destIndex = reindexOperationContext.tableRef(0).indexName.getText();
             String[] sourceIndices = new String[reindexOperationContext.tableRef().size() - 1];
