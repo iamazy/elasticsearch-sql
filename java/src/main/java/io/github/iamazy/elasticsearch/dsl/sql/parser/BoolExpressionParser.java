@@ -9,6 +9,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionType;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.SqlCondition;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.BinaryQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.nested.NestedQueryParser;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -27,12 +28,14 @@ public class BoolExpressionParser {
 
 
     private final BinaryQueryParser binaryQueryParser;
+    private final NestedQueryParser nestedQueryParser;
 
     private Set<String> highlighter;
 
     public BoolExpressionParser() {
         highlighter = new HashSet<>(0);
         binaryQueryParser = new BinaryQueryParser();
+        nestedQueryParser=new NestedQueryParser();
     }
 
     public QueryBuilder parseBoolQueryExpr(ElasticsearchParser.ExpressionContext expressionContext) {
@@ -80,6 +83,9 @@ public class BoolExpressionParser {
             }else{
                 return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
             }
+        }else if(expressionContext instanceof ElasticsearchParser.NestedContext){
+            ElasticsearchParser.NestedContext nestedContext=(ElasticsearchParser.NestedContext) expressionContext;
+            return new SqlCondition(nestedQueryParser.parse(nestedContext), SqlConditionType.Atomic);
         }
         return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
     }
