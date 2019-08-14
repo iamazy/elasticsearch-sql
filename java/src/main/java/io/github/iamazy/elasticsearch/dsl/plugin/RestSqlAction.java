@@ -20,8 +20,6 @@ import org.elasticsearch.tasks.LoggingTaskListener;
 import org.elasticsearch.tasks.Task;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
