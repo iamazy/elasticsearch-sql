@@ -232,6 +232,7 @@ POST _isql/_explain
 - [x] SQL Like
 - [x] SQL Desc
 - [x] ES Excludes
+- [x] ES Reindex
 
 #### Todo
 - [x] SQL Delete

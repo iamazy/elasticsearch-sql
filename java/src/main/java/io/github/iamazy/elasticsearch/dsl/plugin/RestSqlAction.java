@@ -12,6 +12,7 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentParser;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.index.reindex.ReindexAction;
 import org.elasticsearch.rest.*;
 import org.elasticsearch.tasks.LoggingTaskListener;
@@ -73,7 +74,9 @@ public class RestSqlAction extends BaseRestHandler {
                     case REINDEX:{
                         return sendTask(nodeClient.getLocalNodeId(), nodeClient.executeLocally(ReindexAction.INSTANCE, parseResult.getReindexRequest(), LoggingTaskListener.instance()));
                     }
-                    case DELETE:
+                    case DELETE:{
+                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,builder.value(nodeClient.executeLocally(DeleteByQueryAction.INSTANCE,parseResult.toDelRequest(),LoggingTaskListener.instance()))));
+                    }
                     case INSERT:
                     case UPDATE:{
                         return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\"error\":\"not support yet!!!\"}"));
