@@ -88,6 +88,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReindexOperation(ElasticsearchParser.ReindexOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReindexOperation(ElasticsearchParser.ReindexOperationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFieldList(ElasticsearchParser.FieldListContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -455,6 +467,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

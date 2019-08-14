@@ -75,6 +75,7 @@ IN: I N;
 WHERE: W H E R E;
 FROM: F R O M;
 HAVING: H A V I N G;
+REMOTE: R E M O T E;
 
 
 //FULL TEXT

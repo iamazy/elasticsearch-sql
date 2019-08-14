@@ -68,6 +68,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitInsertOperation(ElasticsearchParser.InsertOperationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#reindexOperation}.
+	 * @param ctx the parse tree
+	 */
+	void enterReindexOperation(ElasticsearchParser.ReindexOperationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#reindexOperation}.
+	 * @param ctx the parse tree
+	 */
+	void exitReindexOperation(ElasticsearchParser.ReindexOperationContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#fieldList}.
 	 * @param ctx the parse tree
 	 */
@@ -415,6 +425,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#disMaxClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#disMaxClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#hasParentClause}.
 	 * @param ctx the parse tree

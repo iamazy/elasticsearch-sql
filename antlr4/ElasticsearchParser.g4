@@ -10,6 +10,7 @@ sql: (
 		| descOperation
 		| updateOperation
 		| insertOperation
+		| reindexOperation
 	) SEMI? EOF;
 
 //OPERATIONS
@@ -30,7 +31,11 @@ updateOperation:
 insertOperation:
 	INSERT INTO tableRef (
 		LPAREN identity (COMMA identity)* RPAREN
-	)? VALUES LPAREN identity (COMMA identity)* RPAREN routingClause?;
+	) VALUES LPAREN identity (COMMA identity)* RPAREN routingClause?;
+
+reindexOperation:
+	INSERT INTO tableRef SELECT fieldList FROM tableRef (COMMA tableRef)* whereClause? (LIMIT size = INT)? ( REMOTE EQ LPAREN host = STRING ( COMMA user = STRING COMMA password = STRING )? RPAREN )?
+;
 
 fieldList: STAR | ( nameOperand ( COMMA nameOperand)*);
 
