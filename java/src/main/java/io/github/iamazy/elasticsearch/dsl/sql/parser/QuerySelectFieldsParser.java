@@ -17,7 +17,7 @@ public class QuerySelectFieldsParser implements QueryParser {
 
     @Override
     public void parse(ElasticDslContext dslContext) {
-        if (dslContext.getSqlContext().selectOperation()!=null&&dslContext.getSqlContext().selectOperation().groupByClause() == null) {
+        if (dslContext.getSqlContext().selectOperation() != null && dslContext.getSqlContext().selectOperation().groupByClause() == null) {
             ElasticsearchParser.SelectOperationContext selectOperationContext = dslContext.getSqlContext().selectOperation();
             ElasticsearchParser.FieldListContext fieldListContext = selectOperationContext.fieldList();
             if (fieldListContext.nameOperand().size() > 0) {
