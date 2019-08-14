@@ -4,6 +4,7 @@ import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.ExistsQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.FullTextQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.LikeQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
@@ -28,6 +29,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
     private final FullTextQueryParser fullTextQueryParser;
     private final ScoreQueryParser scoreQueryParser;
     private final BetweenAndQueryParser betweenAndQueryParser;
+    private final ExistsQueryParser existsQueryParser;
     public BinaryQueryParser(){
         geoQueryParser=new GeoQueryParser();
         joinQueryParser=new JoinQueryParser();
@@ -37,6 +39,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         fullTextQueryParser=new FullTextQueryParser();
         scoreQueryParser=new ScoreQueryParser();
         betweenAndQueryParser=new BetweenAndQueryParser();
+        existsQueryParser=new ExistsQueryParser();
     }
 
 
@@ -156,7 +159,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         //IS | IS NOT
         else if (binaryContext.isClause() != null) {
             ElasticsearchParser.IsClauseContext isClauseContext = binaryContext.isClause();
-            return parseIsContext(isClauseContext);
+            return existsQueryParser.parse(isClauseContext);
         }
         //LIKE | NOT LIKE
         else if (binaryContext.likeClause() != null) {
@@ -164,23 +167,6 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             return likeQueryParser.parse(likeClauseContext);
         }
         throw new ElasticSql2DslException("[syntax error] not supported yet");
-    }
-
-
-    private AtomicQuery parseIsContext(ElasticsearchParser.IsClauseContext isContext){
-        SqlConditionOperator operator = isContext.not == null ? SqlConditionOperator.IsNull : SqlConditionOperator.IsNotNull;
-        return parseCondition(isContext.field, operator, null, (fieldName, operator1, rightParams) -> {
-            ExistsQueryBuilder existsQueryBuilder = QueryBuilders.existsQuery(fieldName);
-            switch (operator1) {
-                case IsNull: {
-                    return QueryBuilders.boolQuery().mustNot(existsQueryBuilder);
-                }
-                default:
-                case IsNotNull: {
-                    return existsQueryBuilder;
-                }
-            }
-        });
     }
 
     public AtomicQuery parseExpressionContext(ElasticsearchParser.ExpressionContext expressionContext){
