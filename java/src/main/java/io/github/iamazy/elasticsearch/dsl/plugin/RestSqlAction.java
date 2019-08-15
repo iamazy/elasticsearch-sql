@@ -58,7 +58,15 @@ public class RestSqlAction extends BaseRestHandler {
             ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
             XContentBuilder builder = XContentFactory.jsonBuilder().prettyPrint();
             if (restRequest.path().endsWith("/_explain")) {
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
+                switch (parseResult.getSqlOperation()){
+                    case SELECT:{
+                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
+                    }
+                    default:{
+                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support explaining desc,delete,update syntax yet!!!\"\n}"));
+                    }
+                }
+
             } else {
                 switch (parseResult.getSqlOperation()){
                     case DESC:{
