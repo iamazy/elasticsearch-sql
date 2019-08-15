@@ -58,48 +58,55 @@ public class RestSqlAction extends BaseRestHandler {
             ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
             XContentBuilder builder = XContentFactory.jsonBuilder().prettyPrint();
             if (restRequest.path().endsWith("/_explain")) {
-                switch (parseResult.getSqlOperation()){
-                    case SELECT:{
-                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
-                    }
-                    default:{
-                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support explaining desc,delete,update syntax yet!!!\"\n}"));
-                    }
-                }
-
+                return explain(parseResult,builder);
             } else {
-                switch (parseResult.getSqlOperation()){
-                    case DESC:{
-                        if (parseResult.getFieldMappingsRequest() != null) {
-                            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.admin().indices().getFieldMappings(parseResult.getFieldMappingsRequest()).actionGet())));
-                        } else if (parseResult.getMappingsRequest() != null) {
-                            ImmutableOpenMap<String, MappingMetaData> objectObjectCursors = nodeClient.admin().indices().getMappings(parseResult.getMappingsRequest()).actionGet().mappings().get(parseResult.getMappingsRequest().indices()[0]);
-                            for (ObjectObjectCursor<String, MappingMetaData> objectObjectCursor : objectObjectCursors) {
-                                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(objectObjectCursor.value.getSourceAsMap())));
-                            }
-                            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"sql parse failed!!!\"\n}"));
-                        }
-                    }
-                    case REINDEX:{
-                        return sendTask(nodeClient.getLocalNodeId(), nodeClient.executeLocally(ReindexAction.INSTANCE, parseResult.getReindexRequest(), LoggingTaskListener.instance()));
-                    }
-                    case DELETE:{
-                        BulkByScrollResponse bulkByScrollResponse = nodeClient.execute(DeleteByQueryAction.INSTANCE, parseResult.toDelRequest()).actionGet();
-                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,XContentType.JSON.mediaType(),"{\n\t\"delete doc count\": "+bulkByScrollResponse.getDeleted()+"\n}"));
-                    }
-                    case INSERT:
-                    case UPDATE:{
-                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support yet!!!\"\n}"));
-                    }
-                    default:
-                    case SELECT:{
-                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.search(parseResult.toRequest()).actionGet())));
-                    }
-                }
-
+                return execute(parseResult, builder, nodeClient);
             }
         } catch (Exception e) {
             return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.INTERNAL_SERVER_ERROR, XContentType.JSON.mediaType(), "{\n\t\"error\":\"" + e.getMessage() + "\"\n}"));
+        }
+    }
+
+
+    private RestChannelConsumer explain(ElasticSqlParseResult parseResult,XContentBuilder builder){
+        switch (parseResult.getSqlOperation()) {
+            case SELECT: {
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
+            }
+            default: {
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support explaining desc,delete,update syntax yet!!!\"\n}"));
+            }
+        }
+    }
+
+    private RestChannelConsumer execute(ElasticSqlParseResult parseResult, XContentBuilder builder, NodeClient nodeClient) {
+        switch (parseResult.getSqlOperation()) {
+            case DESC: {
+                if (parseResult.getFieldMappingsRequest() != null) {
+                    return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.admin().indices().getFieldMappings(parseResult.getFieldMappingsRequest()).actionGet())));
+                } else if (parseResult.getMappingsRequest() != null) {
+                    ImmutableOpenMap<String, MappingMetaData> objectObjectCursors = nodeClient.admin().indices().getMappings(parseResult.getMappingsRequest()).actionGet().mappings().get(parseResult.getMappingsRequest().indices()[0]);
+                    for (ObjectObjectCursor<String, MappingMetaData> objectObjectCursor : objectObjectCursors) {
+                        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(objectObjectCursor.value.getSourceAsMap())));
+                    }
+                    return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"sql parse failed!!!\"\n}"));
+                }
+            }
+            case REINDEX: {
+                return sendTask(nodeClient.getLocalNodeId(), nodeClient.executeLocally(ReindexAction.INSTANCE, parseResult.getReindexRequest(), LoggingTaskListener.instance()));
+            }
+            case DELETE: {
+                BulkByScrollResponse bulkByScrollResponse = nodeClient.execute(DeleteByQueryAction.INSTANCE, parseResult.toDelRequest()).actionGet();
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, XContentType.JSON.mediaType(), "{\n\t\"delete doc count\": " + bulkByScrollResponse.getDeleted() + "\n}"));
+            }
+            case INSERT:
+            case UPDATE: {
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support yet!!!\"\n}"));
+            }
+            default:
+            case SELECT: {
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.search(parseResult.toRequest()).actionGet())));
+            }
         }
     }
 
