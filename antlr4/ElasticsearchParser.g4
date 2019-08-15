@@ -23,7 +23,7 @@ selectOperation:
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
-deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause?;
+deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause? limitClause?;
 
 updateOperation:
 	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause?;
@@ -34,7 +34,7 @@ insertOperation:
 	) VALUES LPAREN identity (COMMA identity)* RPAREN routingClause?;
 
 reindexOperation:
-	INSERT INTO tableRef SELECT fieldList FROM tableRef (COMMA tableRef)* whereClause? (LIMIT size = INT)? ( REMOTE EQ LPAREN host = STRING ( COMMA user = STRING COMMA password = STRING )? RPAREN )?
+	INSERT INTO tableRef SELECT fieldList FROM tableRef (COMMA tableRef)* whereClause? limitClause? ( REMOTE EQ LPAREN host = STRING ( COMMA user = STRING COMMA password = STRING )? RPAREN )?
 ;
 
 fieldList: STAR | ( nameOperand ( COMMA nameOperand)*);
