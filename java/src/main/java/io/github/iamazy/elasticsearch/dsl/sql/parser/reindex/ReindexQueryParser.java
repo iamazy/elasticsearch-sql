@@ -51,8 +51,8 @@ public class ReindexQueryParser implements QueryParser {
                     reindexRequest.setSourceQuery(queryBuilder);
                 }
             }
-            if (reindexOperationContext.INT() != null) {
-                int size = Integer.parseInt(reindexOperationContext.INT().getText());
+            if (reindexOperationContext.limitClause() != null) {
+                int size = Integer.parseInt(reindexOperationContext.limitClause().size.getText());
                 reindexRequest.setMaxDocs(size);
             }
             reindexRequest.setDestIndex(destIndex);
