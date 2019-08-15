@@ -181,7 +181,7 @@ POST _isql/_explain
 - [x] SQL Select  
 - [x] SQL Where  
 - [x] SQL Order by (Asc & Desc)
-- [ ] SQL Group by (Terms & Range)
+- [ ] SQL Group by
 - [x] ES Aggregate by
 - [x] SQL And & Or
 - [x] SQL In
