@@ -109,7 +109,7 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 
 | elasticsearch version | latest version | remark | isql version | 
 | ---- | ---- | ---- | ---- | 
-| 7.x | 7.2.0 | | 7.2.0.beta |
+| 7.x | 7.3.0 | | 7.3.0.1 |
 
 #### Installing
 
