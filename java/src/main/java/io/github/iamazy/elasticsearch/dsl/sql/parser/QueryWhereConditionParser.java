@@ -20,11 +20,9 @@ public class QueryWhereConditionParser extends BoolExpressionParser implements Q
             ElasticsearchParser.WhereClauseContext whereClauseContext = dslContext.getSqlContext().selectOperation().whereClause();
             parseWhereCondition(dslContext,whereClauseContext);
         }else if(dslContext.getSqlContext().deleteOperation()!=null){
-            dslContext.getParseResult().setSqlOperation(SqlOperation.DELETE);
             ElasticsearchParser.WhereClauseContext whereClauseContext = dslContext.getSqlContext().deleteOperation().whereClause();
             parseWhereCondition(dslContext,whereClauseContext);
         }else if(dslContext.getSqlContext().updateOperation()!=null){
-            dslContext.getParseResult().setSqlOperation(SqlOperation.UPDATE);
             ElasticsearchParser.WhereClauseContext whereClauseContext = dslContext.getSqlContext().updateOperation().whereClause();
             parseWhereCondition(dslContext,whereClauseContext);
         }
