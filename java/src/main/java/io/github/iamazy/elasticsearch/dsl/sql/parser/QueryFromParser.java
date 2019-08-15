@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
+import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 
 import java.util.ArrayList;
@@ -18,16 +19,20 @@ public class QueryFromParser implements QueryParser {
     public void parse(ElasticDslContext dslContext) {
         List<String> indices=new ArrayList<>(0);
         if(dslContext.getSqlContext().selectOperation()!=null){
+            dslContext.getParseResult().setSqlOperation(SqlOperation.SELECT);
             ElasticsearchParser.SelectOperationContext selectOperationContext=dslContext.getSqlContext().selectOperation();
             for(ElasticsearchParser.TableRefContext tableRef:selectOperationContext.tableRef()){
                 indices.add(tableRef.indexName.getText());
             }
 
         }else if(dslContext.getSqlContext().deleteOperation()!=null){
+            dslContext.getParseResult().setSqlOperation(SqlOperation.DELETE);
             ElasticsearchParser.DeleteOperationContext deleteOperationContext=dslContext.getSqlContext().deleteOperation();
             for(ElasticsearchParser.TableRefContext tableRef:deleteOperationContext.tableRef()){
                 indices.add(tableRef.indexName.getText());
             }
+        }else if(dslContext.getSqlContext().updateOperation()!=null){
+            dslContext.getParseResult().setSqlOperation(SqlOperation.UPDATE);
         }
         dslContext.getParseResult().setIndices(indices);
     }
