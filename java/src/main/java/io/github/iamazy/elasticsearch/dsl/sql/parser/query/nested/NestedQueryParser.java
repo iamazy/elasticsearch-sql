@@ -24,9 +24,7 @@ public class NestedQueryParser implements ExpressionQueryParser<ElasticsearchPar
         BoolExpressionParser  boolExpressionParser=new BoolExpressionParser();
         QueryBuilder queryBuilder = boolExpressionParser.parseBoolQueryExpr(expression.nestedClause().query);
         NestedQueryBuilder nestedQueryBuilder= QueryBuilders.nestedQuery(nestedPath,queryBuilder, ScoreMode.Avg);
-        AtomicQuery atomicQuery= new AtomicQuery(nestedQueryBuilder);
-        atomicQuery.getHighlighter().addAll(boolExpressionParser.highlighter);
-        return atomicQuery;
+        return new AtomicQuery(nestedQueryBuilder);
     }
 
     @Override
