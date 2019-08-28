@@ -62,7 +62,7 @@ expression:
 	| leftExpr = expression operator = (EQ | NE | AEQ | TEQ) rightExpr = expression				# binary
 	| leftExpr = expression operator = AND rightExpr = expression				# binary
 	| leftExpr = expression operator = OR rightExpr = expression					# binary
-	| expr = identity BETWEEN left = identity AND right = identity							# betweenAnd
+	| expr = name BETWEEN left = identity AND right = identity							# betweenAnd
 	| leftExpr = expression operator = XOR rightExpr = expression							# binary
 	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
 	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional
@@ -86,7 +86,7 @@ likeClause: field = name not = NOT? LIKE pattern = STRING;
 
 isClause: field = name IS not = NOT? NULL;
 
-inClause: left = identity NOT? IN right = inRightOperandList;
+inClause: left = name NOT? IN right = inRightOperandList;
 
 inRightOperandList:
 	inRightOperand
@@ -109,7 +109,7 @@ fullTextClause: queryStringClause|multiMatchClause|disMaxClause;
 queryStringClause: QUERY BY STRING;
 
 multiMatchClause:
-	LPAREN ID (COMMA ID)*  RPAREN AEQ value = STRING
+	LPAREN name (COMMA name)*  RPAREN AEQ value = STRING
 ;
 
 disMaxClause:
@@ -154,12 +154,10 @@ limitClause: LIMIT ( offset = INT COMMA)? size = INT;
 geoClause: geoDistanceClause | geoBoundingBoxClause;
 
 geoDistanceClause:
-	name EQ field = STRING AND (GEOPOINT | GEOHASH) EQ coordinate = STRING AND DISTANCE EQ distance
-		= STRING;
+	ID EQ coordinate = STRING AND DISTANCE EQ distance = STRING;
 
 geoBoundingBoxClause:
-	name EQ field = STRING AND TOP_LEFT EQ leftTop = STRING AND BOTTOM_RIGHT EQ rightBottom = STRING
-		;
+	TOP_LEFT EQ leftTop = STRING AND BOTTOM_RIGHT EQ rightBottom = STRING WITHIN field = ID;
 
 //Score
 functionScoreClause:

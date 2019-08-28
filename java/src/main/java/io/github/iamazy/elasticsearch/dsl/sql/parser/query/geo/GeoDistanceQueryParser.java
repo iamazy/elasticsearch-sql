@@ -18,8 +18,8 @@ public class GeoDistanceQueryParser implements ExpressionQueryParser<Elasticsear
 
     @Override
     public AtomicQuery parse(ElasticsearchParser.GeoDistanceClauseContext expression) {
-        GeoDistanceQueryBuilder geoDistanceQueryBuilder= QueryBuilders.geoDistanceQuery(StringManager.removeStringSymbol(expression.field.getText()));
-        if(expression.GEOPOINT()!=null){
+        GeoDistanceQueryBuilder geoDistanceQueryBuilder= QueryBuilders.geoDistanceQuery(StringManager.removeStringSymbol(expression.ID().getText()));
+        if(expression.coordinate.getText().contains(",")){
             String[] latLon=StringManager.removeStringSymbol(expression.coordinate.getText()).split(",");
             geoDistanceQueryBuilder.point(Double.parseDouble(latLon[0]),Double.parseDouble(latLon[1]));
         }else{

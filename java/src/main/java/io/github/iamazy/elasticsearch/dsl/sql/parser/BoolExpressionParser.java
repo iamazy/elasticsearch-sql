@@ -18,6 +18,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author iamazy
@@ -30,7 +31,7 @@ public class BoolExpressionParser {
     private final BinaryQueryParser binaryQueryParser;
     private final NestedQueryParser nestedQueryParser;
 
-    private Set<String> highlighter;
+    public Set<String> highlighter;
 
     public BoolExpressionParser() {
         highlighter = new HashSet<>(0);
@@ -47,13 +48,17 @@ public class BoolExpressionParser {
         if(sqlCondition.getQueryList().size()>1) {
             return mergeAtomicQuery(sqlCondition.getQueryList(), operator);
         }else{
+            this.highlighter.addAll(sqlCondition.getQueryList().get(0).getHighlighter());
             return sqlCondition.getQueryList().get(0).getQueryBuilder();
         }
     }
 
     private void combineQueryBuilder(List<AtomicQuery> combiner, SqlCondition sqlCondition, SqlBoolOperator boolOperator) {
         if (SqlConditionType.Atomic == sqlCondition.getConditionType() || sqlCondition.getOperator() == boolOperator) {
-            combiner.addAll(sqlCondition.getQueryList());
+            for(AtomicQuery atomicQuery:sqlCondition.getQueryList()){
+                this.highlighter.addAll(atomicQuery.getHighlighter());
+                combiner.add(atomicQuery);
+            }
         } else {
             BoolQueryBuilder boolQueryBuilder = mergeAtomicQuery(sqlCondition.getQueryList(), sqlCondition.getOperator());
             combiner.add(new AtomicQuery(boolQueryBuilder));
@@ -71,7 +76,9 @@ public class BoolExpressionParser {
                 } else if (operatorType == ElasticsearchParser.OR || operatorType == ElasticsearchParser.BOOLOR) {
                     boolOperator = SqlBoolOperator.OR;
                 } else {
-                    return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
+                    AtomicQuery atomicQuery=binaryQueryParser.parseExpressionContext(expressionContext);
+                    this.highlighter.addAll(atomicQuery.getHighlighter());
+                    return new SqlCondition(atomicQuery, SqlConditionType.Atomic);
                 }
                 SqlCondition leftCondition = recursiveParseBoolQueryExpr(binaryContext.leftExpr);
                 SqlCondition rightCondition = recursiveParseBoolQueryExpr(binaryContext.rightExpr);
@@ -81,13 +88,17 @@ public class BoolExpressionParser {
                 combineQueryBuilder(queryList, rightCondition, boolOperator);
                 return new SqlCondition(queryList, boolOperator);
             }else{
-                return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
+                AtomicQuery atomicQuery=binaryQueryParser.parseExpressionContext(expressionContext);
+                this.highlighter.addAll(atomicQuery.getHighlighter());
+                return new SqlCondition(atomicQuery, SqlConditionType.Atomic);
             }
         }else if(expressionContext instanceof ElasticsearchParser.NestedContext){
             ElasticsearchParser.NestedContext nestedContext=(ElasticsearchParser.NestedContext) expressionContext;
             return new SqlCondition(nestedQueryParser.parse(nestedContext), SqlConditionType.Atomic);
         }
-        return new SqlCondition(binaryQueryParser.parseExpressionContext(expressionContext), SqlConditionType.Atomic);
+        AtomicQuery atomicQuery=binaryQueryParser.parseExpressionContext(expressionContext);
+        this.highlighter.addAll(atomicQuery.getHighlighter());
+        return new SqlCondition(atomicQuery, SqlConditionType.Atomic);
     }
 
 
@@ -96,7 +107,7 @@ public class BoolExpressionParser {
         ListMultimap<AtomicQuery, QueryBuilder> listMultimap = ArrayListMultimap.create();
         for (AtomicQuery atomicQuery : queryList) {
             if (CollectionUtils.isNotEmpty(atomicQuery.getHighlighter())) {
-                highlighter.addAll(atomicQuery.getHighlighter());
+                this.highlighter.addAll(atomicQuery.getHighlighter());
             }
             //only [and] operator can merge bool query builder
             if (operator == SqlBoolOperator.AND) {

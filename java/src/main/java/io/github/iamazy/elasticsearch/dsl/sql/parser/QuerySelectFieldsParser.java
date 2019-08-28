@@ -33,10 +33,21 @@ public class QuerySelectFieldsParser implements QueryParser {
                             }
                         } else {
                             if (fieldName.fieldName instanceof ElasticsearchParser.FieldNameContext) {
-                                includeFields.add(((ElasticsearchParser.FieldNameContext) fieldName.fieldName).field.getText());
+                                ElasticsearchParser.FieldNameContext fieldNameContext=(ElasticsearchParser.FieldNameContext) fieldName.fieldName;
+                                if(fieldNameContext.highlighter!=null){
+                                    dslContext.getParseResult().getHighlighter().add(fieldNameContext.field.getText());
+                                }
+                                includeFields.add(fieldNameContext.field.getText());
                             } else if (fieldName.fieldName instanceof ElasticsearchParser.DistinctNameContext) {
                                 ElasticsearchParser.DistinctNameContext distinctNameContext = (ElasticsearchParser.DistinctNameContext) fieldName.fieldName;
                                 String distinctName = distinctNameContext.fieldName.getText();
+                                if(distinctNameContext.fieldName instanceof ElasticsearchParser.FieldNameContext){
+                                    ElasticsearchParser.FieldNameContext fieldNameContext=(ElasticsearchParser.FieldNameContext)distinctNameContext.fieldName;
+                                    if(fieldNameContext.highlighter!=null){
+                                        distinctName=fieldNameContext.field.getText();
+                                        dslContext.getParseResult().getHighlighter().add(distinctName);
+                                    }
+                                }
                                 if (dslContext.getParseResult().getCollapseBuilder() == null) {
                                     dslContext.getParseResult().setCollapseBuilder(new CollapseBuilder(distinctName));
                                 }

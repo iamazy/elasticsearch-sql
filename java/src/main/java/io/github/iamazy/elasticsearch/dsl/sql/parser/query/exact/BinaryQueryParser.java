@@ -105,7 +105,9 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                         boolQueryBuilder = QueryBuilders.boolQuery().should(leftQuery.getQueryBuilder())
                                 .should(rightQuery.getQueryBuilder());
                     }
-                    return new AtomicQuery(boolQueryBuilder);
+                    AtomicQuery atomicQuery= new AtomicQuery(boolQueryBuilder);
+                    mergeHighlighterSet(atomicQuery,leftQuery,rightQuery);
+                    return atomicQuery;
                 } else {
                     throw new ElasticSql2DslException("expressions on  both sides of [and or && ||] must be binary context");
                 }
@@ -167,6 +169,12 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             return likeQueryParser.parse(likeClauseContext);
         }
         throw new ElasticSql2DslException("[syntax error] not supported yet");
+    }
+
+    private void mergeHighlighterSet(AtomicQuery atomicQuery,AtomicQuery ...atomicQueries){
+        for(AtomicQuery atomicQueryItem:atomicQueries){
+            atomicQuery.getHighlighter().addAll(atomicQueryItem.getHighlighter());
+        }
     }
 
     public AtomicQuery parseExpressionContext(ElasticsearchParser.ExpressionContext expressionContext){

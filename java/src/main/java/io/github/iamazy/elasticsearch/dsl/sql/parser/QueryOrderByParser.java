@@ -26,7 +26,7 @@ public class QueryOrderByParser implements QueryParser {
                         ElasticsearchParser.FieldNameContext fieldNameContext=(ElasticsearchParser.FieldNameContext)nameContext;
                         String field = fieldNameContext.field.getText();
                         if(fieldNameContext.highlighter!=null){
-                            //TODO
+                            dslContext.getParseResult().getHighlighter().add(field);
                         }
                         SortOrder sortOrder;
                         if(orderContext.ASC()!=null) {

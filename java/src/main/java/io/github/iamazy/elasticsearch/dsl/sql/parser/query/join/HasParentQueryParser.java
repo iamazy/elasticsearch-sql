@@ -15,17 +15,15 @@ import org.elasticsearch.join.query.JoinQueryBuilders;
  **/
 public class HasParentQueryParser implements ExpressionQueryParser<ElasticsearchParser.HasParentClauseContext> {
 
-    private static BoolExpressionParser boolExpressionParser;
-
     @Override
     public AtomicQuery parse(ElasticsearchParser.HasParentClauseContext expression) {
         String type=expression.type.getText();
-        if(boolExpressionParser==null){
-            boolExpressionParser=new BoolExpressionParser();
-        }
+        BoolExpressionParser   boolExpressionParser=new BoolExpressionParser();
         QueryBuilder queryBuilder=boolExpressionParser.parseBoolQueryExpr(expression.query);
         HasParentQueryBuilder hasParentQueryBuilder= JoinQueryBuilders.hasParentQuery(type,queryBuilder,true);
-        return new AtomicQuery(hasParentQueryBuilder);
+        AtomicQuery atomicQuery= new AtomicQuery(hasParentQueryBuilder);
+        atomicQuery.getHighlighter().addAll(boolExpressionParser.highlighter);
+        return atomicQuery;
     }
 
     @Override

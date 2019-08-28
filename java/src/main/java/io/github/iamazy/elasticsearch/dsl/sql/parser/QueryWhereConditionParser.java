@@ -33,6 +33,7 @@ public class QueryWhereConditionParser extends BoolExpressionParser implements Q
             ElasticsearchParser.ExpressionContext expression = whereClauseContext.expression();
             QueryBuilder queryBuilder = parseBoolQueryExpr(expression);
             dslContext.getParseResult().setWhereCondition(queryBuilder);
+            dslContext.getParseResult().getHighlighter().addAll(this.highlighter);
         }
     }
 }

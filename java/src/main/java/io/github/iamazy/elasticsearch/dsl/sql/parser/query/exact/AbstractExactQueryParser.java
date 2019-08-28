@@ -6,6 +6,8 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.elasticsearch.index.query.QueryBuilder;
 
+import java.util.HashSet;
+
 /**
  * @author iamazy
  * @date 2019/7/29
@@ -18,28 +20,43 @@ public abstract class AbstractExactQueryParser {
             ElasticsearchParser.NameExprContext nameExprContext= (ElasticsearchParser.NameExprContext) expression;
             ElasticsearchParser.NameContext nameContext = nameExprContext.name();
             if(nameContext instanceof ElasticsearchParser.FieldNameContext){
-                ElasticsearchParser.FieldNameContext fieldNameContext=(ElasticsearchParser.FieldNameContext) nameContext;
-                if(fieldNameContext.highlighter!=null){
-                    //TODO
-                }
-                QueryBuilder query = queryBuilder.buildQuery(fieldNameContext.field.getText(),operator,params);
-                return new AtomicQuery(query);
+                return parseHighlighterField((ElasticsearchParser.FieldNameContext) nameContext,operator,params,queryBuilder);
             }
 
         }else if(expression instanceof ElasticsearchParser.BetweenAndContext){
             ElasticsearchParser.BetweenAndContext betweenAndContext=(ElasticsearchParser.BetweenAndContext) expression;
-            QueryBuilder query = queryBuilder.buildQuery(betweenAndContext.expr.getText(),operator,params);
-            return new AtomicQuery(query);
+            if(betweenAndContext.expr instanceof ElasticsearchParser.FieldNameContext){
+                ElasticsearchParser.FieldNameContext fieldNameContext=(ElasticsearchParser.FieldNameContext)betweenAndContext.expr;
+                return parseHighlighterField(fieldNameContext,operator,params,queryBuilder);
+            }
         }else if(expression instanceof ElasticsearchParser.InClauseContext){
             ElasticsearchParser.InClauseContext inClauseContext=(ElasticsearchParser.InClauseContext)expression;
-            QueryBuilder query=queryBuilder.buildQuery(inClauseContext.left.getText(),operator,params);
-            return new AtomicQuery(query);
+            if(inClauseContext.left instanceof ElasticsearchParser.FieldNameContext){
+                return parseHighlighterField((ElasticsearchParser.FieldNameContext)inClauseContext.left,operator,params,queryBuilder);
+            }else {
+                QueryBuilder query = queryBuilder.buildQuery(inClauseContext.left.getText(), operator, params);
+                return new AtomicQuery(query);
+            }
         }else if(expression instanceof ElasticsearchParser.LikeClauseContext){
             ElasticsearchParser.LikeClauseContext likeClauseContext=(ElasticsearchParser.LikeClauseContext) expression;
-            QueryBuilder query=queryBuilder.buildQuery(likeClauseContext.field.getText(),operator,params);
-            return new AtomicQuery(query);
+            if(likeClauseContext.field instanceof ElasticsearchParser.FieldNameContext){
+                return parseHighlighterField((ElasticsearchParser.FieldNameContext)likeClauseContext.field,operator,params,queryBuilder);
+            }else {
+                QueryBuilder query = queryBuilder.buildQuery(likeClauseContext.field.getText(), operator, params);
+                return new AtomicQuery(query);
+            }
         }
         return null;
+    }
+
+    private AtomicQuery parseHighlighterField(ElasticsearchParser.FieldNameContext fieldNameContext,SqlConditionOperator operator, Object[] params,IConditionExactQueryBuilder queryBuilder){
+        QueryBuilder query = queryBuilder.buildQuery(fieldNameContext.field.getText(), operator, params);
+        AtomicQuery atomicQuery=new AtomicQuery(query);
+        if(fieldNameContext.highlighter!=null) {
+            atomicQuery.getHighlighter().add(fieldNameContext.field.getText());
+        }
+        return atomicQuery;
+
     }
 }
 

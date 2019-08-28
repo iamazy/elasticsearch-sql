@@ -14,8 +14,11 @@ public class GeoQueryParser implements ExpressionQueryParser<ElasticsearchParser
 
     private GeoDistanceQueryParser geoDistanceQueryParser;
 
+    private GeoBoundingBoxQueryParser geoBoundingBoxQueryParser;
+
     public GeoQueryParser(){
         this.geoDistanceQueryParser=new GeoDistanceQueryParser();
+        this.geoBoundingBoxQueryParser=new GeoBoundingBoxQueryParser();
     }
 
     @Override
@@ -23,8 +26,7 @@ public class GeoQueryParser implements ExpressionQueryParser<ElasticsearchParser
         if(expression.geoClause().geoDistanceClause()!=null){
             return geoDistanceQueryParser.parse(expression.geoClause().geoDistanceClause());
         }else if(expression.geoClause().geoBoundingBoxClause()!=null){
-            //TODO add geo bounding box query
-            throw new ElasticSql2DslException("geo query only support GeoDistanceQuery yet");
+            return geoBoundingBoxQueryParser.parse(expression.geoClause().geoBoundingBoxClause());
         }else{
             throw new ElasticSql2DslException("geo query only support GeoDistanceQuery yet");
         }
@@ -32,6 +34,6 @@ public class GeoQueryParser implements ExpressionQueryParser<ElasticsearchParser
 
     @Override
     public boolean isMatchExpressionInvocation(Class clazz) {
-        return ElasticsearchParser.GeoContext.class==clazz || ElasticsearchParser.GeoDistanceClauseContext.class==clazz;
+        return ElasticsearchParser.GeoContext.class==clazz || ElasticsearchParser.GeoDistanceClauseContext.class==clazz || ElasticsearchParser.GeoBoundingBoxClauseContext.class==clazz;
     }
 }

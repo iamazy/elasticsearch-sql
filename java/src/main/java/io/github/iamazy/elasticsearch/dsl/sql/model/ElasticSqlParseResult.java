@@ -50,10 +50,6 @@ public class ElasticSqlParseResult {
 
     private List<String> indices;
 
-    @Deprecated
-    private String type = "_doc";
-
-
     private SqlOperation sqlOperation = SqlOperation.SELECT;
 
 
@@ -77,8 +73,6 @@ public class ElasticSqlParseResult {
 
 
     //region Getter and Setter
-
-
     public ElasticSqlParseResult setSqlOperation(SqlOperation sqlOperation) {
         this.sqlOperation = sqlOperation;
         return this;
@@ -133,22 +127,8 @@ public class ElasticSqlParseResult {
         return this;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public ElasticSqlParseResult setType(String type) {
-        this.type = type;
-        return this;
-    }
-
     public Set<String> getHighlighter() {
         return highlighter;
-    }
-
-    public ElasticSqlParseResult setHighlighter(Set<String> highlighter) {
-        this.highlighter = highlighter;
-        return this;
     }
 
     public List<String> getRoutingBy() {
@@ -238,9 +218,6 @@ public class ElasticSqlParseResult {
     public DeleteByQueryRequest toDelRequest() {
         DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest().indices());
         deleteByQueryRequest.setQuery(searchSourceBuilder.query());
-        if (StringUtils.isNotBlank(type)) {
-            deleteByQueryRequest.types(type);
-        }
         if (CollectionUtils.isNotEmpty(routingBy)) {
             deleteByQueryRequest.setRouting(routingBy.get(0));
         }
@@ -275,11 +252,6 @@ public class ElasticSqlParseResult {
         }else{
             throw new ElasticSql2DslException("[syntax error] indices name must be set");
         }
-        if (StringUtils.isNotBlank(type)) {
-            searchRequest.types(type);
-        }
-
-
         if (from < 0) {
             log.debug("[from] is gte zero, assign 0 to [from(int)] as default value!!!");
             //这里不会修改from的值
@@ -350,9 +322,9 @@ public class ElasticSqlParseResult {
 
     @Override
     public String toString() {
-        String ptn = "index:%s,type:%s,from:%s,size:%s,routing:%s,dsl:%s";
+        String ptn = "index:%s,from:%s,size:%s,routing:%s,dsl:%s";
         return String.format(
-                ptn, indices, type, from, size,
+                ptn, indices, from, size,
                 (routingBy != null ? routingBy.toString() : "[]"), toDsl(toRequest())
         );
     }

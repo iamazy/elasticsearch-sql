@@ -96,7 +96,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void agg1(){
         long now=System.currentTimeMillis();
-        String sql="select distinct name from student aggregate by [apple,terms(a,1)],terms(bb,2),cardinality(ip) limit 2,5";
+        String sql="select distinct h!name,h!age from student aggregate by [apple,terms(a,1)],terms(bb,2),cardinality(ip) limit 2,5";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -157,7 +157,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void functionScore(){
         long now=System.currentTimeMillis();
-        String sql="select * from student where age> 10 and query weight between 80 and 90 and color = 'red' func_score high > 160 && name ='小明' aggregate by terms(name,10),terms(age,10)>(cardinality(clazz))";
+        String sql="select * from student where h!age> 10 and query h!weight between 80 and 90 and color = 'red' func_score h!high > 160 && name ='小明' aggregate by terms(name,10),terms(age,10)>(cardinality(clazz))";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -181,6 +181,36 @@ public class ElasticSql2DslParserTest {
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.getReindexRequest());
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void highlighter(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student where (h!name,age) ~= 'hahah' and h!ab='haliluya'";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void geoDistance(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student where location.coordinate='40,30' and distance='100km' ";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void geoBoundingBox(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student where left_top='40,30' and right_bottom='20,50' within location.coordinate";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
     }
 }

@@ -226,7 +226,7 @@ POST _isql/_explain
 - [x] ES GeoDistance
 - [x] ES SubAggregation
 - [ ] ES Scroll Id
-- [ ] ES Highlighter
+- [x] ES Highlighter
 - [ ] ES Boosting
 - [x] ES Function Score
 - [x] SQL Like
