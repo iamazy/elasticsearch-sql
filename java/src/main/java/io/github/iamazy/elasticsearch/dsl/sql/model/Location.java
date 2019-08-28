@@ -22,10 +22,6 @@ public final class Location {
         this.offset=offset;
     }
 
-    public int getOffset() {
-        return offset;
-    }
-
     public RuntimeException createError(RuntimeException exception){
         StackTraceElement element=new StackTraceElement(WriterConstants.CLASS_NAME,"compile",sourceName,offset+1);
         StackTraceElement[] oldStack=exception.getStackTrace();
@@ -35,27 +31,6 @@ public final class Location {
         exception.setStackTrace(newStack);
         assert exception.getStackTrace().length==newStack.length:"non-writeable stacktrace for exception: "+exception.getClass();
         return exception;
-    }
-
-    private static final int MAX_NAME_LENGTH=256;
-
-    public static String computeSourceName(String scriptName){
-        StringBuilder fileName=new StringBuilder();
-        int limit = scriptName.indexOf("\n");
-        if (limit>=0){
-            int limit2= scriptName.indexOf("\r");
-            if(limit2>=0){
-                limit=Math.min(limit,limit2);
-            }
-        }else{
-            limit=scriptName.length();
-        }
-        limit=Math.min(limit,MAX_NAME_LENGTH);
-        fileName.append(scriptName,0,limit);
-        if(limit!=scriptName.length()){
-            fileName.append("...");
-        }
-        return fileName.toString();
     }
 }
 

@@ -2,11 +2,9 @@ package io.github.iamazy.elasticsearch.dsl.antlr4;
 
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
-import io.github.iamazy.elasticsearch.dsl.sql.model.Location;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -43,10 +41,5 @@ public class Walker {
         parser.removeErrorListeners();
         parser.setErrorHandler(strategy);
         return parser.sql();
-    }
-
-
-    private Location location(ParserRuleContext ctx) {
-        return new Location(sql, ctx.getStart().getStartIndex());
     }
 }
