@@ -16,7 +16,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void parse(){
         long now=System.currentTimeMillis();
-        String sql="select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(apple,bb~='fruit')) and c=1 and (location = 'geoaaa' and geopoint = '40.0,30.0' and distance = '1km' or t='bb') limit 2,5";
+        String sql="select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(apple,bb~='fruit')) and c=1 and (location.coordinate = '40.0,30.0' and distance = '1km' or t='bb') limit 2,5";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
