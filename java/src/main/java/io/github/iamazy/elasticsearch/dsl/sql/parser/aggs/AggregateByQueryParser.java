@@ -134,7 +134,7 @@ public class AggregateByQueryParser implements QueryParser {
         throw new ElasticSql2DslException("not support yet");
     }
 
-    private Set<AggregationParser> buildAggregationChain() {
+    private static Set<AggregationParser> buildAggregationChain() {
         return ImmutableSet.of(
                 new TermsAggregationParser(),
                 new TopHitsAggregationParser(),

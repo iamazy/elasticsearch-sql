@@ -438,11 +438,4 @@ public class ElasticsearchParserBaseVisitor<T> extends AbstractParseTreeVisitor<
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitCount(ElasticsearchParser.CountContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitAlone(ElasticsearchParser.AloneContext ctx) { return visitChildren(ctx); }
 }

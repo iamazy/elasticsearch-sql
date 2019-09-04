@@ -35,7 +35,7 @@ public class ElasticSql2DslParser {
      *
      * @return QueryParser Set ,
      */
-    private Set<QueryParser> buildSqlParserChain(){
+    private static Set<QueryParser> buildSqlParserChain(){
         return ImmutableSet.of(
                 new QuerySelectFieldsParser(),
                 new QueryFromParser(),
@@ -44,7 +44,6 @@ public class ElasticSql2DslParser {
                 new AggregateByQueryParser(),
                 new QueryOrderByParser(),
                 new QueryLimitParser(),
-                new GroupByQueryParser(),
 
                 new QueryDescParser(),
                 new ReindexQueryParser()

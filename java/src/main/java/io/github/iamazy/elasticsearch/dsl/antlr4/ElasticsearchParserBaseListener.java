@@ -743,18 +743,6 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCount(ElasticsearchParser.CountContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAlone(ElasticsearchParser.AloneContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAlone(ElasticsearchParser.AloneContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

@@ -17,7 +17,7 @@ public class QueryOrderByParser implements QueryParser {
 
     @Override
     public void parse(ElasticDslContext dslContext) {
-        if(dslContext.getSqlContext().selectOperation()!=null){
+        if(dslContext.getSqlContext().selectOperation()!=null&&dslContext.getSqlContext().selectOperation().groupByClause()==null){
             if(dslContext.getSqlContext().selectOperation().orderClause()!=null){
                 ElasticsearchParser.OrderClauseContext orderClauseContext=dslContext.getSqlContext().selectOperation().orderClause();
                 for(ElasticsearchParser.OrderContext orderContext:orderClauseContext.order()){
@@ -37,7 +37,6 @@ public class QueryOrderByParser implements QueryParser {
                         SortBuilder sortBuilder = SortBuilders.fieldSort(field).sortMode(SortMode.AVG).order(sortOrder);
                         dslContext.getParseResult().getOrderBy().add(sortBuilder);
                     }
-
                 }
             }
         }

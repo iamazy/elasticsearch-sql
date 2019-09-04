@@ -396,10 +396,4 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCount(ElasticsearchParser.CountContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#alone}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAlone(ElasticsearchParser.AloneContext ctx);
 }

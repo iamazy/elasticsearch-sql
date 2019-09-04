@@ -657,14 +657,4 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCount(ElasticsearchParser.CountContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#alone}.
-	 * @param ctx the parse tree
-	 */
-	void enterAlone(ElasticsearchParser.AloneContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#alone}.
-	 * @param ctx the parse tree
-	 */
-	void exitAlone(ElasticsearchParser.AloneContext ctx);
 }

@@ -170,8 +170,7 @@ functionScoreClause:
 
 //GroupByFunction
 groupByFunctionClause:
-    count|alone
+    count
 ;
 
 count:COUNT LPAREN DISTINCT? field=ID (COMMA size=INT)? RPAREN;
-alone: funcName=ID LPAREN field=ID RPAREN;
