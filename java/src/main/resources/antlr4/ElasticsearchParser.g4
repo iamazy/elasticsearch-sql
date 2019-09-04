@@ -174,4 +174,4 @@ groupByFunctionClause:
 ;
 
 count:COUNT LPAREN DISTINCT? field=ID (COMMA size=INT)? RPAREN;
-alone:(MAX|MIN|SUM|AVG|LEN) LPAREN field=ID RPAREN;
+alone: funcName=ID LPAREN field=ID RPAREN;
