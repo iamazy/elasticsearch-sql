@@ -93,6 +93,13 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLrName(ElasticsearchParser.LrNameContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code groupByFunctionName}
+	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code binaryName}
 	 * labeled alternative in {@link ElasticsearchParser#name}.
 	 * @param ctx the parse tree
@@ -294,6 +301,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGroupByClause(ElasticsearchParser.GroupByClauseContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#havingClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHavingClause(ElasticsearchParser.HavingClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#aggregateByClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -371,4 +384,22 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#groupByFunctionClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroupByFunctionClause(ElasticsearchParser.GroupByFunctionClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#count}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCount(ElasticsearchParser.CountContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#alone}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAlone(ElasticsearchParser.AloneContext ctx);
 }

@@ -86,7 +86,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void betweenAnd(){
         long now=System.currentTimeMillis();
-        String sql="select distinct name from student where a between 1 and 2 aggregate by [apple,terms(a,1)],terms(b,1) limit 2,5";
+        String sql="select distinct name from student where a between 'dfsfsd' and 'ffff' aggregate by [apple,terms(a,1)],terms(b,1) limit 2,5";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

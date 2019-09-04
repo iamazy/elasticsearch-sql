@@ -172,6 +172,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBinaryName(ElasticsearchParser.BinaryNameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -544,6 +556,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHavingClause(ElasticsearchParser.HavingClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHavingClause(ElasticsearchParser.HavingClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAggregateByClause(ElasticsearchParser.AggregateByClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -695,6 +719,42 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGroupByFunctionClause(ElasticsearchParser.GroupByFunctionClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGroupByFunctionClause(ElasticsearchParser.GroupByFunctionClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCount(ElasticsearchParser.CountContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCount(ElasticsearchParser.CountContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAlone(ElasticsearchParser.AloneContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAlone(ElasticsearchParser.AloneContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

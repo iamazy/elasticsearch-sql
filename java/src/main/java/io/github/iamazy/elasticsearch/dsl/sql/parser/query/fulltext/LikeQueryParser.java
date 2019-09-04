@@ -6,6 +6,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.exact.AbstractExactQueryParser;
+import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RegexpQueryBuilder;
 
@@ -20,7 +21,7 @@ public class LikeQueryParser extends AbstractExactQueryParser implements Express
     public AtomicQuery parse(ElasticsearchParser.LikeClauseContext expression) {
         SqlConditionOperator operator = expression.not == null ? SqlConditionOperator.Like : SqlConditionOperator.NotLike;
         return parseCondition(expression, operator, null, (fieldName, operator1, rightParams) -> {
-            String pattern = expression.pattern.getText();
+            String pattern = StringManager.removeStringSymbol(expression.pattern.getText());
             if (pattern.contains(CoreConstants.MODULE)) {
                 pattern = pattern.replaceAll(CoreConstants.MODULE, CoreConstants.STAR);
             }

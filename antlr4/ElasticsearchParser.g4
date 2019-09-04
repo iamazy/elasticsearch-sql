@@ -49,7 +49,9 @@ name:
 	| DISTINCT fieldName = name												# distinctName
 	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
 	| functionName = ID params = collection									# functionName
-	| highlighter = HIGHLIGHTER? field = ID									# fieldName;
+	| highlighter = HIGHLIGHTER? field = ID									# fieldName
+	| groupByFunctionClause                                                 # groupByFunctionName
+;
 
 identity: ID | number = ( INT | FLOAT ) | str = STRING;
 
@@ -127,7 +129,9 @@ nestedClause:
 
 whereClause: WHERE expression;
 
-groupByClause: GROUP BY name ( COMMA name)*;
+groupByClause: GROUP BY ID ( COMMA ID)* havingClause?;
+
+havingClause: HAVING ;
 
 aggregateByClause:
 	AGGREGATE BY aggregationClause;
@@ -163,3 +167,11 @@ geoBoundingBoxClause:
 functionScoreClause:
  	QUERY expression FUNCTION_SCORE expression (BOOLAND expression)*
 ;
+
+//GroupByFunction
+groupByFunctionClause:
+    count|alone
+;
+
+count:COUNT LPAREN DISTINCT? field=ID (COMMA size=INT)? RPAREN;
+alone:(MAX|MIN|SUM|AVG|LEN) LPAREN field=ID RPAREN;

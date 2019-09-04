@@ -146,6 +146,18 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitLrName(ElasticsearchParser.LrNameContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code groupByFunctionName}
+	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * @param ctx the parse tree
+	 */
+	void enterGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code groupByFunctionName}
+	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * @param ctx the parse tree
+	 */
+	void exitGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code binaryName}
 	 * labeled alternative in {@link ElasticsearchParser#name}.
 	 * @param ctx the parse tree
@@ -486,6 +498,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitGroupByClause(ElasticsearchParser.GroupByClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#havingClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterHavingClause(ElasticsearchParser.HavingClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#havingClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitHavingClause(ElasticsearchParser.HavingClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#aggregateByClause}.
 	 * @param ctx the parse tree
 	 */
@@ -615,4 +637,34 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#groupByFunctionClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterGroupByFunctionClause(ElasticsearchParser.GroupByFunctionClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#groupByFunctionClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitGroupByFunctionClause(ElasticsearchParser.GroupByFunctionClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#count}.
+	 * @param ctx the parse tree
+	 */
+	void enterCount(ElasticsearchParser.CountContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#count}.
+	 * @param ctx the parse tree
+	 */
+	void exitCount(ElasticsearchParser.CountContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#alone}.
+	 * @param ctx the parse tree
+	 */
+	void enterAlone(ElasticsearchParser.AloneContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#alone}.
+	 * @param ctx the parse tree
+	 */
+	void exitAlone(ElasticsearchParser.AloneContext ctx);
 }

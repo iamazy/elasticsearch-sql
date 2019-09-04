@@ -73,7 +73,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                 return parseCondition(binaryContext.leftExpr, operator, new Object[]{targetVal}, (fieldName, operator1, rightParams) -> {
                     switch (operator1) {
                         case NotEqual: {
-                            return QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery(fieldName, rightParams[0]));
+                            return QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery(fieldName, StringManager.removeStringSymbol(rightParams[0].toString())));
                         }
                         case ApproximatelyEqual: {
                             return QueryBuilders.matchQuery(fieldName, StringManager.removeStringSymbol(rightParams[0].toString()));
@@ -142,17 +142,17 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                     RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery(fieldName);
                     switch (operator1) {
                         case GreaterThan: {
-                            return rangeQuery.gt(rightParams[0]);
+                            return rangeQuery.gt(StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
                         case GreaterThanOrEqual: {
-                            return rangeQuery.gte(rightParams[0]);
+                            return rangeQuery.gte(StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
                         case LessThan: {
-                            return rangeQuery.lt(rightParams[0]);
+                            return rangeQuery.lt(StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
                         default:
                         case LessThanOrEqual: {
-                            return rangeQuery.lte(rightParams[1]);
+                            return rangeQuery.lte(StringManager.removeStringSymbol(rightParams[1].toString()));
                         }
                     }
                 });
