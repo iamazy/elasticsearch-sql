@@ -130,6 +130,9 @@ public class BoolExpressionParser {
                 listMultimap.put(atomicQuery, atomicQuery.getQueryBuilder());
             }
         }
-        return boolQueryBuilder.minimumShouldMatch(1);
+        if(boolQueryBuilder.should().size()>1){
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+        return boolQueryBuilder;
     }
 }

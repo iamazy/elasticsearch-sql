@@ -46,7 +46,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void exists(){
         long now=System.currentTimeMillis();
-        String sql="select * from student where name is not null";
+        String sql="select * from student where name is not null and age >15";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
