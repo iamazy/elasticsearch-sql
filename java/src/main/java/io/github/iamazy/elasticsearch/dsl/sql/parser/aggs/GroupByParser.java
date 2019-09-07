@@ -1,8 +1,6 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.aggs;
 
 
-import lombok.Getter;
-import lombok.Setter;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 
 /**
@@ -11,8 +9,6 @@ import org.elasticsearch.search.aggregations.AggregationBuilder;
  * @descrition
  **/
 public abstract class GroupByParser {
-    @Getter
-    @Setter
-    public String funcName;
+    protected String funcName;
     public abstract AggregationBuilder parse(String field, Object ...params);
 }
