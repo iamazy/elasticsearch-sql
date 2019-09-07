@@ -131,7 +131,16 @@ whereClause: WHERE expression;
 
 groupByClause: GROUP BY ID ( COMMA ID)* havingClause?;
 
-havingClause: HAVING ;
+havingClause: HAVING havingExpression;
+
+havingExpression:
+    LPAREN havingExpression RPAREN															# lrHavingExpr
+    | leftExpr = havingExpression operator = AND rightExpr = havingExpression				# havingBinary
+    | leftExpr = havingExpression operator = OR rightExpr = havingExpression			    # havingBinary
+    | leftExpr = havingExpression operator = (LT | LTE | GT | GTE | EQ) rightExpr = havingExpression			# havingBinary
+    | identity																			    # havingPrimitive
+    | funcName = ID collection                                                              # functionExpr
+;
 
 aggregateByClause:
 	AGGREGATE BY aggregationClause;
