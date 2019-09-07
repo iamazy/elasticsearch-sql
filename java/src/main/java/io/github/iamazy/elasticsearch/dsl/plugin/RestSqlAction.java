@@ -29,12 +29,15 @@ import java.io.IOException;
  **/
 public class RestSqlAction extends BaseRestHandler {
 
+    private final ElasticSql2DslParser sql2DslParser;
+
     RestSqlAction(Settings settings, RestController restController) {
         super(settings);
         restController.registerHandler(RestRequest.Method.POST, "/_isql/_explain", this);
         restController.registerHandler(RestRequest.Method.GET, "/_isql/_explain", this);
         restController.registerHandler(RestRequest.Method.POST, "/_isql", this);
         restController.registerHandler(RestRequest.Method.GET, "/_isql", this);
+        this.sql2DslParser = new ElasticSql2DslParser();
     }
 
     @Override
@@ -54,7 +57,6 @@ public class RestSqlAction extends BaseRestHandler {
             if (StringUtils.isBlank(sql)) {
                 return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"sql can not be empty!!!\"\n}"));
             }
-            ElasticSql2DslParser sql2DslParser = new ElasticSql2DslParser();
             ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
             XContentBuilder builder = XContentFactory.jsonBuilder().prettyPrint();
             if (restRequest.path().endsWith("/_explain")) {
