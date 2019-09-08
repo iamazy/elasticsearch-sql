@@ -66,6 +66,8 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 | ---- | ---- | ---- | ---- | 
 | 7.x | 7.3.0 | | v7.3.0.1 |
 | 7.x | 7.3.1 | | v7.3.1.1 |
+| 7.x | 7.3.1 | | v7.3.1.2 |
+| 7.x | 7.3.1 | | v7.3.1.3 |
 
 #### Installing
 
