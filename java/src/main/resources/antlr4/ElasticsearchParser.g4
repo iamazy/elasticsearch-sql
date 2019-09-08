@@ -164,13 +164,21 @@ order: name ASC?;
 limitClause: LIMIT ( offset = INT COMMA)? size = INT;
 
 //Geo Clause
-geoClause: geoDistanceClause | geoBoundingBoxClause;
+geoClause: geoDistanceClause | geoBoundingBoxClause|geoPolygonClause;
 
 geoDistanceClause:
-	ID EQ coordinate = STRING AND DISTANCE EQ distance = STRING;
+	ID EQ coordinate = geoPointClause AND DISTANCE EQ distance = STRING;
 
 geoBoundingBoxClause:
-	TOP_LEFT EQ leftTop = STRING AND BOTTOM_RIGHT EQ rightBottom = STRING WITHIN field = ID;
+	field = ID BETWEEN leftTop = geoPointClause AND rightBottom = geoPointClause ;
+
+geoPolygonClause:
+    ID IN LBRACKET geoPointClause (COMMA geoPointClause)* RBRACKET
+;
+
+geoPointClause:
+    LBRACKET (lon =(INT|FLOAT) COMMA lat= (INT|FLOAT)) RBRACKET
+;
 
 //Score
 functionScoreClause:
