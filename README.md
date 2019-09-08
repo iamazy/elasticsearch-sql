@@ -259,7 +259,7 @@ select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(
       } ],
       "should" : [ {
         "geo_distance" : {
-          "geoaaa" : [ 30.0, 40.0 ],
+          "coordinate" : [ 30.0, 40.0 ],
           "distance" : 1000.0,
           "distance_type" : "arc",
           "validation_method" : "STRICT",
