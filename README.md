@@ -137,7 +137,7 @@ POST _isql/_explain
 - [x] SQL Select  
 - [x] SQL Where  
 - [x] SQL Order by (Asc & Desc)
-- [ ] SQL Group by
+- [x] SQL Group by
 - [x] ES Aggregate by
 - [x] SQL And & Or
 - [x] SQL In
@@ -180,6 +180,8 @@ POST _isql/_explain
 - [x] ES TopHits
 - [x] ES Nested
 - [x] ES GeoDistance
+- [x] ES GeoBoundingBox
+- [x] ES GeoPolygon
 - [x] ES SubAggregation
 - [ ] ES Scroll Id
 - [x] ES Highlighter
@@ -204,7 +206,7 @@ POST _isql/_explain
 ## Examples
 ### 1. select,include,exclude,from,where,in,and,or,has_parent,geo_distance,limit
 ```sql
-select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(apple,bb~='fruit')) and c=1 and (location = 'geoaaa' and geopoint = '40.0,30.0' and distance = '1km' or t='bb') limit 2,5
+select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(apple,bb~='fruit')) and c=1 and (coordinate = [40.0,30.0] and distance = '1km' or t='bb') limit 2,5
 ```
 > generate dsl
 ```json
