@@ -16,7 +16,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void parse(){
         long now=System.currentTimeMillis();
-        String sql="select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(apple,bb~='fruit')) and c=1 and (location.coordinate = '40.0,30.0' and distance = '1km' or t='bb') limit 2,5";
+        String sql="select name,^h!age,h!gender from student where ((a in (1,2,3,4)) and has_parent(apple,bb~='fruit')) and c=1 and (location.coordinate = [40.0,30.0] and distance = '1km' or t='bb') limit 2,5";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -197,7 +197,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void geoDistance(){
         long now=System.currentTimeMillis();
-        String sql="select * from student where location.coordinate='40,30' and distance='100km' ";
+        String sql="select * from student where location.coordinate=[40,30] and distance='100km' ";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -207,12 +207,24 @@ public class ElasticSql2DslParserTest {
     @Test
     public void geoBoundingBox(){
         long now=System.currentTimeMillis();
-        String sql="select * from student where left_top='40,30' and right_bottom='20,50' within location.coordinate";
+        String sql="select * from student where location.coordinate between [30,70] and [20,50]";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
     }
+
+    @Test
+    public void geoPolygon(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student where location.coordinate in [[30.132,50],[40,60],[50,212]]";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+
 
     @Test
     public void groupBy(){
