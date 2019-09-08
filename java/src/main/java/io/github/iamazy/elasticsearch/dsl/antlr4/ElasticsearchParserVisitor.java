@@ -307,6 +307,34 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitHavingClause(ElasticsearchParser.HavingClauseContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code havingPrimitive}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHavingPrimitive(ElasticsearchParser.HavingPrimitiveContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code lrHavingExpr}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLrHavingExpr(ElasticsearchParser.LrHavingExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code havingBinary}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHavingBinary(ElasticsearchParser.HavingBinaryContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code functionExpr}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionExpr(ElasticsearchParser.FunctionExprContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#aggregateByClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -378,6 +406,18 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitGeoBoundingBoxClause(ElasticsearchParser.GeoBoundingBoxClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#geoPolygonClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGeoPolygonClause(ElasticsearchParser.GeoPolygonClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#geoPointClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
 	 * @param ctx the parse tree

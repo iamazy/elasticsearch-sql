@@ -508,6 +508,54 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitHavingClause(ElasticsearchParser.HavingClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code havingPrimitive}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterHavingPrimitive(ElasticsearchParser.HavingPrimitiveContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code havingPrimitive}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitHavingPrimitive(ElasticsearchParser.HavingPrimitiveContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code lrHavingExpr}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLrHavingExpr(ElasticsearchParser.LrHavingExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code lrHavingExpr}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLrHavingExpr(ElasticsearchParser.LrHavingExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code havingBinary}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterHavingBinary(ElasticsearchParser.HavingBinaryContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code havingBinary}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitHavingBinary(ElasticsearchParser.HavingBinaryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code functionExpr}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionExpr(ElasticsearchParser.FunctionExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code functionExpr}
+	 * labeled alternative in {@link ElasticsearchParser#havingExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionExpr(ElasticsearchParser.FunctionExprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#aggregateByClause}.
 	 * @param ctx the parse tree
 	 */
@@ -627,6 +675,26 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitGeoBoundingBoxClause(ElasticsearchParser.GeoBoundingBoxClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#geoPolygonClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterGeoPolygonClause(ElasticsearchParser.GeoPolygonClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#geoPolygonClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitGeoPolygonClause(ElasticsearchParser.GeoPolygonClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#geoPointClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#geoPointClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
 	 * @param ctx the parse tree
