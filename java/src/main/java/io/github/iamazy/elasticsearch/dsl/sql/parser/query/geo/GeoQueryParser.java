@@ -13,12 +13,13 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 public class GeoQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoContext> {
 
     private GeoDistanceQueryParser geoDistanceQueryParser;
-
+    private GeoPolygonQueryParser geoPolygonQueryParser;
     private GeoBoundingBoxQueryParser geoBoundingBoxQueryParser;
 
     public GeoQueryParser(){
         this.geoDistanceQueryParser=new GeoDistanceQueryParser();
         this.geoBoundingBoxQueryParser=new GeoBoundingBoxQueryParser();
+        this.geoPolygonQueryParser=new GeoPolygonQueryParser();
     }
 
     @Override
@@ -27,13 +28,19 @@ public class GeoQueryParser implements ExpressionQueryParser<ElasticsearchParser
             return geoDistanceQueryParser.parse(expression.geoClause().geoDistanceClause());
         }else if(expression.geoClause().geoBoundingBoxClause()!=null){
             return geoBoundingBoxQueryParser.parse(expression.geoClause().geoBoundingBoxClause());
-        }else{
+        }else if(expression.geoClause().geoPolygonClause()!=null){
+            return geoPolygonQueryParser.parse(expression.geoClause().geoPolygonClause());
+        }
+        else{
             throw new ElasticSql2DslException("geo query only support GeoDistanceQuery yet");
         }
     }
 
     @Override
     public boolean isMatchExpressionInvocation(Class clazz) {
-        return ElasticsearchParser.GeoContext.class==clazz || ElasticsearchParser.GeoDistanceClauseContext.class==clazz || ElasticsearchParser.GeoBoundingBoxClauseContext.class==clazz;
+        return ElasticsearchParser.GeoContext.class==clazz
+                || ElasticsearchParser.GeoDistanceClauseContext.class==clazz
+                || ElasticsearchParser.GeoBoundingBoxClauseContext.class==clazz
+                || ElasticsearchParser.GeoPolygonClauseContext.class==clazz;
     }
 }
