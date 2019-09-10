@@ -57,14 +57,14 @@ public class ElasticSqlParseResult {
      * 需要高亮显示的字段
      */
     private Set<String> highlighter = new HashSet<>(0);
-    private List<String> routingBy=new ArrayList<>(0);
-    private List<String> includeFields=new ArrayList<>(0);
-    private List<String> excludeFields=new ArrayList<>(0);
-    private transient QueryBuilder whereCondition;
+    private List<String> routingBy = new ArrayList<>(0);
+    private List<String> includeFields = new ArrayList<>(0);
+    private List<String> excludeFields = new ArrayList<>(0);
+    private transient QueryBuilder whereCondition = QueryBuilders.matchAllQuery();
     private transient QueryBuilder matchCondition;
     private transient CollapseBuilder collapseBuilder;
-    private transient List<SortBuilder> orderBy=new ArrayList<>(0);
-    private transient List<AggregationBuilder> groupBy=new ArrayList<>(0);
+    private transient List<SortBuilder> orderBy = new ArrayList<>(0);
+    private transient List<AggregationBuilder> groupBy = new ArrayList<>(0);
     private transient SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
     private transient ReindexRequest reindexRequest;
 
@@ -249,7 +249,7 @@ public class ElasticSqlParseResult {
         List<String> indexList = indices.parallelStream().map(index -> index.replace("`", "")).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(indexList)) {
             searchRequest.indices(indexList.toArray(new String[0]));
-        }else{
+        } else {
             throw new ElasticSql2DslException("[syntax error] indices name must be set");
         }
         if (from < 0) {
@@ -272,13 +272,9 @@ public class ElasticSqlParseResult {
             searchSourceBuilder.highlighter(highlightBuilder);
         }
 
-        if (whereCondition != null) {
-            searchSourceBuilder.query(whereCondition);
-        } else {
-            searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-        }
+        searchSourceBuilder.query(whereCondition);
 
-        if(collapseBuilder!=null){
+        if (collapseBuilder != null) {
             searchSourceBuilder.collapse(collapseBuilder);
         }
         if (CollectionUtils.isNotEmpty(orderBy)) {
