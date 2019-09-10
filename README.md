@@ -189,6 +189,7 @@ POST _isql/_explain
 - [x] ES Highlighter
 - [ ] ES Boosting
 - [x] ES Function Score
+- [x] ES Disjunction Max (DisMax)
 - [x] SQL Like
 - [x] SQL Desc
 - [x] ES Excludes
