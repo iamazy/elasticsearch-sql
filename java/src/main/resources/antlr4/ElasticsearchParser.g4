@@ -15,11 +15,7 @@ sql: (
 
 //OPERATIONS
 selectOperation:
-	SELECT fieldList FROM tableRef (COMMA tableRef)* (
-		whereClause
-	)? (routingClause)? (groupByClause | aggregateByClause)? (
-		orderClause
-	)? (limitClause)?;
+	SELECT fieldList FROM tableRef (COMMA tableRef)* (whereClause)? (scoreClause)? (routingClause)? (groupByClause | aggregateByClause)? (orderClause)? (limitClause)?;
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
@@ -79,7 +75,6 @@ expression:
 	| geoClause																			# geo
 	| fullTextClause																	# fullText
 	| not = NOT expression																# binary
-	| functionScoreClause																# score									
 ;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
@@ -181,8 +176,12 @@ geoPointClause:
 ;
 
 //Score
+scoreClause:
+    functionScoreClause
+;
+
 functionScoreClause:
- 	QUERY expression FUNCTION_SCORE expression (BOOLAND expression)*
+ 	FUNCTION_SCORE expression (BOOLAND expression)*
 ;
 
 //GroupByFunction
