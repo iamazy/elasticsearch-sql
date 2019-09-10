@@ -472,18 +472,6 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterHasParentClause(ElasticsearchParser.HasParentClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -772,18 +760,6 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterScoreClause(ElasticsearchParser.ScoreClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitScoreClause(ElasticsearchParser.ScoreClauseContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -791,6 +767,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

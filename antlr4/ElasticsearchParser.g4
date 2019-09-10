@@ -15,7 +15,7 @@ sql: (
 
 //OPERATIONS
 selectOperation:
-	SELECT fieldList FROM tableRef (COMMA tableRef)* (whereClause)? (scoreClause)? (routingClause)? (groupByClause | aggregateByClause)? (orderClause)? (limitClause)?;
+	SELECT fieldList FROM tableRef (COMMA tableRef)* ((whereClause functionScoreClause?) | disMaxClause)? routingClause? (groupByClause | aggregateByClause)? orderClause? limitClause?;
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
@@ -101,16 +101,12 @@ inRightOperand:
 
 tableRef: indexName = ID ( AS alias = ID)?;
 
-fullTextClause: queryStringClause|multiMatchClause|disMaxClause;
+fullTextClause: queryStringClause|multiMatchClause;
 
 queryStringClause: QUERY BY STRING;
 
 multiMatchClause:
 	LPAREN name (COMMA name)*  RPAREN AEQ value = STRING
-;
-
-disMaxClause:
-	DIS_MAX expression (BOOLAND expression)* (AND TIE_BREAKER EQ FLOAT)?
 ;
 
 hasParentClause:
@@ -175,13 +171,12 @@ geoPointClause:
     LBRACKET (lon =(INT|FLOAT) COMMA lat= (INT|FLOAT)) RBRACKET
 ;
 
-//Score
-scoreClause:
-    functionScoreClause
-;
-
 functionScoreClause:
  	FUNCTION_SCORE expression (BOOLAND expression)*
+;
+
+disMaxClause:
+	DIS_MAX expression (BOOLOR expression)* (AND TIE_BREAKER EQ tieBreaker = FLOAT)?
 ;
 
 //GroupByFunction

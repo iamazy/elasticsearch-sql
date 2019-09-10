@@ -150,7 +150,7 @@ public class ElasticSql2DslParserTest {
         String sql="desc student/xiaoming";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
-        System.out.println(parseResult.getMappingsRequest());
+        System.out.println(parseResult.getFieldMappingsRequest());
         System.out.println(System.currentTimeMillis()-now);
     }
 
@@ -230,6 +230,16 @@ public class ElasticSql2DslParserTest {
     public void groupBy(){
         long now=System.currentTimeMillis();
         String sql="select max(age),count(distinct name),max(height) from student group by name,age,height";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void disMax(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student dis_max age>11 || name='小米宁' and ( height>1.6 or fruit ='apple') || firstName is not null and tie_breaker=0.7";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

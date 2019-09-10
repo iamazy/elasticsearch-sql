@@ -426,16 +426,6 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#disMaxClause}.
-	 * @param ctx the parse tree
-	 */
-	void enterDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#disMaxClause}.
-	 * @param ctx the parse tree
-	 */
-	void exitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#hasParentClause}.
 	 * @param ctx the parse tree
 	 */
@@ -684,16 +674,6 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#scoreClause}.
-	 * @param ctx the parse tree
-	 */
-	void enterScoreClause(ElasticsearchParser.ScoreClauseContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#scoreClause}.
-	 * @param ctx the parse tree
-	 */
-	void exitScoreClause(ElasticsearchParser.ScoreClauseContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
 	 * @param ctx the parse tree
 	 */
@@ -703,6 +683,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#disMaxClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#disMaxClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#groupByFunctionClause}.
 	 * @param ctx the parse tree

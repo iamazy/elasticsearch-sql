@@ -258,12 +258,6 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultiMatchClause(ElasticsearchParser.MultiMatchClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#disMaxClause}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#hasParentClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -412,17 +406,17 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#scoreClause}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitScoreClause(ElasticsearchParser.ScoreClauseContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#disMaxClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#groupByFunctionClause}.
 	 * @param ctx the parse tree
