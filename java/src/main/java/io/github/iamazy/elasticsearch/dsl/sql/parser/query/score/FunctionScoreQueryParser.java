@@ -14,18 +14,14 @@ import org.elasticsearch.index.query.functionscore.*;
  **/
 public class FunctionScoreQueryParser implements ExpressionQueryParser<ElasticsearchParser.FunctionScoreClauseContext> {
 
-    private static BoolExpressionParser boolExpressionParser;
-
     private QueryBuilder queryBuilder;
-    FunctionScoreQueryParser(QueryBuilder queryBuilder){
+    public FunctionScoreQueryParser(QueryBuilder queryBuilder){
         this.queryBuilder=queryBuilder;
     }
 
     @Override
     public AtomicQuery parse(ElasticsearchParser.FunctionScoreClauseContext expression) {
-        if(boolExpressionParser==null){
-            boolExpressionParser=new BoolExpressionParser();
-        }
+        BoolExpressionParser  boolExpressionParser=new BoolExpressionParser();
         int size=expression.expression().size();
         FunctionScoreQueryBuilder.FilterFunctionBuilder[] filterFunctionBuilders=new FunctionScoreQueryBuilder.FilterFunctionBuilder[size];
         for(int i=0;i<size;i++){

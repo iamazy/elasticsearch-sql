@@ -2,7 +2,9 @@ package io.github.iamazy.elasticsearch.dsl.sql.parser;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
+import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.score.FunctionScoreQueryParser;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
@@ -19,6 +21,11 @@ public class QueryWhereConditionParser extends BoolExpressionParser implements Q
         if(dslContext.getSqlContext().selectOperation()!=null){
             ElasticsearchParser.WhereClauseContext whereClauseContext = dslContext.getSqlContext().selectOperation().whereClause();
             parseWhereCondition(dslContext,whereClauseContext);
+            if(dslContext.getSqlContext().selectOperation().functionScoreClause()!=null){
+                FunctionScoreQueryParser functionScoreQueryParser=new FunctionScoreQueryParser(dslContext.getParseResult().getWhereCondition());
+                AtomicQuery atomicQuery = functionScoreQueryParser.parse(dslContext.getSqlContext().selectOperation().functionScoreClause());
+                dslContext.getParseResult().setWhereCondition(atomicQuery.getQueryBuilder());
+            }
         }else if(dslContext.getSqlContext().deleteOperation()!=null){
             ElasticsearchParser.WhereClauseContext whereClauseContext = dslContext.getSqlContext().deleteOperation().whereClause();
             parseWhereCondition(dslContext,whereClauseContext);
