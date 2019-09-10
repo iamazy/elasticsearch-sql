@@ -29,7 +29,6 @@ public class FunctionScoreQueryParser implements ExpressionQueryParser<Elasticse
             FunctionScoreQueryBuilder.FilterFunctionBuilder filterFunctionBuilder=new FunctionScoreQueryBuilder.FilterFunctionBuilder(boolExpressionParser.parseBoolQueryExpr(expression.expression(i)),weightBuilder);
             filterFunctionBuilders[i]=filterFunctionBuilder;
         }
-
         return new AtomicQuery(new FunctionScoreQueryBuilder(this.queryBuilder,filterFunctionBuilders));
     }
 
