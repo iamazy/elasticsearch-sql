@@ -3,3 +3,4 @@
 2019-08-14: add reindex support
 2019-09-04: add group by support
 2019-09-08: add geo polygon support and update geo bounding box syntax
+2019-09-10: add dis max support
