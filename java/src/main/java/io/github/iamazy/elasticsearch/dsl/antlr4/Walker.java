@@ -28,7 +28,6 @@ public class Walker {
         return parseResult;
     }
 
-    //TODO: set package access to private
     public  ElasticsearchParser.SqlContext buildAntlrTree(){
         if(StringUtils.isBlank(this.sql)){
             throw new ElasticSql2DslException("blank sql is not allowed");
