@@ -220,18 +220,6 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterScore(ElasticsearchParser.ScoreContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitScore(ElasticsearchParser.ScoreContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterPrimitive(ElasticsearchParser.PrimitiveContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -779,6 +767,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterScoreClause(ElasticsearchParser.ScoreClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitScoreClause(ElasticsearchParser.ScoreClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
