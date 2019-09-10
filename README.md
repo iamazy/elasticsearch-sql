@@ -199,6 +199,7 @@ POST _isql/_explain
 - [ ] SQL Update
 - [ ] SQL Insert
 - [x] SQL Desc
+- [x] SQL Having
 - [ ] SQL Customise Function
 - [ ] ES Analysis
 - [ ] ES Boosting
