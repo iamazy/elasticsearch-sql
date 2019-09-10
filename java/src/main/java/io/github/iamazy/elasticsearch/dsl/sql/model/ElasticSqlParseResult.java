@@ -5,20 +5,13 @@ import io.github.iamazy.elasticsearch.dsl.elastic.HighlightBuilders;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.indices.mapping.get.GetFieldMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchScrollRequest;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ReindexRequest;
-import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
@@ -45,8 +38,6 @@ public class ElasticSqlParseResult {
 
     private int from = 0;
     private int size = 15;
-    private String scrollExpire;
-    private String scrollId;
 
     private List<String> indices;
 
@@ -61,7 +52,6 @@ public class ElasticSqlParseResult {
     private List<String> includeFields = new ArrayList<>(0);
     private List<String> excludeFields = new ArrayList<>(0);
     private transient QueryBuilder whereCondition = QueryBuilders.matchAllQuery();
-    private transient QueryBuilder matchCondition;
     private transient CollapseBuilder collapseBuilder;
     private transient List<SortBuilder> orderBy = new ArrayList<>(0);
     private transient List<AggregationBuilder> groupBy = new ArrayList<>(0);
@@ -97,24 +87,6 @@ public class ElasticSqlParseResult {
 
     public ElasticSqlParseResult setSize(int size) {
         this.size = size;
-        return this;
-    }
-
-    public String getScrollExpire() {
-        return scrollExpire;
-    }
-
-    public ElasticSqlParseResult setScrollExpire(String scrollExpire) {
-        this.scrollExpire = scrollExpire;
-        return this;
-    }
-
-    public String getScrollId() {
-        return scrollId;
-    }
-
-    public ElasticSqlParseResult setScrollId(String scrollId) {
-        this.scrollId = scrollId;
         return this;
     }
 
@@ -161,15 +133,6 @@ public class ElasticSqlParseResult {
         return this;
     }
 
-    public QueryBuilder getMatchCondition() {
-        return matchCondition;
-    }
-
-    public ElasticSqlParseResult setMatchCondition(QueryBuilder matchCondition) {
-        this.matchCondition = matchCondition;
-        return this;
-    }
-
     public List<SortBuilder> getOrderBy() {
         return orderBy;
     }
@@ -184,15 +147,6 @@ public class ElasticSqlParseResult {
 
     public CollapseBuilder getCollapseBuilder() {
         return collapseBuilder;
-    }
-
-    public SearchSourceBuilder getSearchSourceBuilder() {
-        return searchSourceBuilder;
-    }
-
-    public ElasticSqlParseResult setSearchSourceBuilder(SearchSourceBuilder searchSourceBuilder) {
-        this.searchSourceBuilder = searchSourceBuilder;
-        return this;
     }
 
     public GetMappingsRequest getMappingsRequest() {
@@ -228,20 +182,6 @@ public class ElasticSqlParseResult {
             deleteByQueryRequest.setMaxDocs(size);
         }
         return deleteByQueryRequest;
-    }
-
-
-    public SearchResponse toResponse(RestHighLevelClient restHighLevelClient, RequestOptions requestOptions) throws IOException {
-        if (StringUtils.isNotBlank(scrollExpire) && StringUtils.isBlank(scrollId)) {
-            return restHighLevelClient.search(toRequest(), requestOptions);
-        } else if (StringUtils.isNotBlank(scrollExpire) && StringUtils.isNotBlank(scrollId)) {
-            SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
-            scrollRequest.scroll(toRequest().scroll());
-            return restHighLevelClient.scroll(scrollRequest, requestOptions);
-        } else if (StringUtils.isBlank(scrollExpire)) {
-            return restHighLevelClient.search(toRequest(), requestOptions);
-        }
-        throw new ElasticSql2DslException("[syntax error] response error,please check your sql");
     }
 
     public SearchRequest toRequest() {
@@ -295,11 +235,6 @@ public class ElasticSqlParseResult {
             }
         }
 
-        if (StringUtils.isNotBlank(scrollExpire)) {
-            final Scroll scroll = new Scroll(TimeValue.parseTimeValue(scrollExpire, StringUtils.EMPTY));
-            searchRequest.scroll(scroll);
-        }
-
         return searchRequest.source(searchSourceBuilder);
     }
 
@@ -314,15 +249,6 @@ public class ElasticSqlParseResult {
         } catch (IOException e) {
             throw new RuntimeException("Elasticsearch Dsl解析出错!!!");
         }
-    }
-
-    @Override
-    public String toString() {
-        String ptn = "index:%s,from:%s,size:%s,routing:%s,dsl:%s";
-        return String.format(
-                ptn, indices, from, size,
-                (routingBy != null ? routingBy.toString() : "[]"), toDsl(toRequest())
-        );
     }
 
 }
