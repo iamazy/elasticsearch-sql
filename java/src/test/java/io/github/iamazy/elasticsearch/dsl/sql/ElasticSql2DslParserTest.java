@@ -157,7 +157,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void functionScore(){
         long now=System.currentTimeMillis();
-        String sql="select * from student where h!age> 10 and query h!weight between 80 and 90 and color = 'red' func_score h!high > 160 && name ='小明' aggregate by terms(name,10),terms(age,10)>(cardinality(clazz))";
+        String sql="select * from student where h!age> 10 and h!weight between 80 and 90 and color = 'red' func_score high > 160 && name ='小明' aggregate by terms(name,10),terms(age,10)>(cardinality(clazz))";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
