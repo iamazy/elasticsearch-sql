@@ -8,7 +8,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.*;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.AggregateByQueryParser;
-import io.github.iamazy.elasticsearch.dsl.sql.parser.query.score.ScoreQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.query.score.DisMaxQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.reindex.ReindexQueryParser;
 
 import java.util.Set;
@@ -40,7 +40,7 @@ public class ElasticSql2DslParser {
                 new QuerySelectFieldsParser(),
                 new QueryFromParser(),
                 new QueryWhereConditionParser(),
-                new ScoreQueryParser(),
+                new DisMaxQueryParser(),
                 new QueryRoutingsParser(),
                 new AggregateByQueryParser(),
                 new QueryOrderByParser(),
