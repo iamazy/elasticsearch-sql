@@ -28,11 +28,6 @@ public class SqlPlugin extends Plugin implements ActionPlugin {
         return "elasticsearch-sql";
     }
 
-    public String description(){
-        return "Use sql to query elasticsearch.";
-    }
-
-
     @Override
     public List<RestHandler> getRestHandlers(Settings settings, RestController restController, ClusterSettings clusterSettings, IndexScopedSettings indexScopedSettings, SettingsFilter settingsFilter, IndexNameExpressionResolver indexNameExpressionResolver, Supplier<DiscoveryNodes> nodesInCluster) {
         return Collections.singletonList(new RestSqlAction(settings,restController));
