@@ -16,24 +16,25 @@ public class FunctionScoreQueryParser implements ExpressionQueryParser<Elasticse
 
     private static BoolExpressionParser boolExpressionParser;
 
+    private QueryBuilder queryBuilder;
+    FunctionScoreQueryParser(QueryBuilder queryBuilder){
+        this.queryBuilder=queryBuilder;
+    }
+
     @Override
     public AtomicQuery parse(ElasticsearchParser.FunctionScoreClauseContext expression) {
-        ElasticsearchParser.ExpressionContext leftExpr = expression.expression(0);
         if(boolExpressionParser==null){
             boolExpressionParser=new BoolExpressionParser();
         }
-        QueryBuilder queryBuilder = boolExpressionParser.parseBoolQueryExpr(leftExpr);
         int size=expression.expression().size();
-        FunctionScoreQueryBuilder.FilterFunctionBuilder[] filterFunctionBuilders=new FunctionScoreQueryBuilder.FilterFunctionBuilder[size-1];
-        for(int i=1;i<size;i++){
+        FunctionScoreQueryBuilder.FilterFunctionBuilder[] filterFunctionBuilders=new FunctionScoreQueryBuilder.FilterFunctionBuilder[size];
+        for(int i=0;i<size;i++){
             WeightBuilder weightBuilder= ScoreFunctionBuilders.weightFactorFunction((size-i)*5);
             FunctionScoreQueryBuilder.FilterFunctionBuilder filterFunctionBuilder=new FunctionScoreQueryBuilder.FilterFunctionBuilder(boolExpressionParser.parseBoolQueryExpr(expression.expression(i)),weightBuilder);
-            filterFunctionBuilders[i-1]=filterFunctionBuilder;
+            filterFunctionBuilders[i]=filterFunctionBuilder;
         }
 
-        AtomicQuery atomicQuery= new AtomicQuery(new FunctionScoreQueryBuilder(queryBuilder,filterFunctionBuilders));
-        atomicQuery.getHighlighter().addAll(boolExpressionParser.highlighter);
-        return atomicQuery;
+        return new AtomicQuery(new FunctionScoreQueryBuilder(this.queryBuilder,filterFunctionBuilders));
     }
 
     @Override
