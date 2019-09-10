@@ -4,6 +4,7 @@ import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.elastic.HighlightBuilders;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
+import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.action.admin.indices.mapping.get.GetFieldMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
@@ -186,7 +187,7 @@ public class ElasticSqlParseResult {
 
     public SearchRequest toRequest() {
         SearchRequest searchRequest = new SearchRequest();
-        List<String> indexList = indices.parallelStream().map(index -> index.replace("`", "")).collect(Collectors.toList());
+        List<String> indexList = indices.parallelStream().map(StringManager::removeStringSymbol).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(indexList)) {
             searchRequest.indices(indexList.toArray(new String[0]));
         } else {
