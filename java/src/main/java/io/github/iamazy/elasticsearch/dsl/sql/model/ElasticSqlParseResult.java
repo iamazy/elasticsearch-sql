@@ -43,6 +43,7 @@ public class ElasticSqlParseResult {
     private List<String> indices;
 
     private SqlOperation sqlOperation = SqlOperation.SELECT;
+    private transient boolean trackTotalHits = false;
 
 
     /**
@@ -97,6 +98,15 @@ public class ElasticSqlParseResult {
 
     public ElasticSqlParseResult setIndices(List<String> indices) {
         this.indices = indices;
+        return this;
+    }
+
+    public boolean trackTotalHits() {
+        return trackTotalHits;
+    }
+
+    public ElasticSqlParseResult trackTotalHits(boolean trackTotalHits) {
+        this.trackTotalHits = trackTotalHits;
         return this;
     }
 
@@ -206,8 +216,7 @@ public class ElasticSqlParseResult {
         } else {
             searchSourceBuilder.size(size);
         }
-
-
+        searchSourceBuilder.trackTotalHits(this.trackTotalHits);
         if (CollectionUtils.isNotEmpty(highlighter)) {
             HighlightBuilder highlightBuilder = HighlightBuilders.highlighter(highlighter);
             searchSourceBuilder.highlighter(highlightBuilder);

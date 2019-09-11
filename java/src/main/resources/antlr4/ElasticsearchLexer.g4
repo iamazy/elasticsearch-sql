@@ -54,6 +54,8 @@ EXISTS: E X I S T S;
 TRUE: T R U E;
 FALSE: F A L S E;
 LIMIT: L I M I T;
+TRACK: T R A C K;
+TOTAL: T O T A L;
 
 ORDER: O R D E R;
 ASC: A S C;

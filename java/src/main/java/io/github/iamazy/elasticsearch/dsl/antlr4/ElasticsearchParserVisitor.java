@@ -376,6 +376,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLimitClause(ElasticsearchParser.LimitClauseContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#trackTotalClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTrackTotalClause(ElasticsearchParser.TrackTotalClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#geoClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -700,6 +700,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTrackTotalClause(ElasticsearchParser.TrackTotalClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTrackTotalClause(ElasticsearchParser.TrackTotalClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterGeoClause(ElasticsearchParser.GeoClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}

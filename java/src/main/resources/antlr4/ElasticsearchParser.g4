@@ -15,14 +15,14 @@ sql: (
 
 //OPERATIONS
 selectOperation:
-	SELECT fieldList FROM tableRef (COMMA tableRef)* ((whereClause functionScoreClause?) | disMaxClause)? routingClause? (groupByClause | aggregateByClause)? orderClause? limitClause?;
+	SELECT fieldList FROM tableRef (COMMA tableRef)* ((whereClause functionScoreClause?) | disMaxClause)? routingClause? (groupByClause | aggregateByClause)? orderClause? limitClause? trackTotalClause?;
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
-deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause? limitClause?;
+deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause? limitClause? trackTotalClause?;
 
 updateOperation:
-	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause?;
+	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause? trackTotalClause?;
 
 insertOperation:
 	INSERT INTO tableRef (
@@ -153,6 +153,10 @@ orderClause: ORDER BY order ( COMMA order)*;
 order: name ASC?;
 
 limitClause: LIMIT ( offset = INT COMMA)? size = INT;
+
+trackTotalClause:
+    TRACK TOTAL
+;
 
 //Geo Clause
 geoClause: geoDistanceClause | geoBoundingBoxClause|geoPolygonClause;

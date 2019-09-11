@@ -24,15 +24,24 @@ public class QueryFromParser implements QueryParser {
             for(ElasticsearchParser.TableRefContext tableRef:selectOperationContext.tableRef()){
                 indices.add(tableRef.indexName.getText());
             }
-
+            if(dslContext.getSqlContext().selectOperation().trackTotalClause()!=null){
+                dslContext.getParseResult().trackTotalHits(true);
+            }
         }else if(dslContext.getSqlContext().deleteOperation()!=null){
             dslContext.getParseResult().setSqlOperation(SqlOperation.DELETE);
             ElasticsearchParser.DeleteOperationContext deleteOperationContext=dslContext.getSqlContext().deleteOperation();
             for(ElasticsearchParser.TableRefContext tableRef:deleteOperationContext.tableRef()){
                 indices.add(tableRef.indexName.getText());
             }
+            if(dslContext.getSqlContext().deleteOperation().trackTotalClause()!=null){
+                dslContext.getParseResult().trackTotalHits(true);
+            }
         }else if(dslContext.getSqlContext().updateOperation()!=null){
             dslContext.getParseResult().setSqlOperation(SqlOperation.UPDATE);
+            //TODO
+            if(dslContext.getSqlContext().updateOperation().trackTotalClause()!=null){
+                dslContext.getParseResult().trackTotalHits(true);
+            }
         }
         dslContext.getParseResult().setIndices(indices);
     }

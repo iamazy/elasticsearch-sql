@@ -624,6 +624,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitLimitClause(ElasticsearchParser.LimitClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#trackTotalClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterTrackTotalClause(ElasticsearchParser.TrackTotalClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#trackTotalClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitTrackTotalClause(ElasticsearchParser.TrackTotalClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#geoClause}.
 	 * @param ctx the parse tree
 	 */
