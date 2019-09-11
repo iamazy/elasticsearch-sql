@@ -194,6 +194,7 @@ POST _isql/_explain
 - [x] SQL Desc
 - [x] ES Excludes
 - [x] ES Reindex
+- [x] ES Track Total Hits
 
 #### Todo
 - [x] SQL Delete
