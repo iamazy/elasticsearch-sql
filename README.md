@@ -136,13 +136,13 @@ POST _isql/_explain
 #### 3. Integrte into elasticsearch(isql)
 
 #### Features
-- [x] SQL Select  
-- [x] SQL Where  
-- [x] SQL Order by (Asc & Desc)
+- [x] [SQL Select](https://github.com/iamazy/elasticsearch-sql/wiki/%E9%80%9A%E7%94%A8%E6%90%9C%E7%B4%A2%E6%9F%A5%E8%AF%A2#1-select-field)  
+- [x] [SQL Where](https://github.com/iamazy/elasticsearch-sql/wiki/通用搜索查询)  
+- [x] [SQL Order by (Asc & Desc)](https://github.com/iamazy/elasticsearch-sql/wiki/%E6%8E%92%E5%BA%8F#1-%E6%8E%92%E5%BA%8F)
 - [x] SQL Group by
-- [x] ES Aggregate by
-- [x] SQL And & Or
-- [x] SQL In
+- [x] [ES Aggregate by](https://github.com/iamazy/elasticsearch-sql/wiki/%E8%81%9A%E7%B1%BB#1-elasticsearch%E8%81%9A%E7%B1%BB)
+- [x] [SQL And & Or](https://github.com/iamazy/elasticsearch-sql/wiki/%E5%A4%8D%E6%9D%82%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2#1-bool-%E6%9F%A5%E8%AF%A2)
+- [x] [SQL In](https://github.com/iamazy/elasticsearch-sql/wiki/%E9%80%9A%E7%94%A8%E6%90%9C%E7%B4%A2%E6%9F%A5%E8%AF%A2#4-elasticsearch%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E8%AF%8D%E6%90%9C%E7%B4%A2%E7%9A%84%E8%A1%A8%E8%BE%BE%E6%96%B9%E5%BC%8F)
 - [x] SQL Between And
 - [x] SQL Is
 - [x] SQL Not
@@ -180,7 +180,7 @@ POST _isql/_explain
 - [x] ES DeleteByQuery
 - [x] ES Cardinality
 - [x] ES TopHits
-- [x] ES Nested
+- [x] [ES Nested](https://github.com/iamazy/elasticsearch-sql/wiki/Nested%E7%B1%BB%E5%9E%8B%E6%9F%A5%E8%AF%A2)
 - [x] ES GeoDistance
 - [x] ES GeoBoundingBox
 - [x] ES GeoPolygon
