@@ -245,4 +245,14 @@ public class ElasticSql2DslParserTest {
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
     }
+
+    @Test
+    public void trackTotalHits(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student track total";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
 }
