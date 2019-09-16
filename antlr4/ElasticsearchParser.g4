@@ -19,10 +19,10 @@ selectOperation:
 
 descOperation: DESCRIBE tableRef (DIVIDE identity)?;
 
-deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause? limitClause? trackTotalClause?;
+deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause? limitClause? ;
 
 updateOperation:
-	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause? trackTotalClause?;
+	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause? ;
 
 insertOperation:
 	INSERT INTO tableRef (
