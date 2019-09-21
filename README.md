@@ -66,7 +66,7 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 | elasticsearch version | latest version | remark | isql version | 
 | ---- | ---- | ---- | ---- | 
 | 7.x | 7.3.1 | | v7.3.1.3 |
-| 7.x | 7.3.1 | | v7.3.2.1 |
+| 7.x | 7.3.2 | | v7.3.2.1 |
 
 #### Installing
 
