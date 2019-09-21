@@ -150,7 +150,7 @@ routingClause: ROUTING BY STRING ( COMMA STRING)*;
 
 orderClause: ORDER BY order ( COMMA order)*;
 
-order: name ASC?;
+order: name (ASC|DESC)?;
 
 limitClause: LIMIT ( offset = INT COMMA)? size = INT;
 

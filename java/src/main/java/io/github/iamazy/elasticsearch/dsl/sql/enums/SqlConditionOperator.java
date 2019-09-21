@@ -9,7 +9,7 @@ public enum SqlConditionOperator {
     Equality,
     NotEqual,
     ApproximatelyEqual,
-    MatchPrase,
+    MatchPhrase,
     GreaterThan,
     GreaterThanOrEqual,
     LessThan,

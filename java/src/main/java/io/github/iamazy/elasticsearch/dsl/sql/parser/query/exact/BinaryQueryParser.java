@@ -58,7 +58,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                         break;
                     }
                     case ElasticsearchParser.TEQ: {
-                        operator = SqlConditionOperator.MatchPrase;
+                        operator = SqlConditionOperator.MatchPhrase;
                         break;
                     }
                     default:
@@ -75,7 +75,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                         case ApproximatelyEqual: {
                             return QueryBuilders.matchQuery(fieldName, StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
-                        case MatchPrase: {
+                        case MatchPhrase: {
                             return QueryBuilders.matchPhraseQuery(fieldName, StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
                         default:
