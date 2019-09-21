@@ -147,7 +147,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void desc(){
         long now=System.currentTimeMillis();
-        String sql="desc student/xiaoming";
+        String sql="describe student/xiaoming";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.getFieldMappingsRequest());
