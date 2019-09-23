@@ -91,20 +91,6 @@ POST _isql/_explain
     "sql":"select * from fruit"
 }
 ```
-##### 3. query index mapping
-```
-POST _isql
-{
-    "sql":"desc student"
-}
-```
-##### 4. query field mapping
-```
-POST _isql/_explain
-{
-    "sql":"desc student/names"
-}
-```
 
 ## Wiki
 [elasticsearch-sql-wiki](https://github.com/iamazy/elasticsearch-sql/wiki)
