@@ -6,7 +6,7 @@
 
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
-    <version>${elasticsearch.version}.1</version>
+    <version>${elasticsearch.version}.2</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
     <url>https://github.com/iamazy/elasticsearch-sql</url>
