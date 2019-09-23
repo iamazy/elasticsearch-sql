@@ -20,8 +20,8 @@ public class GeoPolygonQueryParser implements ExpressionQueryParser<Elasticsearc
     public AtomicQuery parse(ElasticsearchParser.GeoPolygonClauseContext expression) {
         String field=expression.ID().getText();
         List<GeoPoint> points=new ArrayList<>(0);
-        for(ElasticsearchParser.GeoPointClauseContext geoPointClauseContext:expression.geoPointClause()){
-            points.add(GeoUtils.parseGeoPoint(geoPointClauseContext));
+        for(ElasticsearchParser.PointContext pointContext:expression.point()){
+            points.add(GeoUtils.parseGeoPoint(pointContext));
         }
         return new AtomicQuery(QueryBuilders.geoPolygonQuery(field,points));
     }
