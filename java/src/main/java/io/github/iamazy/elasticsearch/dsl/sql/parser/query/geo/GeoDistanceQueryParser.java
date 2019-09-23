@@ -20,7 +20,7 @@ public class GeoDistanceQueryParser implements ExpressionQueryParser<Elasticsear
     @Override
     public AtomicQuery parse(ElasticsearchParser.GeoDistanceClauseContext expression) {
         GeoDistanceQueryBuilder geoDistanceQueryBuilder= QueryBuilders.geoDistanceQuery(StringManager.removeStringSymbol(expression.ID().getText()))
-                .point(GeoUtils.parseGeoPoint(expression.geoPointClause()))
+                .point(GeoUtils.parseGeoPoint(expression.point()))
                 .distance(StringManager.removeStringSymbol(expression.distance.getText()));
         return new AtomicQuery(geoDistanceQueryBuilder);
     }
