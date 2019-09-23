@@ -406,11 +406,35 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGeoPolygonClause(ElasticsearchParser.GeoPolygonClauseContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#geoPointClause}.
+	 * Visit a parse tree produced by {@link ElasticsearchParser#point}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx);
+	T visitPoint(ElasticsearchParser.PointContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#points}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPoints(ElasticsearchParser.PointsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#polygon}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPolygon(ElasticsearchParser.PolygonContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#multiPolygon}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiPolygon(ElasticsearchParser.MultiPolygonContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#geoShapeClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGeoShapeClause(ElasticsearchParser.GeoShapeClauseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
 	 * @param ctx the parse tree

@@ -159,22 +159,42 @@ trackTotalClause:
 ;
 
 //Geo Clause
-geoClause: geoDistanceClause | geoBoundingBoxClause|geoPolygonClause;
+geoClause: geoDistanceClause | geoBoundingBoxClause|geoPolygonClause|geoShapeClause;
 
 geoDistanceClause:
-	ID EQ coordinate = geoPointClause AND DISTANCE EQ distance = STRING;
+	ID EQ coordinate = point AND DISTANCE EQ distance = STRING;
 
 geoBoundingBoxClause:
-	field = ID BETWEEN leftTop = geoPointClause AND rightBottom = geoPointClause ;
+	field = ID BETWEEN leftTop = point AND rightBottom = point ;
 
 geoPolygonClause:
-    ID IN LBRACKET geoPointClause (COMMA geoPointClause)* RBRACKET
+    ID IN LBRACKET point (COMMA point)* RBRACKET
 ;
 
-geoPointClause:
+point:
     LBRACKET (lon =(INT|FLOAT) COMMA lat= (INT|FLOAT)) RBRACKET
 ;
 
+//multiPoint、LineString、Envelope
+points:
+    LBRACKET point (COMMA point)* RBRACKET
+;
+
+//multiLine、Polygon
+polygon:
+    LBRACKET points (COMMA points)* RBRACKET
+;
+
+multiPolygon:
+    LBRACKET polygon (COMMA polygon)* RBRACKET
+;
+
+geoShapeClause:
+    field=ID SHAPED AS shape = (POINT|MULTIPOINT|LINESTRING|ENVELOPE|MULTILINESTRING|POLYGON|MULTIPOLYGON) relation =(INTERSECTS|DISJOINT|WITHIN|CONTAINS) (point|points|polygon|multiPolygon)
+;
+
+
+//Score Clause
 functionScoreClause:
  	FUNCTION_SCORE expression (BOOLAND expression)*
 ;

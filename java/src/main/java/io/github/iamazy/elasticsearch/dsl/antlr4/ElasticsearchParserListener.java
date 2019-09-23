@@ -674,15 +674,55 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitGeoPolygonClause(ElasticsearchParser.GeoPolygonClauseContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#geoPointClause}.
+	 * Enter a parse tree produced by {@link ElasticsearchParser#point}.
 	 * @param ctx the parse tree
 	 */
-	void enterGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx);
+	void enterPoint(ElasticsearchParser.PointContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#geoPointClause}.
+	 * Exit a parse tree produced by {@link ElasticsearchParser#point}.
 	 * @param ctx the parse tree
 	 */
-	void exitGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx);
+	void exitPoint(ElasticsearchParser.PointContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#points}.
+	 * @param ctx the parse tree
+	 */
+	void enterPoints(ElasticsearchParser.PointsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#points}.
+	 * @param ctx the parse tree
+	 */
+	void exitPoints(ElasticsearchParser.PointsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#polygon}.
+	 * @param ctx the parse tree
+	 */
+	void enterPolygon(ElasticsearchParser.PolygonContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#polygon}.
+	 * @param ctx the parse tree
+	 */
+	void exitPolygon(ElasticsearchParser.PolygonContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#multiPolygon}.
+	 * @param ctx the parse tree
+	 */
+	void enterMultiPolygon(ElasticsearchParser.MultiPolygonContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#multiPolygon}.
+	 * @param ctx the parse tree
+	 */
+	void exitMultiPolygon(ElasticsearchParser.MultiPolygonContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#geoShapeClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterGeoShapeClause(ElasticsearchParser.GeoShapeClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#geoShapeClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitGeoShapeClause(ElasticsearchParser.GeoShapeClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
 	 * @param ctx the parse tree

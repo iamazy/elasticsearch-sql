@@ -760,13 +760,61 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx) { }
+	@Override public void enterPoint(ElasticsearchParser.PointContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitGeoPointClause(ElasticsearchParser.GeoPointClauseContext ctx) { }
+	@Override public void exitPoint(ElasticsearchParser.PointContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPoints(ElasticsearchParser.PointsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPoints(ElasticsearchParser.PointsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPolygon(ElasticsearchParser.PolygonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPolygon(ElasticsearchParser.PolygonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultiPolygon(ElasticsearchParser.MultiPolygonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultiPolygon(ElasticsearchParser.MultiPolygonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGeoShapeClause(ElasticsearchParser.GeoShapeClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGeoShapeClause(ElasticsearchParser.GeoShapeClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
