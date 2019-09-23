@@ -3,7 +3,6 @@ package io.github.iamazy.elasticsearch.dsl.sql.model;
 import com.google.common.collect.Lists;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlBoolOperator;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlConditionType;
-import lombok.Getter;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import java.util.List;
  * @date 2019/7/29
  * @descrition
  **/
-@Getter
+
 public class SqlCondition {
 
     private SqlConditionType conditionType;
@@ -32,5 +31,17 @@ public class SqlCondition {
     public SqlCondition(AtomicQuery query,SqlConditionType conditionType){
         this.queryList= Lists.newArrayList(query);
         this.conditionType=conditionType;
+    }
+
+    public List<AtomicQuery> getQueryList() {
+        return queryList;
+    }
+
+    public SqlBoolOperator getOperator() {
+        return operator;
+    }
+
+    public SqlConditionType getConditionType() {
+        return conditionType;
     }
 }
