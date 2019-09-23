@@ -179,7 +179,7 @@ POST _isql/_explain
 - [x] [ES Function Score](https://github.com/iamazy/elasticsearch-sql/wiki/%E6%89%93%E5%88%86)
 - [x] [ES Disjunction Max (DisMax)](https://github.com/iamazy/elasticsearch-sql/wiki/%E6%89%93%E5%88%86)
 - [x] [SQL Like](https://github.com/iamazy/elasticsearch-sql/wiki/%E9%80%9A%E7%94%A8%E6%90%9C%E7%B4%A2%E6%9F%A5%E8%AF%A2#4-elasticsearch%E4%B8%AD%E7%9A%84%E5%85%B3%E9%94%AE%E8%AF%8D%E6%90%9C%E7%B4%A2%E7%9A%84%E8%A1%A8%E8%BE%BE%E6%96%B9%E5%BC%8F)
-- [x] SQL Desc
+- [x] [SQL Desc](https://github.com/iamazy/elasticsearch-sql/wiki/%E6%8F%8F%E8%BF%B0%E7%B4%A2%E5%BC%95-%E5%AD%97%E6%AE%B5%E7%BB%93%E6%9E%84)
 - [x] [ES Reindex](https://github.com/iamazy/elasticsearch-sql/wiki/Reindex)
 - [x] [ES Track Total Hits](https://github.com/iamazy/elasticsearch-sql/wiki/%E5%88%86%E9%A1%B5)
 
