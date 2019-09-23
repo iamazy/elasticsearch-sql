@@ -18,8 +18,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,8 +32,6 @@ import java.util.stream.Collectors;
  * @descrition
  **/
 public class ElasticSqlParseResult {
-
-    private static Logger log = LoggerFactory.getLogger(ElasticSqlParseResult.class);
 
     private int from = 0;
     private int size = 15;
@@ -204,14 +200,12 @@ public class ElasticSqlParseResult {
             throw new ElasticSql2DslException("[syntax error] indices name must be set");
         }
         if (from < 0) {
-            log.debug("[from] is gte zero, assign 0 to [from(int)] as default value!!!");
             //这里不会修改from的值
             searchSourceBuilder.from(0);
         } else {
             searchSourceBuilder.from(from);
         }
         if (size < 0) {
-            log.debug("[size] is gte zero, assign 15 to [size(int)] as default value!!!");
             searchSourceBuilder.size(15);
         } else {
             searchSourceBuilder.size(size);
