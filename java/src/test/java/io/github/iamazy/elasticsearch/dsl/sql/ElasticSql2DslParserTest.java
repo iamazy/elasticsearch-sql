@@ -274,6 +274,16 @@ public class ElasticSql2DslParserTest {
         System.out.println(System.currentTimeMillis()-now);
     }
 
+    @Test
+    public void geoShape6(){
+        long now=System.currentTimeMillis();
+        String sql="select * from student where location.coordinate shaped disjoint `{\"coordinates\": [[-155.52, 19.61], [-156.22, 20.74], [-157.97, 21.46]], \"type\": \"MultiPoint\"}`";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
 
 
     @Test
