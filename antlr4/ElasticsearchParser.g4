@@ -159,7 +159,7 @@ trackTotalClause:
 ;
 
 //Geo Clause
-geoClause: geoDistanceClause | geoBoundingBoxClause|geoPolygonClause|geoShapeClause;
+geoClause: geoDistanceClause | geoBoundingBoxClause|geoPolygonClause|geoShapeClause|geoJsonShapeClause;
 
 geoDistanceClause:
 	ID EQ coordinate = point AND DISTANCE EQ distance = STRING;
@@ -191,6 +191,10 @@ multiPolygon:
 
 geoShapeClause:
     field=ID SHAPED AS shape = (POINT|MULTIPOINT|LINESTRING|ENVELOPE|MULTILINESTRING|POLYGON|MULTIPOLYGON) relation =(INTERSECTS|DISJOINT|WITHIN|CONTAINS) (point|points|polygon|multiPolygon)
+;
+
+geoJsonShapeClause:
+    field = ID SHAPED relation =(INTERSECTS|DISJOINT|WITHIN|CONTAINS) geojson = STRING
 ;
 
 

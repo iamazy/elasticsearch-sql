@@ -486,6 +486,13 @@ public class ElasticsearchParserBaseVisitor<T> extends AbstractParseTreeVisitor<
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitGeoJsonShapeClause(ElasticsearchParser.GeoJsonShapeClauseContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
