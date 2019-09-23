@@ -10,7 +10,7 @@ import org.elasticsearch.common.geo.GeoPoint;
  **/
 public class GeoUtils {
 
-    public static GeoPoint parseGeoPoint(ElasticsearchParser.GeoPointClauseContext geoPointClauseContext) {
-        return new GeoPoint(Double.parseDouble(geoPointClauseContext.lat.getText()), Double.parseDouble(geoPointClauseContext.lon.getText()));
+    public static GeoPoint parseGeoPoint(ElasticsearchParser.PointContext pointContext) {
+        return new GeoPoint(Double.parseDouble(pointContext.lat.getText()), Double.parseDouble(pointContext.lon.getText()));
     }
 }
