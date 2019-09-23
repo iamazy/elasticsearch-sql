@@ -1,25 +1,17 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
-import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
-import org.elasticsearch.common.geo.ShapeRelation;
+import io.github.iamazy.elasticsearch.dsl.utils.GeoUtils;
 import org.elasticsearch.common.geo.builders.*;
-import org.elasticsearch.common.geo.parsers.ShapeParser;
-import org.elasticsearch.common.xcontent.LoggingDeprecationHandler;
-import org.elasticsearch.common.xcontent.NamedXContentRegistry;
-import org.elasticsearch.common.xcontent.XContentParser;
-import org.elasticsearch.common.xcontent.json.JsonXContent;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.locationtech.jts.geom.Coordinate;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author iamazy
@@ -33,7 +25,7 @@ public class GeoShapeQueryParser implements ExpressionQueryParser<ElasticsearchP
     public AtomicQuery parse(ElasticsearchParser.GeoShapeClauseContext expression) {
         try {
             QueryBuilder queryBuilder= QueryBuilders.geoShapeQuery(expression.field.getText(),parseShapeBuilder(expression.shape.getType(),expression))
-                    .relation(parseGeoRelation(expression.relation.getType()));
+                    .relation(GeoUtils.parseGeoRelation(expression.relation.getType()));
             return new AtomicQuery(queryBuilder);
         } catch (Exception e) {
             throw new ElasticSql2DslException("geo shape parse error: "+e.getMessage());
@@ -43,37 +35,6 @@ public class GeoShapeQueryParser implements ExpressionQueryParser<ElasticsearchP
     @Override
     public boolean isMatchExpressionInvocation(Class clazz) {
         return ElasticsearchParser.GeoShapeClauseContext.class==clazz;
-    }
-
-    private ShapeRelation parseGeoRelation(int relation){
-        switch (relation){
-            case ElasticsearchParser.WITHIN:{
-                return ShapeRelation.WITHIN;
-            }
-            case ElasticsearchParser.DISJOINT:{
-                return ShapeRelation.DISJOINT;
-            }
-            case ElasticsearchParser.CONTAINS:{
-                return ShapeRelation.CONTAINS;
-            }
-            default:
-            case ElasticsearchParser.INTERSECTS:{
-                return ShapeRelation.INTERSECTS;
-            }
-        }
-    }
-
-    /**
-     * turn GeoJson to ShapeBuilder
-     * @param geometry
-     * @return
-     * @throws IOException
-     */
-    private ShapeBuilder parseShapeBuilder(Map<String, Object> geometry) throws IOException {
-        String json = CoreConstants.OBJECT_MAPPER.writeValueAsString(geometry);
-        XContentParser xContentParser = JsonXContent.jsonXContent.createParser(NamedXContentRegistry.EMPTY, LoggingDeprecationHandler.INSTANCE, json);
-        xContentParser.nextToken();
-        return ShapeParser.parse(xContentParser);
     }
 
 
