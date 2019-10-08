@@ -442,6 +442,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGeoJsonShapeClause(ElasticsearchParser.GeoJsonShapeClauseContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#geometryCollectionClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGeometryCollectionClause(ElasticsearchParser.GeometryCollectionClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

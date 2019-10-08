@@ -734,6 +734,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitGeoJsonShapeClause(ElasticsearchParser.GeoJsonShapeClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#geometryCollectionClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterGeometryCollectionClause(ElasticsearchParser.GeometryCollectionClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#geometryCollectionClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitGeometryCollectionClause(ElasticsearchParser.GeometryCollectionClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#functionScoreClause}.
 	 * @param ctx the parse tree
 	 */

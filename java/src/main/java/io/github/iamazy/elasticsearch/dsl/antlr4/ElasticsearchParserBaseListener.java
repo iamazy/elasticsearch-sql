@@ -832,6 +832,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterGeometryCollectionClause(ElasticsearchParser.GeometryCollectionClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGeometryCollectionClause(ElasticsearchParser.GeometryCollectionClauseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFunctionScoreClause(ElasticsearchParser.FunctionScoreClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}

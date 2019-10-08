@@ -190,11 +190,14 @@ multiPolygon:
 ;
 
 geoShapeClause:
-    field=ID SHAPED AS shape = (POINT|MULTIPOINT|LINESTRING|ENVELOPE|MULTILINESTRING|POLYGON|MULTIPOLYGON) relation =(INTERSECTS|DISJOINT|WITHIN|CONTAINS) (point|points|polygon|multiPolygon)
+    field=ID relation =(INTERSECTS|DISJOINT|WITHIN|CONTAINS) (point|points|polygon|multiPolygon) SHAPED AS shape = (POINT|MULTIPOINT|LINESTRING|ENVELOPE|MULTILINESTRING|POLYGON|MULTIPOLYGON)
 ;
 
 geoJsonShapeClause:
-    field = ID SHAPED relation =(INTERSECTS|DISJOINT|WITHIN|CONTAINS) geojson = STRING
+    field = ID relation =(INTERSECTS|DISJOINT|WITHIN|CONTAINS) geojson = STRING
+;
+
+geometryCollectionClause:
 ;
 
 
