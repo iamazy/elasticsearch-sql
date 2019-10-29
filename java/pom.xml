@@ -6,19 +6,23 @@
 
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
-    <version>${elasticsearch.version}.3</version>
+    <version>${elasticsearch.version}.1</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
     <url>https://github.com/iamazy/elasticsearch-sql</url>
 
     <properties>
-        <elasticsearch.version>7.3.1</elasticsearch.version>
-        <java.version>1.8</java.version>
+        <elasticsearch.version>7.4.1</elasticsearch.version>
+        <java.version>13</java.version>
         <antlr4.version>4.7.2</antlr4.version>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <jackson.version>2.10.0</jackson.version>
+        <guava.version>28.1-jre</guava.version>
         <elasticsearch.plugin.name>isql</elasticsearch.plugin.name>
         <elasticsearch.plugin.classname>io.github.iamazy.elasticsearch.dsl.plugin.SqlPlugin</elasticsearch.plugin.classname>
         <elasticsearch.plugin.jvm>true</elasticsearch.plugin.jvm>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -63,17 +67,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.10.0</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.10.0</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>28.0-jre</version>
+            <version>${guava.version}</version>
         </dependency>
         <!--&lt;!&ndash; https://mvnrepository.com/artifact/commons-codec/commons-codec &ndash;&gt;-->
         <!--<dependency>-->
@@ -282,6 +286,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
