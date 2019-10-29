@@ -190,6 +190,18 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNameExpr(ElasticsearchParser.NameExprContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#rangeClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRangeClause(ElasticsearchParser.RangeClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#rangeItemClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRangeItemClause(ElasticsearchParser.RangeItemClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#collection}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql;
 
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
+import org.elasticsearch.search.aggregations.bucket.composite.CompositeValuesSourceBuilder;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -94,6 +95,16 @@ public class ElasticSql2DslParserTest {
     }
 
     @Test
+    public void betweenAnd2(){
+        long now=System.currentTimeMillis();
+        String sql="select distinct name from student where a ranged in (1,2] aggregate by [apple,terms(a,1)],terms(b,1) limit 2,5";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
     public void agg1(){
         long now=System.currentTimeMillis();
         String sql="select distinct h!name,h!age from student aggregate by [apple,terms(a,1)],terms(bb,2),cardinality(ip) limit 2,5";
@@ -131,6 +142,11 @@ public class ElasticSql2DslParserTest {
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void compositeAgg(){
+
     }
 
     @Test
@@ -227,7 +243,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void geoShape(){
         long now=System.currentTimeMillis();
-        String sql="select * from student where location.coordinate within [[10,10],[20,20]] shaped as envelope";
+        String sql="select * from student where location.coordinate within [[10,11],[21,22]] shaped as envelope";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -257,7 +273,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void geoShape4(){
         long now=System.currentTimeMillis();
-        String sql="select * from student where location.coordinate intersects [[[10,10],[20,20],[11,11],[21,21]]] shaped as polygon";
+        String sql="select * from student where location.coordinate intersects [[[10,10],[20,20],[11,11],[10,10]]] shaped as polygon";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
@@ -267,7 +283,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void geoShape5(){
         long now=System.currentTimeMillis();
-        String sql="select * from student where location.coordinate disjoint [[[[10,10],[20,20],[11,11],[21,21]]],[[[10,10],[20,20],[11,11],[21,21]]]] shaped as multipolygon ";
+        String sql="select * from student where location.coordinate disjoint [[[[10,10],[22,21],[11,11],[10,10]]],[[[10,10],[20,20],[11,11],[10,10]]]] shaped as multipolygon ";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));

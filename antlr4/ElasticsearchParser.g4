@@ -61,6 +61,7 @@ expression:
 	| leftExpr = expression operator = AND rightExpr = expression				# binary
 	| leftExpr = expression operator = OR rightExpr = expression					# binary
 	| expr = name BETWEEN left = identity AND right = identity							# betweenAnd
+	| rangeClause #betweenAnd
 	| leftExpr = expression operator = XOR rightExpr = expression							# binary
 	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
 	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional
@@ -75,6 +76,14 @@ expression:
 	| geoClause																			# geo
 	| fullTextClause																	# fullText
 	| not = NOT expression																# binary
+;
+
+rangeClause:
+    field = name RANGED IN (LPAREN|LBRACKET) left = rangeItemClause COMMA right = rangeItemClause (RPAREN|RBRACKET)
+;
+
+rangeItemClause:
+    STRING|INT|FLOAT
 ;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
@@ -145,6 +154,10 @@ nestedAggregationClause:
 subAggregationClause: GT LPAREN aggregationClause RPAREN;
 
 aggregateItemClause: ID collection ((COMMA aggregationClause)| subAggregationClause)*;
+
+//compositeAggregationClause:
+//    LIMIT INT AFTER ID EQ identity (COMMA ID EQ identity)*
+//;
 
 routingClause: ROUTING BY STRING ( COMMA STRING)*;
 

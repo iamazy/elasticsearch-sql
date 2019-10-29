@@ -312,6 +312,26 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitNameExpr(ElasticsearchParser.NameExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#rangeClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterRangeClause(ElasticsearchParser.RangeClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#rangeClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitRangeClause(ElasticsearchParser.RangeClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#rangeItemClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterRangeItemClause(ElasticsearchParser.RangeItemClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#rangeItemClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitRangeItemClause(ElasticsearchParser.RangeItemClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#collection}.
 	 * @param ctx the parse tree
 	 */

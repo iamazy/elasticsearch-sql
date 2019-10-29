@@ -5,10 +5,9 @@ import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 import io.github.iamazy.elasticsearch.dsl.utils.GeoUtils;
-import org.elasticsearch.common.geo.builders.*;
+import org.elasticsearch.geometry.*;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.locationtech.jts.geom.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,83 +23,107 @@ public class GeoShapeQueryParser implements ExpressionQueryParser<ElasticsearchP
     @Override
     public AtomicQuery parse(ElasticsearchParser.GeoShapeClauseContext expression) {
         try {
-            QueryBuilder queryBuilder= QueryBuilders.geoShapeQuery(expression.field.getText(),parseShapeBuilder(expression.shape.getType(),expression))
+            QueryBuilder queryBuilder = QueryBuilders.geoShapeQuery(expression.field.getText(), parseShapeBuilder(expression.shape.getType(), expression))
                     .relation(GeoUtils.parseGeoRelation(expression.relation.getType()));
             return new AtomicQuery(queryBuilder);
         } catch (Exception e) {
-            throw new ElasticSql2DslException("geo shape parse error: "+e.getMessage());
+            throw new ElasticSql2DslException("geo shape parse error: " + e.getMessage());
         }
     }
 
     @Override
     public boolean isMatchExpressionInvocation(Class clazz) {
-        return ElasticsearchParser.GeoShapeClauseContext.class==clazz;
+        return ElasticsearchParser.GeoShapeClauseContext.class == clazz;
     }
 
 
-    private ShapeBuilder parseShapeBuilder(int shape, ElasticsearchParser.GeoShapeClauseContext geoShapeClauseContext){
+    private Geometry parseShapeBuilder(int shape, ElasticsearchParser.GeoShapeClauseContext geoShapeClauseContext) {
         switch (shape) {
             case ElasticsearchParser.POINT: {
-                return new PointBuilder().coordinate(parsePointContext(geoShapeClauseContext.point()));
+                return parsePointContext(geoShapeClauseContext.point());
             }
             case ElasticsearchParser.ENVELOPE: {
-                ElasticsearchParser.PointsContext pointsContext = geoShapeClauseContext.points();
-                return new EnvelopeBuilder(parsePointContext(pointsContext.point(0)), parsePointContext(pointsContext.point(1)));
+                return parseRectangleContext(geoShapeClauseContext.points());
             }
             case ElasticsearchParser.LINESTRING: {
-                return new LineStringBuilder(parsePointsContext(geoShapeClauseContext.points()));
+                return parseLineContext(geoShapeClauseContext.points());
             }
             case ElasticsearchParser.MULTIPOINT: {
-                return new MultiPointBuilder(parsePointsContext(geoShapeClauseContext.points()));
+                return new MultiPoint(parsePointsContext(geoShapeClauseContext.points()));
             }
             case ElasticsearchParser.MULTILINESTRING: {
                 ElasticsearchParser.PolygonContext polygonContext = geoShapeClauseContext.polygon();
-                MultiLineStringBuilder multiLineStringBuilder = new MultiLineStringBuilder();
+                List<Line> lines=new ArrayList<>(0);
                 for (ElasticsearchParser.PointsContext pointsContext : polygonContext.points()) {
-                    multiLineStringBuilder.linestring(new LineStringBuilder(parsePointsContext(pointsContext)));
+                    lines.add(new Line(traversePointsX(pointsContext),traversePointsY(pointsContext)));
                 }
-                return multiLineStringBuilder;
+                return new MultiLine(lines);
             }
             case ElasticsearchParser.POLYGON: {
                 return parsePolygonContext(geoShapeClauseContext.polygon());
             }
             default:
             case ElasticsearchParser.MULTIPOLYGON: {
-                MultiPolygonBuilder multiPolygonBuilder = new MultiPolygonBuilder();
+                List<Polygon> multiPolygon=new ArrayList<>(0);
                 ElasticsearchParser.MultiPolygonContext multiPolygonContext = geoShapeClauseContext.multiPolygon();
                 for (ElasticsearchParser.PolygonContext polygonContext : multiPolygonContext.polygon()) {
-                    multiPolygonBuilder.polygon(parsePolygonContext(polygonContext));
+                    multiPolygon.add(parsePolygonContext(polygonContext));
                 }
-                return multiPolygonBuilder;
+                return new MultiPolygon(multiPolygon);
             }
         }
     }
 
-    private Coordinate parsePointContext(ElasticsearchParser.PointContext pointContext){
-        return new Coordinate(Double.parseDouble(pointContext.lon.getText()),Double.parseDouble(pointContext.lat.getText()));
+    private Point parsePointContext(ElasticsearchParser.PointContext pointContext) {
+        return new Point(Double.parseDouble(pointContext.lon.getText()), Double.parseDouble(pointContext.lat.getText()));
     }
 
-    private List<Coordinate> parsePointsContext(ElasticsearchParser.PointsContext pointsContext){
-        List<Coordinate> coordinates=new ArrayList<>(0);
-        for(ElasticsearchParser.PointContext pointContext:pointsContext.point()){
-            coordinates.add(parsePointContext(pointContext));
-        }
-        return coordinates;
+    private Rectangle parseRectangleContext(ElasticsearchParser.PointsContext pointsContext) {
+        double minX = Double.parseDouble(pointsContext.point(0).lon.getText());
+        double maxX = Double.parseDouble(pointsContext.point(1).lon.getText());
+        double minY = Double.parseDouble(pointsContext.point(0).lat.getText());
+        double maxY = Double.parseDouble(pointsContext.point(1).lat.getText());
+        return new Rectangle(minX, maxX, maxY, minY);
     }
 
-    private PolygonBuilder parsePolygonContext(ElasticsearchParser.PolygonContext polygonContext){
-        PolygonBuilder polygonBuilder=new PolygonBuilder(parsePolygonContext(polygonContext.points(0)));
-        for(int i=1;i<polygonContext.points().size();i++){
-            polygonBuilder.hole(new LineStringBuilder(parsePolygonContext(polygonContext.points(i))));
+    private List<Point> parsePointsContext(ElasticsearchParser.PointsContext pointsContext) {
+        List<Point> points = new ArrayList<>(0);
+        for (ElasticsearchParser.PointContext pointContext : pointsContext.point()) {
+            points.add(parsePointContext(pointContext));
         }
-        return polygonBuilder;
+        return points;
     }
 
-    private CoordinatesBuilder parsePolygonContext(ElasticsearchParser.PointsContext pointsContext){
-        List<Coordinate> coordinates=new ArrayList<>(0);
-        for(ElasticsearchParser.PointContext pointContext:pointsContext.point()){
-            coordinates.add(parsePointContext(pointContext));
+    private Line parseLineContext(ElasticsearchParser.PointsContext pointsContext){
+        return new Line(traversePointsX(pointsContext),traversePointsY(pointsContext));
+    }
+
+    private LinearRing parseLinearRingContext(ElasticsearchParser.PointsContext pointsContext){
+        return new LinearRing(traversePointsX(pointsContext),traversePointsY(pointsContext));
+    }
+
+    private double[] traversePointsX(ElasticsearchParser.PointsContext pointsContext){
+        double[] lats=new double[pointsContext.point().size()];
+        for(int i=0;i<pointsContext.point().size();i++){
+            lats[i]=Double.parseDouble(pointsContext.point(i).lon.getText());
         }
-        return new CoordinatesBuilder().coordinates(coordinates).close();
+        return lats;
+    }
+
+    private double[] traversePointsY(ElasticsearchParser.PointsContext pointsContext){
+        double[] lons=new double[pointsContext.point().size()];
+        for(int i=0;i<pointsContext.point().size();i++){
+            lons[i]=Double.parseDouble(pointsContext.point(i).lat.getText());
+        }
+        return lons;
+    }
+
+    private Polygon parsePolygonContext(ElasticsearchParser.PolygonContext polygonContext) {
+        LinearRing linearRing= parseLinearRingContext(polygonContext.points(0));
+        List<LinearRing> linearRings=new ArrayList<>(0);
+        for (int i = 1; i < polygonContext.points().size(); i++) {
+            linearRings.add(parseLinearRingContext(polygonContext.points(i)));
+        }
+        return new Polygon(linearRing,linearRings);
     }
 }

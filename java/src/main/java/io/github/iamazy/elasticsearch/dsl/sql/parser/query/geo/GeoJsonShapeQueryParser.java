@@ -12,6 +12,7 @@ import org.elasticsearch.common.xcontent.LoggingDeprecationHandler;
 import org.elasticsearch.common.xcontent.NamedXContentRegistry;
 import org.elasticsearch.common.xcontent.XContentParser;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
+import org.elasticsearch.geometry.Geometry;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
@@ -28,7 +29,7 @@ public class GeoJsonShapeQueryParser  implements ExpressionQueryParser<Elasticse
     @Override
     public AtomicQuery parse(ElasticsearchParser.GeoJsonShapeClauseContext expression) {
         try {
-            QueryBuilder queryBuilder= QueryBuilders.geoShapeQuery(expression.field.getText(),parseShapeBuilder(StringManager.removeStringSymbol(expression.geojson.getText())))
+            QueryBuilder queryBuilder= QueryBuilders.geoShapeQuery(expression.field.getText(),parseGeometry(StringManager.removeStringSymbol(expression.geojson.getText())))
                     .relation(GeoUtils.parseGeoRelation(expression.relation.getType()));
             return new AtomicQuery(queryBuilder);
         } catch (Exception e) {
@@ -47,9 +48,9 @@ public class GeoJsonShapeQueryParser  implements ExpressionQueryParser<Elasticse
      * @return
      * @throws IOException
      */
-    private ShapeBuilder parseShapeBuilder(String geometry) throws IOException {
+    private Geometry parseGeometry(String geometry) throws IOException {
         XContentParser xContentParser = JsonXContent.jsonXContent.createParser(NamedXContentRegistry.EMPTY, LoggingDeprecationHandler.INSTANCE, geometry);
         xContentParser.nextToken();
-        return ShapeParser.parse(xContentParser);
+        return ShapeParser.parse(xContentParser).buildGeometry();
     }
 }
