@@ -13,7 +13,7 @@
 
     <properties>
         <elasticsearch.version>7.4.1</elasticsearch.version>
-        <java.version>13</java.version>
+        <java.version>12</java.version>
         <antlr4.version>4.7.2</antlr4.version>
         <jackson.version>2.10.0</jackson.version>
         <guava.version>28.1-jre</guava.version>
@@ -31,7 +31,6 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.locationtech.jts/jts-core -->
         <dependency>
             <groupId>org.locationtech.spatial4j</groupId>
             <artifactId>spatial4j</artifactId>
@@ -79,13 +78,11 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/commons-codec/commons-codec &ndash;&gt;-->
         <!--<dependency>-->
             <!--<groupId>commons-codec</groupId>-->
             <!--<artifactId>commons-codec</artifactId>-->
             <!--<version>1.12</version>-->
         <!--</dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
@@ -157,7 +154,7 @@
         <profile>
             <id>disable-javadoc-doclint</id>
             <activation>
-                <jdk>[1.8,)</jdk>
+                <jdk>[13,)</jdk>
             </activation>
             <properties>
                 <javadoc.opts>-Xdoclint:none</javadoc.opts>
@@ -168,7 +165,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>es-plugin.properties</include>
@@ -182,8 +179,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -246,7 +243,7 @@
                             <outputDirectory>${project.build.directory}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/resources</directory>
+                                    <directory>${basedir}/src/main/resources</directory>
                                     <filtering>true</filtering>
                                     <includes>
                                         <include>plugin-descriptor.properties</include>
@@ -268,7 +265,7 @@
             <!--</plugin>-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -278,7 +275,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <descriptor>src/assembly/zip.xml</descriptor>
+                    <descriptors>
+                        <descriptor>${basedir}/src/assembly/zip.xml</descriptor>
+                    </descriptors>
                     <finalName>elasticsearch</finalName>
                 </configuration>
             </plugin>
@@ -291,7 +290,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
+                <version>3.1.1</version>
                 <configuration>
                     <charset>UTF-8</charset>
                     <encoding>UTF-8</encoding>
@@ -310,17 +309,17 @@
                         </tag>
                     </tags>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <additionalparam>${javadoc.opts}</additionalparam>
-                        </configuration>
-                    </execution>
-                </executions>
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>attach-javadocs</id>-->
+<!--                        <goals>-->
+<!--                            <goal>jar</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <additionalparam>-Xdoclint:none</additionalparam>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
