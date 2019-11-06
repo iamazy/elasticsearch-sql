@@ -325,7 +325,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void trackTotalHits(){
         long now=System.currentTimeMillis();
-        String sql="select * from student track total";
+        String sql="select * from aaa where resCategory='port_info' aggregate by terms(deviceInfo.deviceType,10) limit 0 track total";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
