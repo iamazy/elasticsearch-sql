@@ -25,8 +25,11 @@ public class TermsAggregationParser implements AggregationParser {
         if (StringUtils.equalsIgnoreCase(aggregateItemClauseContext.ID().getText(), AGG_TERMS_METHOD)) {
             try {
                 String field = aggregateItemClauseContext.collection().identity(0).getText();
-                int size = Integer.parseInt(aggregateItemClauseContext.collection().identity(1).getText());
-                aggregateQuery.setAggregationBuilder(AggregationBuilders.terms(field).size(size)
+                int size = 10;
+                if (aggregateItemClauseContext.collection().identity().size() > 1) {
+                    size = Integer.parseInt(aggregateItemClauseContext.collection().identity(1).getText());
+                }
+                aggregateQuery.setAggregationBuilder(AggregationBuilders.terms(field + "_terms").field(field).size(size)
                         .minDocCount(1).shardMinDocCount(1).shardSize(size << 1).order(BucketOrder.count(false)));
             }catch (IllegalArgumentException e){
                 throw new ElasticSql2DslException(e);
