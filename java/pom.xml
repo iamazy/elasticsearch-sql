@@ -78,11 +78,6 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>commons-codec</groupId>-->
-            <!--<artifactId>commons-codec</artifactId>-->
-            <!--<version>1.12</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
@@ -98,17 +93,6 @@
             <artifactId>antlr4-runtime</artifactId>
             <version>${antlr4.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.ow2.asm</groupId>-->
-            <!--<artifactId>asm</artifactId>-->
-            <!--<version>7.1</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.ow2.asm</groupId>-->
-            <!--<artifactId>asm-commons</artifactId>-->
-            <!--<version>7.1</version>-->
-        <!--</dependency>-->
-
     </dependencies>
 
     <licenses>
@@ -254,15 +238,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>-->
-            <!--<artifactId>maven-assembly-plugin</artifactId>-->
-            <!--<version>2.4</version>-->
-            <!--<configuration>-->
-            <!--<descriptorRefs>-->
-            <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
-            <!--</descriptorRefs>-->
-            <!--</configuration>-->
-            <!--</plugin>-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.1</version>
