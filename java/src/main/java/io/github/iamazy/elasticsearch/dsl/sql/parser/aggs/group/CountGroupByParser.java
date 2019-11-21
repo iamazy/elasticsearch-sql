@@ -1,6 +1,5 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.group;
 
-
 import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.GroupByParser;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -10,6 +9,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
  * @date 2019/9/3
  * @descrition
  **/
+@SuppressWarnings("unstable")
 public class CountGroupByParser extends GroupByParser {
 
     public CountGroupByParser(){

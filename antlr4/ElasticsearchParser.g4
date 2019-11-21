@@ -88,7 +88,7 @@ rangeItemClause:
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
-likeClause: field = name not = NOT? LIKE pattern = STRING;
+likeClause: field = name not = NOT? funName=(FUZZY|PREFIX|REGEXP|WILDCARD)* LIKE pattern = STRING;
 
 isClause: field = name IS not = NOT? NULL;
 

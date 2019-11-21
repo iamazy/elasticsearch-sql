@@ -331,4 +331,54 @@ public class ElasticSql2DslParserTest {
         System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
         System.out.println(System.currentTimeMillis()-now);
     }
+
+    @Test
+    public void fuzzyLike(){
+        long now=System.currentTimeMillis();
+        String sql="select * from aaa where resCategory fuzzy like'port_info'";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void wildcardLike(){
+        long now=System.currentTimeMillis();
+        String sql="select * from aaa where resCategory wildcard like 'port_info'";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void prefixLike(){
+        long now=System.currentTimeMillis();
+        String sql="select * from aaa where resCategory prefix like 'port_info'";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void regexpLike(){
+        long now=System.currentTimeMillis();
+        String sql="select * from aaa where resCategory regexp like 'port*'";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
+
+    @Test
+    public void like(){
+        long now=System.currentTimeMillis();
+        String sql="select * from aaa where resCategory like 'port*'";
+        ElasticSql2DslParser parser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = parser.parse(sql);
+        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
+        System.out.println(System.currentTimeMillis()-now);
+    }
 }

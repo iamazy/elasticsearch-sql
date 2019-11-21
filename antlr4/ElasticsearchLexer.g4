@@ -48,6 +48,12 @@ NOT: N O T;
 IS: I S;
 AS: A S;
 LIKE: L I K E;
+
+FUZZY: F U Z Z Y;
+PREFIX: P R E F I X;
+REGEXP: R E G E X P;
+WILDCARD: W I L D C A R D;
+
 RLIKE: R L I K E;
 EXISTS: E X I S T S;
 

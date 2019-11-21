@@ -13,6 +13,7 @@ import java.util.List;
  * @date 2019-08-06
  * @descrition
  **/
+@SuppressWarnings("unstable")
 public class GroupByQueryParser{
 
     public AggregationBuilder parse(String funcName,String field,Object... params){
