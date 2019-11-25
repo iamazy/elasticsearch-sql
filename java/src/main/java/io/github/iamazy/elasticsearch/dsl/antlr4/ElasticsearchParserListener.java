@@ -352,6 +352,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitLikeClause(ElasticsearchParser.LikeClauseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#notClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotClause(ElasticsearchParser.NotClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#notClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotClause(ElasticsearchParser.NotClauseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#isClause}.
 	 * @param ctx the parse tree
 	 */

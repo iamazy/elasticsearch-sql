@@ -57,7 +57,7 @@ expression:
 	| leftExpr = expression operator = (PLUS | MINUS) rightExpr = expression				# binary
 	| leftExpr = expression operator = (LSH | RSH | USH) rightExpr = expression				# binary
 	| leftExpr = expression operator = (LT | LTE | GT | GTE) rightExpr = expression			# binary
-	| leftExpr = expression operator = (EQ | NE | AEQ | TEQ) rightExpr = expression				# binary
+	| leftExpr = expression operator = (EQ | NE | AEQ | NAEQ | TEQ | NTEQ| MPPEQ| NMPPEQ) rightExpr = expression				# binary
 	| leftExpr = expression operator = AND rightExpr = expression				# binary
 	| leftExpr = expression operator = OR rightExpr = expression					# binary
 	| expr = name BETWEEN left = identity AND right = identity							# betweenAnd
@@ -75,7 +75,7 @@ expression:
 	| likeClause																		# binary
 	| geoClause																			# geo
 	| fullTextClause																	# fullText
-	| not = NOT expression																# binary
+	| notClause 															            # binary
 ;
 
 rangeClause:
@@ -89,6 +89,10 @@ rangeItemClause:
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
 likeClause: field = name not = NOT? funName=(FUZZY|PREFIX|REGEXP|WILDCARD)* LIKE pattern = STRING;
+
+notClause:
+    NOT expression
+;
 
 isClause: field = name IS not = NOT? NULL;
 

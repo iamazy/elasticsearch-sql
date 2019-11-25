@@ -214,6 +214,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLikeClause(ElasticsearchParser.LikeClauseContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#notClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNotClause(ElasticsearchParser.NotClauseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#isClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

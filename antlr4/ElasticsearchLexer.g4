@@ -157,8 +157,13 @@ COND: '?';
 EQ: '=';
 // ~= -> match
 AEQ: '~=';
+NAEQ: '!~=';
 // ~== -> match_phrase
 TEQ: '~==';
+NTEQ: '!~==';
+// ~=== -> match_phrase_prefix
+MPPEQ: '~===';
+NMPPEQ: '!~===';
 EQEQ: '==';
 NE: '!=';
 GT: '>';
