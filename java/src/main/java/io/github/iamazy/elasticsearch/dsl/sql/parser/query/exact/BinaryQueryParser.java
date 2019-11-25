@@ -192,7 +192,9 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         else if (binaryContext.likeClause() != null) {
             ElasticsearchParser.LikeClauseContext likeClauseContext = binaryContext.likeClause();
             return likeQueryParser.parse(likeClauseContext);
-        }else if(binaryContext.notClause()!=null){
+        }
+        // NOT
+        else if(binaryContext.notClause()!=null){
             return parseNotExpressionContext(binaryContext.notClause());
         }
         throw new ElasticSql2DslException("[syntax error] not supported yet");
