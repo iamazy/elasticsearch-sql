@@ -21,7 +21,7 @@ public class QueryOrderByParser implements QueryParser {
             if(dslContext.getSqlContext().selectOperation().orderClause()!=null){
                 ElasticsearchParser.OrderClauseContext orderClauseContext=dslContext.getSqlContext().selectOperation().orderClause();
                 for(ElasticsearchParser.OrderContext orderContext:orderClauseContext.order()){
-                    ElasticsearchParser.NameContext nameContext = orderContext.name();
+                    ElasticsearchParser.NameClauseContext nameContext = orderContext.nameClause();
                     if(nameContext instanceof ElasticsearchParser.FieldNameContext){
                         ElasticsearchParser.FieldNameContext fieldNameContext=(ElasticsearchParser.FieldNameContext)nameContext;
                         String field = fieldNameContext.field.getText();

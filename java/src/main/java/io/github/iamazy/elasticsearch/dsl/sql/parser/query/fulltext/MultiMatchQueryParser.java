@@ -17,11 +17,11 @@ import java.util.Set;
 public class MultiMatchQueryParser implements ExpressionQueryParser<ElasticsearchParser.MultiMatchClauseContext> {
     @Override
     public AtomicQuery parse(ElasticsearchParser.MultiMatchClauseContext expression) {
-        String[] fields=new String[expression.name().size()];
+        String[] fields=new String[expression.nameClause().size()];
         Set<String> highlighters=new HashSet<>(0);
-        for(int i=0;i<expression.name().size();i++){
-            if(expression.name(i) instanceof ElasticsearchParser.FieldNameContext){
-                ElasticsearchParser.FieldNameContext fieldNameContext=(ElasticsearchParser.FieldNameContext)expression.name(i);
+        for(int i=0;i<expression.nameClause().size();i++){
+            if(expression.nameClause(i) instanceof ElasticsearchParser.FieldNameContext){
+                ElasticsearchParser.FieldNameContext fieldNameContext=(ElasticsearchParser.FieldNameContext)expression.nameClause(i);
                 if(fieldNameContext.highlighter!=null){
                     highlighters.add(fieldNameContext.field.getText());
                 }

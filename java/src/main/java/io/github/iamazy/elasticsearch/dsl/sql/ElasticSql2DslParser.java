@@ -8,8 +8,12 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.*;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.AggregateByQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.delete.DeleteQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.desc.QueryDescParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.insert.InsertQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.score.DisMaxQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.reindex.ReindexQueryParser;
+import io.github.iamazy.elasticsearch.dsl.sql.parser.update.UpdateQueryParser;
 
 import java.util.Set;
 
@@ -47,7 +51,10 @@ public class ElasticSql2DslParser {
                 new QueryLimitParser(),
 
                 new QueryDescParser(),
-                new ReindexQueryParser()
+                new ReindexQueryParser(),
+                new InsertQueryParser(),
+                new UpdateQueryParser(),
+                new DeleteQueryParser()
         );
     }
 }

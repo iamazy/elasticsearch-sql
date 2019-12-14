@@ -150,17 +150,6 @@ public class ElasticSql2DslParserTest {
     }
 
     @Test
-    public void delete1(){
-        long now=System.currentTimeMillis();
-        String sql="delete from student where a=1";
-        ElasticSql2DslParser parser=new ElasticSql2DslParser();
-        ElasticSqlParseResult parseResult = parser.parse(sql);
-        System.out.println(parseResult.toPrettyDsl(parseResult.toRequest()));
-        System.out.println(parseResult.toDelRequest());
-        System.out.println(System.currentTimeMillis()-now);
-    }
-
-    @Test
     public void desc(){
         long now=System.currentTimeMillis();
         String sql="describe student/xiaoming";

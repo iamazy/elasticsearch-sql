@@ -99,73 +99,73 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	void exitNameOperand(ElasticsearchParser.NameOperandContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code fieldName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void enterFieldName(ElasticsearchParser.FieldNameContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code fieldName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void exitFieldName(ElasticsearchParser.FieldNameContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code distinctName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void enterDistinctName(ElasticsearchParser.DistinctNameContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code distinctName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void exitDistinctName(ElasticsearchParser.DistinctNameContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code functionName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void enterFunctionName(ElasticsearchParser.FunctionNameContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code functionName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void exitFunctionName(ElasticsearchParser.FunctionNameContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code lrName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void enterLrName(ElasticsearchParser.LrNameContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code lrName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void exitLrName(ElasticsearchParser.LrNameContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code groupByFunctionName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void enterGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code groupByFunctionName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void exitGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code binaryName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void enterBinaryName(ElasticsearchParser.BinaryNameContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code binaryName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 */
 	void exitBinaryName(ElasticsearchParser.BinaryNameContext ctx);
@@ -179,6 +179,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIdentity(ElasticsearchParser.IdentityContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#identifyClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifyClause(ElasticsearchParser.IdentifyClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#identifyClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifyClause(ElasticsearchParser.IdentifyClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code geo}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
@@ -653,6 +663,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLimitClause(ElasticsearchParser.LimitClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#batchClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterBatchClause(ElasticsearchParser.BatchClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#batchClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitBatchClause(ElasticsearchParser.BatchClauseContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#trackTotalClause}.
 	 * @param ctx the parse tree

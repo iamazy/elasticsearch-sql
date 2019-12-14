@@ -17,12 +17,12 @@ sql: (
 selectOperation:
 	SELECT fieldList FROM tableRef (COMMA tableRef)* ((whereClause functionScoreClause?) | disMaxClause)? routingClause? (groupByClause | aggregateByClause)? orderClause? limitClause? trackTotalClause?;
 
-descOperation: DESCRIBE tableRef (DIVIDE identity)?;
+descOperation: (DESCRIBE|DESC) tableRef (DIVIDE identity)?;
 
-deleteOperation: DELETE FROM tableRef (COMMA tableRef)* whereClause? routingClause? limitClause? ;
+deleteOperation: DELETE FROM tableRef (COMMA tableRef)* (identifyClause|whereClause)? routingClause? batchClause? limitClause? ;
 
 updateOperation:
-	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)* whereClause? routingClause? ;
+	UPDATE tableRef SET ID EQ identity (COMMA ID EQ identity)*  (identifyClause|whereClause)? routingClause? batchClause? limitClause?;
 
 insertOperation:
 	INSERT INTO tableRef (
@@ -30,26 +30,30 @@ insertOperation:
 	) VALUES LPAREN identity (COMMA identity)* RPAREN routingClause?;
 
 reindexOperation:
-	INSERT INTO tableRef SELECT fieldList FROM tableRef (COMMA tableRef)* whereClause? limitClause? ( REMOTE EQ LPAREN host = STRING ( COMMA user = STRING COMMA password = STRING )? RPAREN )?
+	INSERT INTO tableRef SELECT fieldList FROM tableRef (COMMA tableRef)* whereClause? batchClause? limitClause? ( REMOTE EQ LPAREN host = STRING ( COMMA user = STRING COMMA password = STRING )? RPAREN )?
 ;
 
 fieldList: STAR | ( nameOperand ( COMMA nameOperand)*);
 
 nameOperand: //^field,field
-	exclude = XOR? fieldName = name (
+	exclude = XOR? fieldName = nameClause (
 		AS alias = ID
 	)?;
 
-name:
-	LPAREN name RPAREN														# lrName
-	| DISTINCT fieldName = name												# distinctName
-	| left = name op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = name	# binaryName
+nameClause:
+	LPAREN nameClause RPAREN														# lrName
+	| DISTINCT fieldName = nameClause												# distinctName
+	| left = nameClause op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = nameClause	# binaryName
 	| functionName = ID params = collection									# functionName
 	| highlighter = HIGHLIGHTER? field = ID									# fieldName
 	| groupByFunctionClause                                                 # groupByFunctionName
 ;
 
 identity: ID | number = ( INT | FLOAT ) | str = STRING;
+
+identifyClause:
+    IDENTIFY BY id = STRING
+;
 
 expression:
 	LPAREN expression RPAREN															# lrExpr
@@ -60,13 +64,13 @@ expression:
 	| leftExpr = expression operator = (EQ | NE | AEQ | NAEQ | TEQ | NTEQ| MPPEQ| NMPPEQ) rightExpr = expression				# binary
 	| leftExpr = expression operator = AND rightExpr = expression				# binary
 	| leftExpr = expression operator = OR rightExpr = expression					# binary
-	| expr = name BETWEEN left = identity AND right = identity							# betweenAnd
+	| expr = nameClause BETWEEN left = identity AND right = identity							# betweenAnd
 	| rangeClause #betweenAnd
 	| leftExpr = expression operator = XOR rightExpr = expression							# binary
 	| leftExpr = expression operator = BWOR rightExpr = expression							# binary
 	| <assoc = right> expr = expression COND leftExpr = expression COLON rightExpr = expression	# conditional
 	| inClause																			# in
-	| name																				# nameExpr
+	| nameClause																				# nameExpr
 	| identity																			# primitive
 	| hasChildClause																	# join
 	| hasParentClause																	# join
@@ -79,7 +83,7 @@ expression:
 ;
 
 rangeClause:
-    field = name RANGED IN (LPAREN|LBRACKET) left = rangeItemClause COMMA right = rangeItemClause (RPAREN|RBRACKET)
+    field = nameClause RANGED IN (LPAREN|LBRACKET) left = rangeItemClause COMMA right = rangeItemClause (RPAREN|RBRACKET)
 ;
 
 rangeItemClause:
@@ -88,15 +92,15 @@ rangeItemClause:
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
 
-likeClause: field = name not = NOT? funName=(FUZZY|PREFIX|REGEXP|WILDCARD)* LIKE pattern = STRING;
+likeClause: field = nameClause not = NOT? funName=(FUZZY|PREFIX|REGEXP|WILDCARD)* LIKE pattern = STRING;
 
 notClause:
     NOT expression
 ;
 
-isClause: field = name IS not = NOT? NULL;
+isClause: field = nameClause IS not = NOT? NULL;
 
-inClause: left = name NOT? IN right = inRightOperandList;
+inClause: left = nameClause NOT? IN right = inRightOperandList;
 
 inRightOperandList:
 	inRightOperand
@@ -119,14 +123,14 @@ fullTextClause: queryStringClause|multiMatchClause;
 queryStringClause: QUERY BY STRING;
 
 multiMatchClause:
-	LPAREN name (COMMA name)*  RPAREN AEQ value = STRING
+	LPAREN nameClause (COMMA nameClause)*  RPAREN AEQ value = STRING
 ;
 
 hasParentClause:
-	HAS_PARENT LPAREN type = name COMMA query = expression RPAREN;
+	HAS_PARENT LPAREN type = nameClause COMMA query = expression RPAREN;
 
 hasChildClause:
-	HAS_CHILD LPAREN type = name COMMA query = expression RPAREN;
+	HAS_CHILD LPAREN type = nameClause COMMA query = expression RPAREN;
 
 nestedClause:
 	LBRACKET nestedPath = ID COMMA query = expression RBRACKET;
@@ -167,9 +171,11 @@ routingClause: ROUTING BY STRING ( COMMA STRING)*;
 
 orderClause: ORDER BY order ( COMMA order)*;
 
-order: name (ASC|DESC)?;
+order: nameClause (ASC|DESC)?;
 
 limitClause: LIMIT ( offset = INT COMMA)? size = INT;
+
+batchClause: BATCH size = INT;
 
 trackTotalClause:
     TRACK TOTAL

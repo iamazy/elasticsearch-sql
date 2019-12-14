@@ -8,11 +8,15 @@ import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.action.admin.indices.mapping.get.GetFieldMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ReindexRequest;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.collapse.CollapseBuilder;
@@ -55,6 +59,11 @@ public class ElasticSqlParseResult {
     private transient List<AggregationBuilder> groupBy = new ArrayList<>(0);
     private transient SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
     private transient ReindexRequest reindexRequest;
+    private transient IndexRequest indexRequest;
+    private transient UpdateRequest updateRequest;
+    private transient UpdateByQueryRequest updateByQueryRequest;
+    private transient DeleteRequest deleteRequest;
+    private transient DeleteByQueryRequest deleteByQueryRequest;
 
     private GetMappingsRequest mappingsRequest;
     private GetFieldMappingsRequest fieldMappingsRequest;
@@ -140,6 +149,46 @@ public class ElasticSqlParseResult {
         return this;
     }
 
+    public IndexRequest getIndexRequest() {
+        return indexRequest;
+    }
+
+    public void setIndexRequest(IndexRequest indexRequest) {
+        this.indexRequest = indexRequest;
+    }
+
+    public UpdateByQueryRequest getUpdateByQueryRequest() {
+        return updateByQueryRequest;
+    }
+
+    public void setUpdateByQueryRequest(UpdateByQueryRequest updateByQueryRequest) {
+        this.updateByQueryRequest = updateByQueryRequest;
+    }
+
+    public UpdateRequest getUpdateRequest() {
+        return updateRequest;
+    }
+
+    public void setUpdateRequest(UpdateRequest updateRequest) {
+        this.updateRequest = updateRequest;
+    }
+
+    public DeleteByQueryRequest getDeleteByQueryRequest() {
+        return deleteByQueryRequest;
+    }
+
+    public void setDeleteByQueryRequest(DeleteByQueryRequest deleteByQueryRequest) {
+        this.deleteByQueryRequest = deleteByQueryRequest;
+    }
+
+    public DeleteRequest getDeleteRequest() {
+        return deleteRequest;
+    }
+
+    public void setDeleteRequest(DeleteRequest deleteRequest) {
+        this.deleteRequest = deleteRequest;
+    }
+
     public List<SortBuilder> getOrderBy() {
         return orderBy;
     }
@@ -175,21 +224,6 @@ public class ElasticSqlParseResult {
     }
 
     //endregion
-
-    public DeleteByQueryRequest toDelRequest() {
-        DeleteByQueryRequest deleteByQueryRequest = new DeleteByQueryRequest(toRequest().indices());
-        deleteByQueryRequest.setQuery(searchSourceBuilder.query());
-        if (CollectionUtils.isNotEmpty(routingBy)) {
-            deleteByQueryRequest.setRouting(routingBy.get(0));
-        }
-
-        if (size < 0) {
-            deleteByQueryRequest.setMaxDocs(15);
-        } else {
-            deleteByQueryRequest.setMaxDocs(size);
-        }
-        return deleteByQueryRequest;
-    }
 
     public SearchRequest toRequest() {
         SearchRequest searchRequest = new SearchRequest();

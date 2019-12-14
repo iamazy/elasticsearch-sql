@@ -2,8 +2,12 @@ package io.github.iamazy.elasticsearch.dsl.plugin;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import io.github.iamazy.elasticsearch.dsl.sql.ElasticSql2DslParser;
+import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.ActionFuture;
+import org.elasticsearch.action.index.IndexAction;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.node.NodeClient;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
@@ -14,6 +18,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.index.reindex.ReindexAction;
+import org.elasticsearch.index.reindex.UpdateByQueryAction;
 import org.elasticsearch.rest.*;
 import org.elasticsearch.tasks.LoggingTaskListener;
 import org.elasticsearch.tasks.Task;
@@ -69,14 +74,10 @@ public class RestSqlAction extends BaseRestHandler {
 
 
     private RestChannelConsumer explain(ElasticSqlParseResult parseResult,XContentBuilder builder){
-        switch (parseResult.getSqlOperation()) {
-            case SELECT: {
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
-            }
-            default: {
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support explaining desc,delete,update syntax yet!!!\"\n}"));
-            }
+        if (parseResult.getSqlOperation() == SqlOperation.SELECT) {
+            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
         }
+        return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support explaining desc,delete,update syntax yet!!!\"\n}"));
     }
 
     private RestChannelConsumer execute(ElasticSqlParseResult parseResult, XContentBuilder builder, NodeClient nodeClient) {
@@ -95,13 +96,22 @@ public class RestSqlAction extends BaseRestHandler {
             case REINDEX: {
                 return sendTask(nodeClient.getLocalNodeId(), nodeClient.executeLocally(ReindexAction.INSTANCE, parseResult.getReindexRequest(), LoggingTaskListener.instance()));
             }
-            case DELETE: {
-                BulkByScrollResponse bulkByScrollResponse = nodeClient.execute(DeleteByQueryAction.INSTANCE, parseResult.toDelRequest()).actionGet();
+            case DELETE_BY_QUERY: {
+                BulkByScrollResponse bulkByScrollResponse = nodeClient.execute(DeleteByQueryAction.INSTANCE, parseResult.getDeleteByQueryRequest()).actionGet();
                 return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, XContentType.JSON.mediaType(), "{\n\t\"delete doc count\": " + bulkByScrollResponse.getDeleted() + "\n}"));
             }
-            case INSERT:
-            case UPDATE: {
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support yet!!!\"\n}"));
+            case DELETE:{
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,builder.value(nodeClient.delete(parseResult.getDeleteRequest()).actionGet())));
+            }
+            case INSERT:{
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,builder.value(nodeClient.index(parseResult.getIndexRequest()).actionGet())));
+            }
+            case UPDATE:{
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,builder.value(nodeClient.update(parseResult.getUpdateRequest()).actionGet())));
+            }
+            case UPDATE_BY_QUERY: {
+                BulkByScrollResponse bulkByScrollResponse = nodeClient.execute(UpdateByQueryAction.INSTANCE, parseResult.getUpdateByQueryRequest()).actionGet();
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, XContentType.JSON.mediaType(), "{\n\t\"update doc count\": " + bulkByScrollResponse.getUpdated() + "\n}"));
             }
             default:
             case SELECT: {

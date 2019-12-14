@@ -40,20 +40,22 @@ public class ReindexQueryParser implements QueryParser {
             }
             ReindexRequest reindexRequest = new ReindexRequest();
             if (reindexOperationContext.fieldList().nameOperand().size() > 0) {
-                buildScript(reindexOperationContext,reindexRequest);
+                buildScript(reindexOperationContext, reindexRequest);
             }
             if (reindexOperationContext.whereClause() != null) {
                 BoolExpressionParser boolExpressionParser = new BoolExpressionParser();
                 QueryBuilder queryBuilder = boolExpressionParser.parseBoolQueryExpr(reindexOperationContext.whereClause().expression());
                 if (reindexOperationContext.host != null) {
-                    reindexRequest.setRemoteInfo(buildRemoteInfo(reindexOperationContext,queryBuilder.toString()));
+                    reindexRequest.setRemoteInfo(buildRemoteInfo(reindexOperationContext, queryBuilder.toString()));
                 } else {
                     reindexRequest.setSourceQuery(queryBuilder);
                 }
             }
+            if (reindexOperationContext.batchClause() != null) {
+                reindexRequest.setSourceBatchSize(Integer.parseInt(reindexOperationContext.batchClause().size.getText()));
+            }
             if (reindexOperationContext.limitClause() != null) {
-                int size = Integer.parseInt(reindexOperationContext.limitClause().size.getText());
-                reindexRequest.setMaxDocs(size);
+                reindexRequest.setMaxDocs(Integer.parseInt(reindexOperationContext.limitClause().size.getText()));
             }
             reindexRequest.setDestIndex(destIndex);
             reindexRequest.setSourceIndices(sourceIndices);
@@ -70,7 +72,7 @@ public class ReindexQueryParser implements QueryParser {
     }
 
 
-    private void buildScript(ElasticsearchParser.ReindexOperationContext reindexOperationContext,ReindexRequest reindexRequest){
+    private void buildScript(ElasticsearchParser.ReindexOperationContext reindexOperationContext, ReindexRequest reindexRequest) {
         StringBuilder script = new StringBuilder();
         for (ElasticsearchParser.NameOperandContext nameOperandContext : reindexOperationContext.fieldList().nameOperand()) {
             if (nameOperandContext.exclude != null) {
@@ -84,11 +86,12 @@ public class ReindexQueryParser implements QueryParser {
 
     /**
      * get remote es clusters info
+     *
      * @param reindexOperationContext
-     * @param query elasticsearch query dsl
+     * @param query                   elasticsearch query dsl
      * @return RemoteInfo
      */
-    private RemoteInfo buildRemoteInfo(ElasticsearchParser.ReindexOperationContext reindexOperationContext,String query){
+    private RemoteInfo buildRemoteInfo(ElasticsearchParser.ReindexOperationContext reindexOperationContext, String query) {
         String[] hostInfo = reindexOperationContext.STRING(0).getText().split("://|:");
         String user = null;
         String password = null;

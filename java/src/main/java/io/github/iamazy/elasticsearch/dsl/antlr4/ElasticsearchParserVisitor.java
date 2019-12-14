@@ -66,42 +66,42 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	T visitNameOperand(ElasticsearchParser.NameOperandContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code fieldName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitFieldName(ElasticsearchParser.FieldNameContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code distinctName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitDistinctName(ElasticsearchParser.DistinctNameContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code functionName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitFunctionName(ElasticsearchParser.FunctionNameContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code lrName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLrName(ElasticsearchParser.LrNameContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code groupByFunctionName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code binaryName}
-	 * labeled alternative in {@link ElasticsearchParser#name}.
+	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -112,6 +112,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIdentity(ElasticsearchParser.IdentityContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#identifyClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentifyClause(ElasticsearchParser.IdentifyClauseContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code geo}
 	 * labeled alternative in {@link ElasticsearchParser#expression}.
@@ -393,6 +399,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLimitClause(ElasticsearchParser.LimitClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#batchClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBatchClause(ElasticsearchParser.BatchClauseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#trackTotalClause}.
 	 * @param ctx the parse tree
