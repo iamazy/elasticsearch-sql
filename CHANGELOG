@@ -5,3 +5,4 @@
 2019-09-08: add geo polygon support and update geo bounding box syntax
 2019-09-10: add dis max support
 2019-09-23: add geo shape support
+2019-12-14: add insert/update support
