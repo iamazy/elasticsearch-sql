@@ -51,8 +51,7 @@ public class FlatMapUtils {
             if (map.containsKey(firstItem)) {
                 flatPut(restItems, value, (Map<String, Object>) map.get(firstItem));
             } else {
-                Map<String, Object> temp = new HashMap<>(0);
-                map.put(firstItem, temp);
+                map.put(firstItem, new HashMap<>(0));
                 flatPut(restItems, value, (Map<String, Object>) map.get(firstItem));
             }
         } else {
