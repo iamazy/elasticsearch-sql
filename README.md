@@ -180,11 +180,11 @@ POST _isql/_explain
 - [x] [SQL Desc](https://github.com/iamazy/elasticsearch-sql/wiki/%E6%8F%8F%E8%BF%B0%E7%B4%A2%E5%BC%95-%E5%AD%97%E6%AE%B5%E7%BB%93%E6%9E%84)
 - [x] [ES Reindex](https://github.com/iamazy/elasticsearch-sql/wiki/Reindex)
 - [x] [ES Track Total Hits](https://github.com/iamazy/elasticsearch-sql/wiki/%E5%88%86%E9%A1%B5)
-- [x] [SQL Update]()
-- [x] [ES Update By Query]()
-- [x] [SQL Delete]()
-- [x] [ES DeleteByQuery](https://github.com/iamazy/elasticsearch-sql/wiki/DeleteByQuery)
-- [x] [SQL Insert]()
+- [x] [SQL Update](https://github.com/iamazy/elasticsearch-sql/wiki/Update)
+- [x] [ES Update By Query](https://github.com/iamazy/elasticsearch-sql/wiki/Update)
+- [x] [SQL Delete](https://github.com/iamazy/elasticsearch-sql/wiki/Delete)
+- [x] [ES DeleteByQuery](https://github.com/iamazy/elasticsearch-sql/wiki/Delete)
+- [x] [SQL Insert](https://github.com/iamazy/elasticsearch-sql/wiki/Insert)
 
 #### Todo
 - [ ] SQL Having
