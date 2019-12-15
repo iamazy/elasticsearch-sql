@@ -44,8 +44,10 @@ public class InsertQueryParser implements QueryParser {
                         }
                     }
                     FlatMapUtils.flatPut(insertOperationContext.identity(i).ID().getText(), list, source);
+                } else if (identityContext.STRING() != null) {
+                    FlatMapUtils.flatPut(insertOperationContext.identity(i).ID().getText(), StringManager.removeStringSymbol(identityContext.getText()), source);
                 } else {
-                    FlatMapUtils.flatPut(insertOperationContext.identity(i).ID().getText(), StringManager.removeStringSymbol(insertOperationContext.identity(i + size / 2).getText()), source);
+                    FlatMapUtils.flatPut(insertOperationContext.identity(i).ID().getText(), identityContext.getText(), source);
                 }
             }
             IndexRequest indexRequest = new IndexRequest(indexName);
