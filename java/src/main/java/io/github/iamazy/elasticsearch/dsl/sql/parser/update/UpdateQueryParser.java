@@ -48,8 +48,10 @@ public class UpdateQueryParser implements QueryParser {
         for (int i = 0; i < size; i++) {
             if (updateOperationContext.identity(i).identityList() != null) {
                 FlatMapUtils.flatPut(updateOperationContext.ID(i).getText(), parseIdentityList(updateOperationContext.identity(i).identityList().identity()), doc);
-            } else {
+            } else if (updateOperationContext.identity(i).STRING() != null) {
                 FlatMapUtils.flatPut(updateOperationContext.ID(i).getText(), StringManager.removeStringSymbol(updateOperationContext.identity(i).getText()), doc);
+            } else {
+                FlatMapUtils.flatPut(updateOperationContext.ID(i).getText(), updateOperationContext.identity(i).getText(), doc);
             }
         }
         updateRequest.doc(doc);
