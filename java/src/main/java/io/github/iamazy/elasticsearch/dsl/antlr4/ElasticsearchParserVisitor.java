@@ -214,6 +214,12 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCollection(ElasticsearchParser.CollectionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ElasticsearchParser#identityList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentityList(ElasticsearchParser.IdentityListContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ElasticsearchParser#likeClause}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

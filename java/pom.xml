@@ -6,14 +6,14 @@
 
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
-    <version>${elasticsearch.version}.1</version>
+    <version>7.5.0</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
     <url>https://github.com/iamazy/elasticsearch-sql</url>
 
     <properties>
         <elasticsearch.version>7.5.0</elasticsearch.version>
-        <java.version>12</java.version>
+        <java.version>13</java.version>
         <antlr4.version>4.7.2</antlr4.version>
         <jackson.version>2.10.0</jackson.version>
         <guava.version>28.1-jre</guava.version>
@@ -202,15 +202,6 @@
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${maven.compiler.target}</source>
-                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>

@@ -352,6 +352,16 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 */
 	void exitCollection(ElasticsearchParser.CollectionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ElasticsearchParser#identityList}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentityList(ElasticsearchParser.IdentityListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ElasticsearchParser#identityList}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentityList(ElasticsearchParser.IdentityListContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link ElasticsearchParser#likeClause}.
 	 * @param ctx the parse tree
 	 */

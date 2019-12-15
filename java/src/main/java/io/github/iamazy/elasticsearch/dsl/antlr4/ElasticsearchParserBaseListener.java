@@ -388,6 +388,18 @@ public class ElasticsearchParserBaseListener implements ElasticsearchParserListe
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIdentityList(ElasticsearchParser.IdentityListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIdentityList(ElasticsearchParser.IdentityListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLikeClause(ElasticsearchParser.LikeClauseContext ctx) { }
 	/**
 	 * {@inheritDoc}

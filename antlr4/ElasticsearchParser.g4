@@ -49,7 +49,7 @@ nameClause:
 	| groupByFunctionClause                                                 # groupByFunctionName
 ;
 
-identity: ID | number = ( INT | FLOAT ) | str = STRING;
+identity: ID | number = ( INT | FLOAT ) | str = STRING | list = identityList;
 
 identifyClause:
     IDENTIFY BY id = STRING
@@ -91,6 +91,8 @@ rangeItemClause:
 ;
 
 collection: LPAREN identity? ( COMMA identity)* RPAREN;
+
+identityList: LBRACKET identity (COMMA identity)* RBRACKET;
 
 likeClause: field = nameClause not = NOT? funName=(FUZZY|PREFIX|REGEXP|WILDCARD)* LIKE pattern = STRING;
 
@@ -164,7 +166,7 @@ subAggregationClause: GT LPAREN aggregationClause RPAREN;
 aggregateItemClause: ID collection ((COMMA aggregationClause)| subAggregationClause)*;
 
 //compositeAggregationClause:
-//    LIMIT INT AFTER ID EQ identity (COMMA ID EQ identity)*
+//    AFTER ID EQ identity (COMMA ID EQ identity)*
 //;
 
 routingClause: ROUTING BY STRING ( COMMA STRING)*;

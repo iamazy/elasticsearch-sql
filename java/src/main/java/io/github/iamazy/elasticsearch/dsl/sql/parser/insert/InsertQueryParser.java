@@ -9,7 +9,9 @@ import io.github.iamazy.elasticsearch.dsl.utils.FlatMapUtils;
 import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.elasticsearch.action.index.IndexRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,19 +30,34 @@ public class InsertQueryParser implements QueryParser {
             int size = insertOperationContext.identity().size();
             Map<String, Object> source = new HashMap<>(0);
             for (int i = 0; i < size / 2; i++) {
-                checkFieldsAndValues(insertOperationContext.identity(i), insertOperationContext.identity(i + size / 2));
-                FlatMapUtils.flatPut(insertOperationContext.identity(i).ID().getText(), StringManager.removeStringSymbol(insertOperationContext.identity(i+size/2).getText()),source);
+                ElasticsearchParser.IdentityContext identityContext = insertOperationContext.identity(i + size / 2);
+                checkFieldsAndValues(insertOperationContext.identity(i), identityContext);
+                if (identityContext.identityList() != null) {
+                    List<Object> list = new ArrayList<>(0);
+                    for (ElasticsearchParser.IdentityContext identity : identityContext.identityList().identity()) {
+                        if (identity.identityList() != null) {
+                            throw new ElasticSql2DslException("[syntax error] not support insert nested array object");
+                        } else if (identity.STRING() != null) {
+                            list.add(StringManager.removeStringSymbol(identity.getText()));
+                        } else {
+                            list.add(identity.getText());
+                        }
+                    }
+                    FlatMapUtils.flatPut(insertOperationContext.identity(i).ID().getText(), list, source);
+                } else {
+                    FlatMapUtils.flatPut(insertOperationContext.identity(i).ID().getText(), StringManager.removeStringSymbol(insertOperationContext.identity(i + size / 2).getText()), source);
+                }
             }
-            IndexRequest indexRequest=new IndexRequest(indexName);
-            if(source.containsKey("_id")){
+            IndexRequest indexRequest = new IndexRequest(indexName);
+            if (source.containsKey("_id")) {
                 indexRequest.id(source.get("_id").toString());
                 source.remove("_id");
             }
-            if(source.containsKey("_routing")){
+            if (source.containsKey("_routing")) {
                 indexRequest.routing(source.get("_routing").toString());
                 source.remove("_routing");
             }
-            if(insertOperationContext.routingClause()!=null){
+            if (insertOperationContext.routingClause() != null) {
                 indexRequest.routing(StringManager.removeStringSymbol(insertOperationContext.routingClause().STRING(0).getText()));
             }
             indexRequest.source(source);

@@ -27,12 +27,12 @@ public class QuerySelectFieldsParser implements QueryParser {
                 parseNotGroupByClause(dslContext);
             } else {
                 ElasticsearchParser.GroupByClauseContext groupByClauseContext = dslContext.getSqlContext().selectOperation().groupByClause();
-                parseGroupByClause(groupByClauseContext,dslContext);
+                parseGroupByClause(groupByClauseContext, dslContext);
             }
         }
     }
 
-    private void parseNotGroupByClause(ElasticDslContext dslContext){
+    private void parseNotGroupByClause(ElasticDslContext dslContext) {
         ElasticsearchParser.SelectOperationContext selectOperationContext = dslContext.getSqlContext().selectOperation();
         ElasticsearchParser.FieldListContext fieldListContext = selectOperationContext.fieldList();
         if (fieldListContext.nameOperand().size() > 0) {
@@ -80,13 +80,13 @@ public class QuerySelectFieldsParser implements QueryParser {
         }
     }
 
-    private void parseGroupByClause(ElasticsearchParser.GroupByClauseContext groupByClauseContext,ElasticDslContext dslContext){
+    private void parseGroupByClause(ElasticsearchParser.GroupByClauseContext groupByClauseContext, ElasticDslContext dslContext) {
         //only return aggregation data and not care about whether fields are included,excluded or highlighted
         dslContext.getParseResult().setSize(0);
         List<String> groupByFields = groupByClauseContext.ID().stream().map(TerminalNode::getText).collect(Collectors.toList());
         ElasticsearchParser.FieldListContext fieldListContext = dslContext.getSqlContext().selectOperation().fieldList();
-        GroupByQueryParser groupByQueryParser=new GroupByQueryParser();
-        Map<Integer, Set<AggregationBuilder>> aggregationMap=new HashMap<>(0);
+        GroupByQueryParser groupByQueryParser = new GroupByQueryParser();
+        Map<Integer, Set<AggregationBuilder>> aggregationMap = new HashMap<>(0);
         for (ElasticsearchParser.NameOperandContext nameOperandContext : fieldListContext.nameOperand()) {
             if (nameOperandContext.fieldName instanceof ElasticsearchParser.FieldNameContext) {
                 ElasticsearchParser.FieldNameContext fieldNameContext = (ElasticsearchParser.FieldNameContext) nameOperandContext.fieldName;
@@ -98,10 +98,10 @@ public class QuerySelectFieldsParser implements QueryParser {
                 ElasticsearchParser.GroupByFunctionClauseContext groupByFunctionClauseContext = groupByFunctionNameContext.groupByFunctionClause();
                 if (groupByFunctionClauseContext.count() != null) {
                     ElasticsearchParser.CountContext countContext = groupByFunctionClauseContext.count();
-                    String field=countContext.field.getText();
+                    String field = countContext.field.getText();
                     checkGroupByField(countContext.field.getText(), groupByFields);
-                    int idx=groupByFields.indexOf(field);
-                    if(countContext.DISTINCT()!=null) {
+                    int idx = groupByFields.indexOf(field);
+                    if (countContext.DISTINCT() != null) {
                         if (aggregationMap.containsKey(idx)) {
                             aggregationMap.get(idx).add(groupByQueryParser.parse("count", field, true));
                         } else {
@@ -111,35 +111,34 @@ public class QuerySelectFieldsParser implements QueryParser {
                         }
                     }
                 }
-            } else if(nameOperandContext.fieldName instanceof ElasticsearchParser.FunctionNameContext){
-                ElasticsearchParser.FunctionNameContext functionNameContext=(ElasticsearchParser.FunctionNameContext)nameOperandContext.fieldName;
+            } else if (nameOperandContext.fieldName instanceof ElasticsearchParser.FunctionNameContext) {
+                ElasticsearchParser.FunctionNameContext functionNameContext = (ElasticsearchParser.FunctionNameContext) nameOperandContext.fieldName;
                 //only support one params groupBy function at the moment
-                String field=functionNameContext.params.identity(0).ID().getText();
+                String field = functionNameContext.params.identity(0).ID().getText();
                 checkGroupByField(field, groupByFields);
-                int idx=groupByFields.indexOf(field);
+                int idx = groupByFields.indexOf(field);
                 //insert subAggregation
-                if(aggregationMap.containsKey(idx)){
-                    aggregationMap.get(idx).add(groupByQueryParser.parse(functionNameContext.functionName.getText(),field));
-                }else{
-                    Set<AggregationBuilder> aggregationSet=new HashSet<>(0);
-                    aggregationSet.add(groupByQueryParser.parse(functionNameContext.functionName.getText(),field));
-                    aggregationMap.put(idx,aggregationSet);
+                if (aggregationMap.containsKey(idx)) {
+                    aggregationMap.get(idx).add(groupByQueryParser.parse(functionNameContext.functionName.getText(), field));
+                } else {
+                    Set<AggregationBuilder> aggregationSet = new HashSet<>(0);
+                    aggregationSet.add(groupByQueryParser.parse(functionNameContext.functionName.getText(), field));
+                    aggregationMap.put(idx, aggregationSet);
                 }
-            }
-            else {
+            } else {
                 throw new ElasticSql2DslException("only support field or groupBy function in groupBy syntax");
             }
         }
         AggregationBuilder aggregationBuilder = null;
         for (int i = groupByFields.size() - 1; i >= 0; i--) {
-            if(aggregationBuilder==null) {
+            if (aggregationBuilder == null) {
                 aggregationBuilder = AggregationBuilders.terms("count_" + groupByFields.get(i)).field(groupByFields.get(i));
-                buildGroupBy(i,aggregationMap,aggregationBuilder);
-            }else{
-                AggregationBuilder parentAggregationBuilder=AggregationBuilders.terms("count_"+groupByFields.get(i)).field(groupByFields.get(i));
+                buildGroupBy(i, aggregationMap, aggregationBuilder);
+            } else {
+                AggregationBuilder parentAggregationBuilder = AggregationBuilders.terms("count_" + groupByFields.get(i)).field(groupByFields.get(i));
                 parentAggregationBuilder.subAggregation(aggregationBuilder);
-                buildGroupBy(i,aggregationMap,parentAggregationBuilder);
-                aggregationBuilder=parentAggregationBuilder;
+                buildGroupBy(i, aggregationMap, parentAggregationBuilder);
+                aggregationBuilder = parentAggregationBuilder;
             }
         }
 
@@ -153,8 +152,8 @@ public class QuerySelectFieldsParser implements QueryParser {
         }
     }
 
-    private void buildGroupBy(int idx,Map<Integer,Set<AggregationBuilder>> aggregationMap,AggregationBuilder aggregationBuilder){
-        if(aggregationMap.containsKey(idx)) {
+    private void buildGroupBy(int idx, Map<Integer, Set<AggregationBuilder>> aggregationMap, AggregationBuilder aggregationBuilder) {
+        if (aggregationMap.containsKey(idx)) {
             for (AggregationBuilder aggregation : aggregationMap.get(idx)) {
                 aggregationBuilder.subAggregation(aggregation);
             }

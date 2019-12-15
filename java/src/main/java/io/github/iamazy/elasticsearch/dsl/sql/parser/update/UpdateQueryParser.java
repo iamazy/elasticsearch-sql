@@ -2,6 +2,7 @@ package io.github.iamazy.elasticsearch.dsl.sql.parser.update;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
+import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.BoolExpressionParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.QueryParser;
@@ -13,9 +14,7 @@ import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author iamazy
@@ -25,6 +24,7 @@ import java.util.Map;
 public class UpdateQueryParser implements QueryParser {
 
     private static final String UPDATE_PREFIX = "ctx._source.";
+    private static final String PARAM_PREFIX = "param";
 
     @Override
     public void parse(ElasticDslContext dslContext) {
@@ -46,10 +46,10 @@ public class UpdateQueryParser implements QueryParser {
         int size = updateOperationContext.ID().size();
         Map<String, Object> doc = new HashMap<>(0);
         for (int i = 0; i < size; i++) {
-            if (updateOperationContext.identity(i).STRING() != null) {
-                FlatMapUtils.flatPut(updateOperationContext.ID(i).getText(), StringManager.removeStringSymbol(updateOperationContext.identity(i).getText()), doc);
+            if (updateOperationContext.identity(i).identityList() != null) {
+                FlatMapUtils.flatPut(updateOperationContext.ID(i).getText(), parseIdentityList(updateOperationContext.identity(i).identityList().identity()), doc);
             } else {
-                FlatMapUtils.flatPut(updateOperationContext.ID(i).getText(), updateOperationContext.identity(i).getText(), doc);
+                FlatMapUtils.flatPut(updateOperationContext.ID(i).getText(), StringManager.removeStringSymbol(updateOperationContext.identity(i).getText()), doc);
             }
         }
         updateRequest.doc(doc);
@@ -66,16 +66,20 @@ public class UpdateQueryParser implements QueryParser {
         UpdateByQueryRequest updateByQueryRequest = new UpdateByQueryRequest(indexName);
         int size = updateOperationContext.ID().size();
         StringBuilder builder = new StringBuilder();
+        Map<String, Object> params = new HashMap<>(0);
         for (int i = 0; i < size; i++) {
             builder.append(UPDATE_PREFIX).append(updateOperationContext.ID(i).getText()).append('=');
-            if (updateOperationContext.identity(i).STRING() != null) {
+            if (updateOperationContext.identity(i).identityList() != null) {
+                builder.append("params.").append(PARAM_PREFIX).append(params.size());
+                params.put(PARAM_PREFIX + params.size(), parseIdentityList(updateOperationContext.identity(i).identityList().identity()));
+            } else if (updateOperationContext.identity(i).STRING() != null) {
                 builder.append('\'').append(StringManager.removeStringSymbol(updateOperationContext.identity(i).STRING().getText())).append('\'');
             } else {
                 builder.append(updateOperationContext.identity(i).number.getText());
             }
             builder.append(';');
         }
-        updateByQueryRequest.setScript(new Script(ScriptType.INLINE, "painless", builder.toString(), Collections.emptyMap()));
+        updateByQueryRequest.setScript(new Script(ScriptType.INLINE, "painless", builder.toString(), params));
         if (updateOperationContext.routingClause() != null) {
             updateByQueryRequest.setRouting(StringManager.removeStringSymbol(updateOperationContext.routingClause().STRING(0).getText()));
         }
@@ -92,6 +96,21 @@ public class UpdateQueryParser implements QueryParser {
             updateByQueryRequest.setMaxDocs(Integer.parseInt(updateOperationContext.limitClause().size.getText()));
         }
         dslContext.getParseResult().setUpdateByQueryRequest(updateByQueryRequest);
+    }
+
+    private List<Object> parseIdentityList(List<ElasticsearchParser.IdentityContext> identityContexts) {
+        List<Object> list = new ArrayList<>(0);
+        for (ElasticsearchParser.IdentityContext identityContext : identityContexts) {
+            if (identityContext.identityList() != null) {
+                throw new ElasticSql2DslException("[syntax error] not support update nested array object");
+            }
+            if (identityContext.STRING() != null) {
+                list.add(StringManager.removeStringSymbol(identityContext.getText()));
+            } else {
+                list.add(identityContext.getText());
+            }
+        }
+        return list;
     }
 }
 
