@@ -5,9 +5,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.ElasticSql2DslParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.action.ActionFuture;
-import org.elasticsearch.action.index.IndexAction;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.node.NodeClient;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
@@ -63,7 +60,7 @@ public class RestSqlAction extends BaseRestHandler {
             ElasticSqlParseResult parseResult = sql2DslParser.parse(sql);
             XContentBuilder builder = XContentFactory.jsonBuilder().prettyPrint();
             if (restRequest.path().endsWith("/_explain")) {
-                return explain(parseResult,builder);
+                return explain(parseResult, builder);
             } else {
                 return execute(parseResult, builder, nodeClient);
             }
@@ -73,7 +70,7 @@ public class RestSqlAction extends BaseRestHandler {
     }
 
 
-    private RestChannelConsumer explain(ElasticSqlParseResult parseResult,XContentBuilder builder){
+    private RestChannelConsumer explain(ElasticSqlParseResult parseResult, XContentBuilder builder) {
         if (parseResult.getSqlOperation() == SqlOperation.SELECT) {
             return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
         }
@@ -100,14 +97,14 @@ public class RestSqlAction extends BaseRestHandler {
                 BulkByScrollResponse bulkByScrollResponse = nodeClient.execute(DeleteByQueryAction.INSTANCE, parseResult.getDeleteByQueryRequest()).actionGet();
                 return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, XContentType.JSON.mediaType(), "{\n\t\"delete doc count\": " + bulkByScrollResponse.getDeleted() + "\n}"));
             }
-            case DELETE:{
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,builder.value(nodeClient.delete(parseResult.getDeleteRequest()).actionGet())));
+            case DELETE: {
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.delete(parseResult.getDeleteRequest()).actionGet())));
             }
-            case INSERT:{
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,builder.value(nodeClient.index(parseResult.getIndexRequest()).actionGet())));
+            case INSERT: {
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.index(parseResult.getIndexRequest()).actionGet())));
             }
-            case UPDATE:{
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK,builder.value(nodeClient.update(parseResult.getUpdateRequest()).actionGet())));
+            case UPDATE: {
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.update(parseResult.getUpdateRequest()).actionGet())));
             }
             case UPDATE_BY_QUERY: {
                 BulkByScrollResponse bulkByScrollResponse = nodeClient.execute(UpdateByQueryAction.INSTANCE, parseResult.getUpdateByQueryRequest()).actionGet();
