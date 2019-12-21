@@ -11,16 +11,16 @@ import java.util.Properties;
  **/
 public abstract class AbstractDriverBasedDataSource extends AbstractDataSource {
 
-    private String uri;
+    private String url;
 
     private Properties properties;
 
-    public String getUri() {
-        return uri;
+    public String getUrl() {
+        return url;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Properties getProperties() {

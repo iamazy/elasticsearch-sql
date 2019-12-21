@@ -6,8 +6,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.elasticsearch.index.query.QueryBuilder;
 
-import java.util.HashSet;
-
 /**
  * @author iamazy
  * @date 2019/7/29

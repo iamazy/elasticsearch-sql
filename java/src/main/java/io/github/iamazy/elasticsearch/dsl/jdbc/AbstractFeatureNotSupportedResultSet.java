@@ -861,5 +861,23 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
         throw new SQLFeatureNotSupportedException("getNString");
     }
 
+    @Override
+    public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
+        throw new SQLFeatureNotSupportedException("getBigDecimal");
+    }
 
+    @Override
+    public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
+        throw new SQLFeatureNotSupportedException("getBigDecimal");
+    }
+
+    @Override
+    public InputStream getUnicodeStream(int columnIndex) throws SQLException {
+        throw new SQLFeatureNotSupportedException("getUnicodeStream");
+    }
+
+    @Override
+    public InputStream getUnicodeStream(String columnLabel) throws SQLException {
+        throw new SQLFeatureNotSupportedException("getUnicodeStream");
+    }
 }

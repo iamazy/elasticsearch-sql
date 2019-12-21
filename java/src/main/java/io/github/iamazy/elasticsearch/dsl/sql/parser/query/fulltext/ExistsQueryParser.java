@@ -11,6 +11,8 @@ import org.elasticsearch.index.query.QueryBuilders;
  * @descrition
  **/
 public class ExistsQueryParser implements ExpressionQueryParser<ElasticsearchParser.IsClauseContext> {
+
+
     @Override
     public AtomicQuery parse(ElasticsearchParser.IsClauseContext expression) {
         String field = expression.field.getText();

@@ -70,9 +70,8 @@ public class ElasticSqlParseResult {
 
 
     //region Getter and Setter
-    public ElasticSqlParseResult setSqlOperation(SqlOperation sqlOperation) {
+    public void setSqlOperation(SqlOperation sqlOperation) {
         this.sqlOperation = sqlOperation;
-        return this;
     }
 
     public SqlOperation getSqlOperation() {
@@ -101,18 +100,16 @@ public class ElasticSqlParseResult {
         return indices;
     }
 
-    public ElasticSqlParseResult setIndices(List<String> indices) {
+    public void setIndices(List<String> indices) {
         this.indices = indices;
-        return this;
     }
 
     public boolean trackTotalHits() {
         return trackTotalHits;
     }
 
-    public ElasticSqlParseResult trackTotalHits(boolean trackTotalHits) {
+    public void trackTotalHits(boolean trackTotalHits) {
         this.trackTotalHits = trackTotalHits;
-        return this;
     }
 
     public Set<String> getHighlighter() {
@@ -135,18 +132,16 @@ public class ElasticSqlParseResult {
         return whereCondition;
     }
 
-    public ElasticSqlParseResult setWhereCondition(QueryBuilder whereCondition) {
+    public void setWhereCondition(QueryBuilder whereCondition) {
         this.whereCondition = whereCondition;
-        return this;
     }
 
     public ReindexRequest getReindexRequest() {
         return reindexRequest;
     }
 
-    public ElasticSqlParseResult setReindexRequest(ReindexRequest reindexRequest) {
+    public void setReindexRequest(ReindexRequest reindexRequest) {
         this.reindexRequest = reindexRequest;
-        return this;
     }
 
     public IndexRequest getIndexRequest() {
@@ -209,21 +204,19 @@ public class ElasticSqlParseResult {
         return mappingsRequest;
     }
 
-    public ElasticSqlParseResult setMappingsRequest(GetMappingsRequest mappingsRequest) {
+    public void setMappingsRequest(GetMappingsRequest mappingsRequest) {
         this.mappingsRequest = mappingsRequest;
-        return this;
     }
 
     public GetFieldMappingsRequest getFieldMappingsRequest() {
         return fieldMappingsRequest;
     }
 
-    public ElasticSqlParseResult setFieldMappingsRequest(GetFieldMappingsRequest fieldMappingsRequest) {
+    public void setFieldMappingsRequest(GetFieldMappingsRequest fieldMappingsRequest) {
         this.fieldMappingsRequest = fieldMappingsRequest;
-        return this;
     }
-
     //endregion
+
 
     public SearchRequest toRequest() {
         SearchRequest searchRequest = new SearchRequest();
@@ -233,25 +226,15 @@ public class ElasticSqlParseResult {
         } else {
             throw new ElasticSql2DslException("[syntax error] indices name must be set");
         }
-        if (from < 0) {
-            //这里不会修改from的值
-            searchSourceBuilder.from(0);
-        } else {
-            searchSourceBuilder.from(from);
-        }
-        if (size < 0) {
-            searchSourceBuilder.size(15);
-        } else {
-            searchSourceBuilder.size(size);
-        }
+        //这里不会修改from的值
+        searchSourceBuilder.from(Math.max(from, 0));
+        searchSourceBuilder.size(Math.max(size, 0));
         searchSourceBuilder.trackTotalHits(this.trackTotalHits);
         if (CollectionUtils.isNotEmpty(highlighter)) {
             HighlightBuilder highlightBuilder = HighlightBuilders.highlighter(highlighter);
             searchSourceBuilder.highlighter(highlightBuilder);
         }
-
         searchSourceBuilder.query(whereCondition);
-
         if (collapseBuilder != null) {
             searchSourceBuilder.collapse(collapseBuilder);
         }
@@ -260,19 +243,15 @@ public class ElasticSqlParseResult {
                 searchSourceBuilder.sort(sortBuilder);
             }
         }
-
         searchSourceBuilder.fetchSource(includeFields.toArray(new String[0]), excludeFields.toArray(new String[0]));
-
         if (CollectionUtils.isNotEmpty(routingBy)) {
             searchRequest.routing(routingBy.toArray(new String[0]));
         }
-
         if (CollectionUtils.isNotEmpty(groupBy)) {
             for (AggregationBuilder aggItem : groupBy) {
                 searchSourceBuilder.aggregation(aggItem);
             }
         }
-
         return searchRequest.source(searchSourceBuilder);
     }
 

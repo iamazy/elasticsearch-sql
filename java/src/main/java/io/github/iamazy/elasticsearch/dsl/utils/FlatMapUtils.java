@@ -14,13 +14,13 @@ import java.util.Map;
 @SuppressWarnings({"unchecked", "beta"})
 public class FlatMapUtils {
 
-    public static Map<String, String> flat(Map<String, ?> map, String parentKey) {
+    public static Map<String, Object> flat(Map<String, ?> map, String parentKey) {
         String parent = parentKey == null ? StringUtils.EMPTY : parentKey;
-        Map<String, String> dataInfo = new HashMap<>(0);
+        Map<String, Object> dataInfo = new HashMap<>(0);
         for (Map.Entry<String, ?> entry : map.entrySet()) {
             if (!(entry.getValue() instanceof Map)) {
                 if (StringUtils.isNotBlank(parent)) {
-                    dataInfo.put(parent + CoreConstants.DOT + entry.getKey(), entry.getValue() != null ? entry.getValue().toString() : StringUtils.EMPTY);
+                    dataInfo.put(parent + CoreConstants.DOT + entry.getKey(), entry.getValue() != null ? entry.getValue() : StringUtils.EMPTY);
                 } else {
                     dataInfo.put(entry.getKey(), entry.getValue() != null ? entry.getValue().toString() : StringUtils.EMPTY);
                 }
