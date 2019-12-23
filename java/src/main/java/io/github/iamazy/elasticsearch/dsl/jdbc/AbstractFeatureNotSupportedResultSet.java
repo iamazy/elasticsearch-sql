@@ -852,6 +852,11 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
+    public final String getString(int columnIndex) throws SQLException {
+        throw new SQLFeatureNotSupportedException("getCharacterStream columnIndex");
+    }
+
+    @Override
     public final String getNString(int columnIndex) throws SQLException {
         throw new SQLFeatureNotSupportedException("getNString");
     }
