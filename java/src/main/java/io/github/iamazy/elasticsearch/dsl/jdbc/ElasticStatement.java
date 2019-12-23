@@ -1,5 +1,8 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
+import io.github.iamazy.elasticsearch.dsl.sql.ElasticSql2DslParser;
+import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +28,8 @@ public class ElasticStatement extends AbstractStatement{
 
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
-        //TODO
+        ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
+        ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql);
         return null;
     }
 
