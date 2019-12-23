@@ -16,8 +16,6 @@ public interface JdbcConstants {
 
     String ELASTIC_DRIVER_PREFIX = "jdbc:es:";
 
-    String ELASTIC_SSL_DRIVER_PREFIX = "jdbc:ess:";
-
     SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     Pattern USERNAME_PASSWORD_PATTERN = Pattern.compile("://(.*):(.*)@");
