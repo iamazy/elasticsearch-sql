@@ -12,6 +12,7 @@ public class JdbcSearchResponse {
 
     private long took;
     private long total;
+    private int size;
 
     private List<Map<String,Object>> result;
 
@@ -37,5 +38,13 @@ public class JdbcSearchResponse {
 
     public void setResult(List<Map<String,Object>> result) {
         this.result = result;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }
