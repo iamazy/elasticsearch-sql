@@ -1,7 +1,6 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 
 import com.google.common.collect.Maps;
-
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.jdbc.exception.InvalidUrlException;
 import org.apache.commons.lang3.StringUtils;
