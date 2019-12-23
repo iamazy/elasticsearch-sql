@@ -1,8 +1,11 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
+import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcSearchResponse;
+
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 
 /**
  * @author iamazy
@@ -11,15 +14,15 @@ import java.sql.Statement;
  **/
 public class ElasticResultSet extends AbstractResultSet {
 
-    public static final ElasticResultSetMetaData resultSetMetaData=new ElasticResultSetMetaData();
+    public static final ElasticResultSetMetaData RESULT_SET_META_DATA =new ElasticResultSetMetaData();
 
-    private String searchResultJson;
+    private JdbcSearchResponse response;
 
     private int rowCursor=0;
 
-    public ElasticResultSet(Statement statement,String searchResultJson){
+    public ElasticResultSet(Statement statement,JdbcSearchResponse response){
         super(statement);
-        this.searchResultJson=searchResultJson;
+        this.response=response;
     }
 
     @Override
@@ -29,13 +32,8 @@ public class ElasticResultSet extends AbstractResultSet {
     }
 
     @Override
-    public String getString(int columnIndex) throws SQLException {
-        return null;
-    }
-
-    @Override
     public String getString(String columnLabel) throws SQLException {
-        return searchResultJson;
+        return this.response.getResult().get(rowCursor).get(columnLabel).toString();
     }
 
     @Override
@@ -45,7 +43,7 @@ public class ElasticResultSet extends AbstractResultSet {
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLException {
-        return resultSetMetaData;
+        return RESULT_SET_META_DATA;
     }
 
     @Override
