@@ -2,9 +2,9 @@ package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 
 import com.google.common.collect.Maps;
 
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.jdbc.exception.InvalidUrlException;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
 import org.elasticsearch.client.*;
@@ -36,14 +36,8 @@ public class ElasticClientManager implements ElasticClientProvider {
         if (clientProxyMap.containsKey(url)) {
             return clientProxyMap.get(url);
         }
-        boolean useSsl;
-        if (StringUtils.startsWithIgnoreCase(url, ELASTIC_SSL_DRIVER_PREFIX)) {
-            useSsl = true;
-        } else if (StringUtils.startsWithIgnoreCase(url, ELASTIC_DRIVER_PREFIX)) {
-            useSsl = false;
-        } else {
-            throw new InvalidUrlException("[" + url + "] is an invalid elasticsearch jdbc url");
-        }
+        Map<String, Object> params = parseUrlParams(url);
+        boolean useSsl = Boolean.parseBoolean(params.getOrDefault("useSSL", false).toString());
         Matcher matcher = IP_PORT_PATTERN.matcher(url);
         List<HttpHost> httpHosts = new ArrayList<>(0);
         while (matcher.find()) {
@@ -74,12 +68,12 @@ public class ElasticClientManager implements ElasticClientProvider {
             restClientBuilder
                     .setHttpClientConfigCallback(httpAsyncClientBuilder -> {
                         httpAsyncClientBuilder.setSSLHostnameVerifier((s, sslSession) -> true);
-                        SSLContext sslContext = null;
+                        SSLContext sslContext;
                         try {
                             sslContext = SSLContext.getInstance("TLS");
                             sslContext.init(null, TRUST_ALL_CERTS, new java.security.SecureRandom());
                         } catch (NoSuchAlgorithmException | KeyManagementException e) {
-                            e.printStackTrace();
+                            throw new RuntimeException(e.getMessage());
                         }
                         httpAsyncClientBuilder.setSSLContext(sslContext);
                         httpAsyncClientBuilder.setDefaultHeaders(Collections.singletonList(new BasicHeader("Authorization", "Basic " + basicToken)));
@@ -102,5 +96,26 @@ public class ElasticClientManager implements ElasticClientProvider {
         builder.setHttpAsyncResponseConsumerFactory(responseConsumerFactory);
         builder.addHeader("Authorization", "Basic " + token);
         return builder.build();
+    }
+
+    private Map<String, Object> parseUrlParams(String url) {
+        if (!StringUtils.startsWithIgnoreCase(url, ELASTIC_DRIVER_PREFIX)) {
+            throw new InvalidUrlException("[" + url + "] is an invalid elasticsearch jdbc url");
+        }
+        if (url.contains(CoreConstants.COND)) {
+            Map<String, Object> params = new HashMap<>(0);
+            try {
+                String[] items = url.substring(url.indexOf('?') + 1).split("[&]");
+                for (String item : items) {
+                    String[] split = item.split("[=]");
+                    params.put(split[0], split[1]);
+                }
+            } catch (Exception e) {
+                throw new InvalidUrlException(e.getMessage());
+            }
+            return params;
+        } else {
+            return Collections.emptyMap();
+        }
     }
 }
