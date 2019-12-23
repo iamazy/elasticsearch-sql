@@ -3,6 +3,7 @@ package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 import io.github.iamazy.elasticsearch.dsl.utils.FlatMapUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.Aggregations;
@@ -131,7 +132,7 @@ public class JdbcResponseExtractor {
         aggMap.put(cardinality.getName(), cardinality.getValue());
     }
 
-    private void parseAggregations(Aggregations aggregations, Map<String, Object> aggMap, String parent) {
+    public void parseAggregations(Aggregations aggregations, Map<String, Object> aggMap, String parent) {
         for (Aggregation aggregation : aggregations) {
             if (aggregation instanceof ParsedNested) {
                 parseNestedAggregation(aggregation,aggMap);
@@ -149,5 +150,25 @@ public class JdbcResponseExtractor {
                 parseGeoBoundAggregation(aggregation,aggMap);
             }
         }
+    }
+
+
+    public JdbcSearchResponse parseSearchResponse(SearchResponse response){
+        JdbcSearchResponse jdbcSearchResponse=new JdbcSearchResponse();
+        jdbcSearchResponse.setSize(response.getHits().getHits().length);
+        jdbcSearchResponse.setTook(response.getTook().getMillis());
+        if(response.getHits().getTotalHits()!=null) {
+            jdbcSearchResponse.setTotal(response.getHits().getTotalHits().value);
+        }
+        List<Map<String,Object>> result=new ArrayList<>(jdbcSearchResponse.getSize());
+        for (SearchHit hit : response.getHits().getHits()) {
+            hit.getSourceAsMap().put("_id",hit.getId());
+            if(hit.field("_routing")!=null){
+                hit.getSourceAsMap().put("_routing",hit.field("_routing"));
+            }
+            result.add(FlatMapUtils.flat(hit.getSourceAsMap(),null));
+        }
+        jdbcSearchResponse.setResult(result);
+        return jdbcSearchResponse;
     }
 }
