@@ -1,18 +1,19 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author iamazy
  * @date 2019/12/21
  * @descrition
  **/
-public class JdbcSearchResponse<T> {
+public class JdbcSearchResponse {
 
     private long took;
     private long total;
 
-    private List<T> result;
+    private List<Map<String,Object>> result;
 
     public long getTook() {
         return took;
@@ -30,11 +31,11 @@ public class JdbcSearchResponse<T> {
         this.total = total;
     }
 
-    public List<T> getResult() {
+    public List<Map<String,Object>> getResult() {
         return result;
     }
 
-    public void setResult(List<T> result) {
+    public void setResult(List<Map<String,Object>> result) {
         this.result = result;
     }
 }
