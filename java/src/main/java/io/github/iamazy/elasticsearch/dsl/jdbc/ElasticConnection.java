@@ -1,6 +1,5 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
-import org.elasticsearch.client.Client;
 import org.elasticsearch.client.RestHighLevelClient;
 
 import java.sql.DatabaseMetaData;
