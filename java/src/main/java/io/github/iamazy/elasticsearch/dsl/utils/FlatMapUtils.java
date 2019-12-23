@@ -16,7 +16,7 @@ public class FlatMapUtils {
 
     public static Map<String, Object> flat(Map<String, ?> map, String parentKey) {
         String parent = parentKey == null ? StringUtils.EMPTY : parentKey;
-        Map<String, Object> dataInfo = new HashMap<>(0);
+        Map<String, Object> dataInfo = new HashMap<>(map.size());
         for (Map.Entry<String, ?> entry : map.entrySet()) {
             if (!(entry.getValue() instanceof Map)) {
                 if (StringUtils.isNotBlank(parent)) {
@@ -48,12 +48,10 @@ public class FlatMapUtils {
         if (key.contains(CoreConstants.DOT)) {
             String firstItem = key.substring(0, key.indexOf(CoreConstants.DOT));
             String restItems = key.substring(key.indexOf(CoreConstants.DOT) + 1);
-            if (map.containsKey(firstItem)) {
-                flatPut(restItems, value, (Map<String, Object>) map.get(firstItem));
-            } else {
+            if (!map.containsKey(firstItem)) {
                 map.put(firstItem, new HashMap<>(0));
-                flatPut(restItems, value, (Map<String, Object>) map.get(firstItem));
             }
+            flatPut(restItems, value, (Map<String, Object>) map.get(firstItem));
         } else {
             map.put(key, value);
         }
