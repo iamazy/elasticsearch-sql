@@ -1,8 +1,12 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
+import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.ElasticClientManager;
 import io.github.iamazy.elasticsearch.dsl.sql.ElasticSql2DslParser;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.RequestOptions;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +34,12 @@ public class ElasticStatement extends AbstractStatement{
     public ResultSet executeQuery(String sql) throws SQLException {
         ElasticSql2DslParser elasticSql2DslParser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql);
+        try {
+            SearchResponse searchResponse = connection.getRestClient().search(parseResult.toRequest(), RequestOptions.DEFAULT);
+            return new ElasticResultSet(this,)
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
