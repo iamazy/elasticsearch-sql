@@ -51,8 +51,7 @@ public class ElasticDriver implements Driver {
     @Override
     public boolean acceptsURL(String url) throws SQLException {
         return url != null
-                && (StringUtils.startsWithIgnoreCase(url, JdbcConstants.ELASTIC_DRIVER_PREFIX)
-                || StringUtils.startsWithIgnoreCase(url, JdbcConstants.ELASTIC_SSL_DRIVER_PREFIX));
+                && (StringUtils.startsWithIgnoreCase(url, JdbcConstants.ELASTIC_DRIVER_PREFIX));
     }
 
     @Override
