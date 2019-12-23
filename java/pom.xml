@@ -6,13 +6,13 @@
 
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
-    <version>7.5.0</version>
+    <version>7.5.1</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
     <url>https://github.com/iamazy/elasticsearch-sql</url>
 
     <properties>
-        <elasticsearch.version>7.5.0</elasticsearch.version>
+        <elasticsearch.version>7.5.1</elasticsearch.version>
         <java.version>13</java.version>
         <antlr4.version>4.7.2</antlr4.version>
         <jackson.version>2.10.0</jackson.version>
