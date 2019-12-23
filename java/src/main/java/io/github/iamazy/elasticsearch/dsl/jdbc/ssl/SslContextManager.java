@@ -10,9 +10,6 @@ import javax.net.ssl.X509TrustManager;
  **/
 public class SslContextManager {
 
-    /**
-     * 绕过证书认证的环节，在上线时，请完善下面两个方法
-     */
     public static final TrustManager[] TRUST_ALL_CERTS = new TrustManager[]{
             new X509TrustManager() {
                 @Override
