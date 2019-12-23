@@ -5,7 +5,6 @@ import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcSearchResponse;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
 
 /**
  * @author iamazy
@@ -14,21 +13,21 @@ import java.util.Map;
  **/
 public class ElasticResultSet extends AbstractResultSet {
 
-    public static final ElasticResultSetMetaData RESULT_SET_META_DATA =new ElasticResultSetMetaData();
+    public static final ElasticResultSetMetaData RESULT_SET_META_DATA = new ElasticResultSetMetaData();
 
     private JdbcSearchResponse response;
 
-    private int rowCursor=0;
+    private int rowCursor = -1;
 
-    public ElasticResultSet(Statement statement,JdbcSearchResponse response){
+    public ElasticResultSet(Statement statement, JdbcSearchResponse response) {
         super(statement);
-        this.response=response;
+        this.response = response;
     }
 
     @Override
     public boolean next() throws SQLException {
         rowCursor++;
-        return rowCursor<=1;
+        return rowCursor + 1 <= getFetchSize();
     }
 
     @Override
@@ -48,12 +47,12 @@ public class ElasticResultSet extends AbstractResultSet {
 
     @Override
     public void beforeFirst() throws SQLException {
-        rowCursor=0;
+        rowCursor = 0;
     }
 
     @Override
     public void afterLast() throws SQLException {
-        rowCursor=1;
+        rowCursor = 1;
     }
 
     @Override
@@ -63,6 +62,6 @@ public class ElasticResultSet extends AbstractResultSet {
 
     @Override
     public int getFetchSize() throws SQLException {
-        return 1;
+        return response.getSize();
     }
 }
