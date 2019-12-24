@@ -12,8 +12,7 @@ import java.sql.SQLWarning;
 public abstract class AbstractStatement extends AbstractFeatureNotSupportedStatement {
 
     private boolean isClosed=false;
-
-
+    private int timeout;
 
     @Override
     public void close() throws SQLException {
@@ -47,12 +46,12 @@ public abstract class AbstractStatement extends AbstractFeatureNotSupportedState
 
     @Override
     public int getQueryTimeout() throws SQLException {
-        return 0;
+        return timeout;
     }
 
     @Override
     public void setQueryTimeout(int seconds) throws SQLException {
-        //ignore
+        this.timeout=seconds;
     }
 
     @Override
@@ -128,5 +127,13 @@ public abstract class AbstractStatement extends AbstractFeatureNotSupportedState
         return iface.isInstance(this);
     }
 
+    /**
+     * execute sql for prepareStatement
+     * eg: select * from user where name = ?
+     * @param sql
+     * @param args
+     * @return
+     * @throws SQLException
+     */
     protected abstract ResultSet executeQuery(String sql,Object[] args) throws SQLException ;
 }

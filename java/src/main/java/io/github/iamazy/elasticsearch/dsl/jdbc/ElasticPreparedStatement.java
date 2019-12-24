@@ -52,6 +52,21 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
     }
 
     @Override
+    public int executeUpdate() throws SQLException {
+        return super.executeUpdate();
+    }
+
+    @Override
+    public int executeUpdate(String sql) throws SQLException {
+        return super.executeUpdate(sql);
+    }
+
+    @Override
+    public int executeUpdate(String sql, String[] columnNames) throws SQLException {
+        return super.executeUpdate(sql, columnNames);
+    }
+
+    @Override
     public void setBoolean(int parameterIndex, boolean x) throws SQLException {
         paramMap.put(parameterIndex, new SqlParam(parameterIndex, x));
     }

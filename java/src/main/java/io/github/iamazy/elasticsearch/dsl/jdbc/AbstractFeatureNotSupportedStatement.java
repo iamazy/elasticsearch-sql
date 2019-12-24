@@ -48,7 +48,7 @@ public abstract class AbstractFeatureNotSupportedStatement implements Statement 
     }
 
     @Override
-    public final int executeUpdate(String sql) throws SQLException {
+    public int executeUpdate(String sql) throws SQLException {
         throw new SQLFeatureNotSupportedException("executeUpdate");
     }
 
@@ -58,12 +58,12 @@ public abstract class AbstractFeatureNotSupportedStatement implements Statement 
     }
 
     @Override
-    public final int getUpdateCount() throws SQLException {
+    public int getUpdateCount() throws SQLException {
         throw new SQLFeatureNotSupportedException("getUpdateCount");
     }
 
     @Override
-    public final boolean getMoreResults() throws SQLException {
+    public boolean getMoreResults() throws SQLException {
         throw new SQLFeatureNotSupportedException("getMoreResults");
     }
 
@@ -78,7 +78,7 @@ public abstract class AbstractFeatureNotSupportedStatement implements Statement 
     }
 
     @Override
-    public final int executeUpdate(String sql, String[] columnNames) throws SQLException {
+    public int executeUpdate(String sql, String[] columnNames) throws SQLException {
         throw new SQLFeatureNotSupportedException("executeUpdate");
     }
 
@@ -93,7 +93,7 @@ public abstract class AbstractFeatureNotSupportedStatement implements Statement 
     }
 
     @Override
-    public final boolean execute(String sql, String[] columnNames) throws SQLException {
+    public boolean execute(String sql, String[] columnNames) throws SQLException {
         throw new SQLFeatureNotSupportedException("execute");
     }
 
