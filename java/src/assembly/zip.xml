@@ -40,8 +40,6 @@ http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 ">
             <useProjectArtifact>true</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <includes>
-<!--                <include>org.locationtech.spatial4j:spatial4j</include>-->
-<!--                <include>org.locationtech.jts:jts-core</include>-->
                 <include>com.google.guava:guava</include>
                 <include>org.apache.commons:commons-collections4</include>
                 <include>org.apache.commons:commons-lang3</include>
