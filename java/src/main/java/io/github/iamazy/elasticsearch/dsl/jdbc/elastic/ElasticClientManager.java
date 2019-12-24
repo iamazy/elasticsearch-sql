@@ -2,6 +2,7 @@ package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 
 import com.google.common.collect.Maps;
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
+import io.github.iamazy.elasticsearch.dsl.jdbc.ClusterMode;
 import io.github.iamazy.elasticsearch.dsl.jdbc.exception.InvalidUrlException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
@@ -31,12 +32,13 @@ public class ElasticClientManager implements ElasticClientProvider {
     private final Map<String, RestHighLevelClient> clientProxyMap = Maps.newHashMap();
 
     @Override
-    public RestHighLevelClient fromUrl(String url) {
+    public RestHighLevelClient fromUrl(String url, String username, String password) {
         if (clientProxyMap.containsKey(url)) {
             return clientProxyMap.get(url);
         }
         Map<String, Object> params = parseUrlParams(url);
         boolean useSsl = Boolean.parseBoolean(params.getOrDefault("useSSL", false).toString());
+        String mode = params.getOrDefault("mode", "single").toString();
         Matcher matcher = IP_PORT_PATTERN.matcher(url);
         List<HttpHost> httpHosts = new ArrayList<>(0);
         while (matcher.find()) {
@@ -44,23 +46,15 @@ public class ElasticClientManager implements ElasticClientProvider {
             int port = matcher.group(2) == null ? DEFAULT_PORT : Integer.parseInt(matcher.group(2));
             httpHosts.add(new HttpHost(ip, port, useSsl ? "https" : "http"));
         }
-        String basicToken = null;
-        Matcher tokenMatcher = USERNAME_PASSWORD_PATTERN.matcher(url);
-        while (tokenMatcher.find()) {
-            basicToken = Base64.getEncoder().encodeToString((tokenMatcher.group(1) + ":" + tokenMatcher.group(2)).getBytes());
-        }
-        clientProxyMap.put(url, initClient(httpHosts, useSsl, basicToken));
+        String token = username + ":" + password;
+        clientProxyMap.put(url, initClient(httpHosts, useSsl, parseClusterMode(mode), token));
         return clientProxyMap.get(url);
     }
 
-    private RestHighLevelClient initClient(List<HttpHost> httpHosts, boolean useSsl, String basicToken) {
-        SniffOnFailureListener sniffOnFailureListener = new SniffOnFailureListener();
-        Sniffer sniffer;
+    private RestHighLevelClient initClient(List<HttpHost> httpHosts, boolean useSsl, ClusterMode mode, String token) {
         RestHighLevelClient restHighLevelClient;
-        NodesSniffer nodesSniffer;
         RestClientBuilder restClientBuilder = RestClient.builder(httpHosts.toArray(new HttpHost[0]))
                 .setNodeSelector(NodeSelector.SKIP_DEDICATED_MASTERS)
-                .setFailureListener(sniffOnFailureListener)
                 .setRequestConfigCallback(builder -> builder.setConnectTimeout(50000)
                         .setSocketTimeout(600000));
         if (useSsl) {
@@ -75,17 +69,39 @@ public class ElasticClientManager implements ElasticClientProvider {
                             throw new RuntimeException(e.getMessage());
                         }
                         httpAsyncClientBuilder.setSSLContext(sslContext);
+                        String basicToken = Base64.getEncoder().encodeToString(token.getBytes());
                         httpAsyncClientBuilder.setDefaultHeaders(Collections.singletonList(new BasicHeader("Authorization", "Basic " + basicToken)));
                         return httpAsyncClientBuilder;
                     });
         }
-        restHighLevelClient = new RestHighLevelClient(restClientBuilder);
-        nodesSniffer = new ElasticsearchNodesSniffer(restHighLevelClient.getLowLevelClient(),
-                ElasticsearchNodesSniffer.DEFAULT_SNIFF_REQUEST_TIMEOUT,
-                useSsl ? ElasticsearchNodesSniffer.Scheme.HTTPS : ElasticsearchNodesSniffer.Scheme.HTTP);
-        sniffer = Sniffer.builder(restHighLevelClient.getLowLevelClient()).setSniffIntervalMillis(5000).setNodesSniffer(nodesSniffer).build();
-        sniffOnFailureListener.setSniffer(sniffer);
+        SniffOnFailureListener sniffOnFailureListener;
+        if (ClusterMode.CLUSTER.equals(mode)) {
+            sniffOnFailureListener = new SniffOnFailureListener();
+            restClientBuilder.setFailureListener(sniffOnFailureListener);
+            restHighLevelClient = new RestHighLevelClient(restClientBuilder);
+            NodesSniffer nodesSniffer = new ElasticsearchNodesSniffer(restHighLevelClient.getLowLevelClient(),
+                    ElasticsearchNodesSniffer.DEFAULT_SNIFF_REQUEST_TIMEOUT,
+                    useSsl ? ElasticsearchNodesSniffer.Scheme.HTTPS : ElasticsearchNodesSniffer.Scheme.HTTP);
+            Sniffer sniffer = Sniffer.builder(restHighLevelClient.getLowLevelClient()).setSniffIntervalMillis(5000).setNodesSniffer(nodesSniffer).build();
+            sniffOnFailureListener.setSniffer(sniffer);
+        } else {
+            restHighLevelClient = new RestHighLevelClient(restClientBuilder);
+        }
         return restHighLevelClient;
+    }
+
+    private ClusterMode parseClusterMode(String mode) {
+        switch (mode) {
+            case "cluster": {
+                return ClusterMode.CLUSTER;
+            }
+            case "cross_cluster": {
+                return ClusterMode.CROSS_CLUSTER;
+            }
+            default: {
+                return ClusterMode.SINGLE;
+            }
+        }
     }
 
     public static RequestOptions requestOptions(String token) {

@@ -18,7 +18,5 @@ public interface JdbcConstants {
 
     SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-    Pattern USERNAME_PASSWORD_PATTERN = Pattern.compile("://(.*):(.*)@");
-
-    Pattern IP_PORT_PATTERN = Pattern.compile("(\\d+\\.\\d+\\.\\d+\\.\\d+):?(\\d+)?");
+    Pattern IP_PORT_PATTERN = Pattern.compile("://(.*):(\\d+)/");
 }

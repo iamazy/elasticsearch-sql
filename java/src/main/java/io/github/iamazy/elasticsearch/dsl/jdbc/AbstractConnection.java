@@ -10,13 +10,13 @@ import java.util.Properties;
  **/
 public abstract class AbstractConnection extends AbstractFeatureNotSupportedConnection{
 
-    protected String uri;
+    protected String url;
     protected Properties properties;
     private boolean closed=false;
     private int transactionIsolation;
 
-    public AbstractConnection(String uri,Properties properties){
-        this.uri=uri;
+    public AbstractConnection(String url,Properties properties){
+        this.url=url;
         this.properties=properties;
     }
 

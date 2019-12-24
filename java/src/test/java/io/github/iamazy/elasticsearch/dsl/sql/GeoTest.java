@@ -13,9 +13,8 @@ public class GeoTest {
 
     @Test
     public void geohash(){
-        String hash= Geohash.stringEncode(121.617751, 23.996745);
-        System.out.println(hash);
-        Point point = Geohash.toPoint(hash);
-        System.out.println(point);
+        String url="jdbc:es://10.10.2.43:9210/device_search_latest?useSSL=true";
+        String[] split = url.split("/");
+        System.out.println(split);
     }
 }

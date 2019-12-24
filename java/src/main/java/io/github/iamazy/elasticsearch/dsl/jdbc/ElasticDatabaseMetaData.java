@@ -1,11 +1,6 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
 import java.sql.*;
-import java.util.Base64;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.USERNAME_PASSWORD_PATTERN;
 
 /**
  * @author iamazy
@@ -25,10 +20,7 @@ public class ElasticDatabaseMetaData implements DatabaseMetaData {
 
     public ElasticDatabaseMetaData(String url){
         this.url=url;
-        Matcher matcher = USERNAME_PASSWORD_PATTERN.matcher(url);
-        while (matcher.find()) {
-            this.username=matcher.group(1);
-        }
+        this.username="";
     }
 
     @Override

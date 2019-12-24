@@ -45,10 +45,10 @@ public class ElasticConnectionDataSource extends DriverManagerDataSource impleme
     }
 
     @Override
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection(String username, String password) throws SQLException {
         synchronized (this.connectionMonitor) {
             if (this.connection == null) {
-                initConnection();
+                initConnection(username,password);
             }
             if (connection.isClosed()) {
                 throw new SQLException(
@@ -57,11 +57,6 @@ public class ElasticConnectionDataSource extends DriverManagerDataSource impleme
             }
             return this.connection;
         }
-    }
-
-    @Override
-    public Connection getConnection(String username, String password) throws SQLException {
-        return getConnection();
     }
 
     @Override
@@ -77,7 +72,7 @@ public class ElasticConnectionDataSource extends DriverManagerDataSource impleme
         }
     }
 
-    public void initConnection() throws SQLException {
+    public void initConnection(String username,String password) throws SQLException {
         if (getUrl() == null) {
             throw new IllegalStateException("'url' property is required for lazily initializing a Connection");
         }
@@ -86,7 +81,7 @@ public class ElasticConnectionDataSource extends DriverManagerDataSource impleme
         }
         try {
             if (elasticClientProvider != null) {
-                restHighLevelClient = elasticClientProvider.fromUrl(getUrl());
+                restHighLevelClient = elasticClientProvider.fromUrl(getUrl(),username,password);
                 if (restHighLevelClient == null) {
                     throw new SQLException(String.format("Failed to build elastic client for url[%s]", getUrl()));
                 }

@@ -32,7 +32,9 @@ public class ElasticResultSet extends AbstractResultSet {
 
     @Override
     public String getString(String columnLabel) throws SQLException {
-        return this.response.getResult().get(rowCursor).get(columnLabel).toString();
+        Object result = this.response.getResult().get(rowCursor).get(columnLabel);
+        assert result instanceof String;
+        return result.toString();
     }
 
     @Override

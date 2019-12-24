@@ -76,11 +76,6 @@ public abstract class AbstractResultSet extends AbstractFeatureNotSupportedResul
     }
 
     @Override
-    public Object getObject(int columnIndex) throws SQLException {
-        return getString(columnIndex);
-    }
-
-    @Override
     public Object getObject(String columnLabel) throws SQLException {
         return getString(columnLabel);
     }

@@ -16,12 +16,12 @@ import java.util.Map;
 public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet {
 
     @Override
-    public final void cancelRowUpdates() throws SQLException {
+    public void cancelRowUpdates() throws SQLException {
         throw new SQLFeatureNotSupportedException("cancelRowUpdates");
     }
 
     @Override
-    public final void deleteRow() throws SQLException {
+    public void deleteRow() throws SQLException {
         throw new SQLFeatureNotSupportedException("deleteRow");
     }
 
@@ -31,72 +31,72 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void moveToCurrentRow() throws SQLException {
+    public void moveToCurrentRow() throws SQLException {
         throw new SQLFeatureNotSupportedException("moveToCurrentRow");
     }
 
     @Override
-    public final void moveToInsertRow() throws SQLException {
+    public void moveToInsertRow() throws SQLException {
         throw new SQLFeatureNotSupportedException("moveToInsertRow");
     }
 
     @Override
-    public final void refreshRow() throws SQLException {
+    public void refreshRow() throws SQLException {
         throw new SQLFeatureNotSupportedException("refreshRow");
     }
 
     @Override
-    public final void updateRow() throws SQLException {
+    public void updateRow() throws SQLException {
         throw new SQLFeatureNotSupportedException("updateRow");
     }
 
     @Override
-    public final boolean first() throws SQLException {
+    public boolean first() throws SQLException {
         throw new SQLFeatureNotSupportedException("first");
     }
 
     @Override
-    public final boolean isAfterLast() throws SQLException {
+    public boolean isAfterLast() throws SQLException {
         throw new SQLFeatureNotSupportedException("isAfterLast");
     }
 
     @Override
-    public final boolean isBeforeFirst() throws SQLException {
+    public boolean isBeforeFirst() throws SQLException {
         throw new SQLFeatureNotSupportedException("isBeforeFirst");
     }
 
     @Override
-    public final boolean isFirst() throws SQLException {
+    public boolean isFirst() throws SQLException {
         throw new SQLFeatureNotSupportedException("isFirst");
     }
 
     @Override
-    public final boolean isLast() throws SQLException {
+    public boolean isLast() throws SQLException {
         throw new SQLFeatureNotSupportedException("isLast");
     }
 
     @Override
-    public final boolean last() throws SQLException {
+    public boolean last() throws SQLException {
         throw new SQLFeatureNotSupportedException("last");
     }
 
     @Override
-    public final boolean previous() throws SQLException {
+    public boolean previous() throws SQLException {
         throw new SQLFeatureNotSupportedException("previous");
     }
 
     @Override
-    public final boolean rowDeleted() throws SQLException {
+    public boolean rowDeleted() throws SQLException {
         throw new SQLFeatureNotSupportedException("rowDeleted");
     }
 
     @Override
-    public final boolean rowInserted() throws SQLException {
+    public boolean rowInserted() throws SQLException {
         throw new SQLFeatureNotSupportedException("rowInserted");
     }
 
     @Override
-    public final boolean rowUpdated() throws SQLException {
+    public boolean rowUpdated() throws SQLException {
         throw new SQLFeatureNotSupportedException("rowUpdated");
     }
 
@@ -106,7 +106,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void setFetchSize(int rows) throws SQLException {
+    public void setFetchSize(int rows) throws SQLException {
         throw new SQLFeatureNotSupportedException("setFetchSize");
     }
 
@@ -121,7 +121,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final String getCursorName() throws SQLException {
+    public String getCursorName() throws SQLException {
         throw new SQLFeatureNotSupportedException("getCursorName");
     }
 
@@ -131,7 +131,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateArray(String columnLabel, Array x) throws SQLException {
+    public void updateArray(String columnLabel, Array x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateArray");
     }
 
@@ -141,7 +141,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
+    public void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateAsciiStream");
     }
 
@@ -156,12 +156,12 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateAsciiStream(String columnLabel, InputStream x, int length) throws SQLException {
+    public void updateAsciiStream(String columnLabel, InputStream x, int length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateAsciiStream");
     }
 
     @Override
-    public final void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
+    public void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateAsciiStream");
     }
 
@@ -171,7 +171,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateBigDecimal(String columnLabel, BigDecimal x) throws SQLException {
+    public void updateBigDecimal(String columnLabel, BigDecimal x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBigDecimal");
     }
 
@@ -181,7 +181,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
+    public void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBinaryStream");
     }
 
@@ -196,12 +196,12 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateBinaryStream(String columnLabel, InputStream x, int length) throws SQLException {
+    public void updateBinaryStream(String columnLabel, InputStream x, int length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBinaryStream");
     }
 
     @Override
-    public final void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
+    public void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBinaryStream");
     }
 
@@ -211,7 +211,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateBlob(String columnLabel, Blob x) throws SQLException {
+    public void updateBlob(String columnLabel, Blob x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBlob");
     }
 
@@ -221,7 +221,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
+    public void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBlob");
     }
 
@@ -231,7 +231,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
+    public void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBlob");
     }
 
@@ -241,7 +241,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateBoolean(String columnLabel, boolean x) throws SQLException {
+    public void updateBoolean(String columnLabel, boolean x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBoolean");
     }
 
@@ -251,7 +251,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateByte(String columnLabel, byte x) throws SQLException {
+    public void updateByte(String columnLabel, byte x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateByte");
     }
 
@@ -261,7 +261,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateBytes(String columnLabel, byte[] x) throws SQLException {
+    public void updateBytes(String columnLabel, byte[] x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateBytes");
     }
 
@@ -271,7 +271,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
+    public void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateCharacterStream");
     }
 
@@ -286,12 +286,12 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateCharacterStream(String columnLabel, Reader reader, int length) throws SQLException {
+    public void updateCharacterStream(String columnLabel, Reader reader, int length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateCharacterStream");
     }
 
     @Override
-    public final void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+    public void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateCharacterStream");
     }
 
@@ -301,7 +301,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateClob(String columnLabel, Clob x) throws SQLException {
+    public void updateClob(String columnLabel, Clob x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateClob");
     }
 
@@ -311,7 +311,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateClob(String columnLabel, Reader reader) throws SQLException {
+    public void updateClob(String columnLabel, Reader reader) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateClob");
     }
 
@@ -321,7 +321,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
+    public void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateClob");
     }
 
@@ -331,7 +331,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateDate(String columnLabel, Date x) throws SQLException {
+    public void updateDate(String columnLabel, Date x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateDate");
     }
 
@@ -341,7 +341,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateDouble(String columnLabel, double x) throws SQLException {
+    public void updateDouble(String columnLabel, double x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateDouble");
     }
 
@@ -351,7 +351,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateFloat(String columnLabel, float x) throws SQLException {
+    public void updateFloat(String columnLabel, float x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateFloat");
     }
 
@@ -361,7 +361,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateInt(String columnLabel, int x) throws SQLException {
+    public void updateInt(String columnLabel, int x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateInt");
     }
 
@@ -371,7 +371,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateLong(String columnLabel, long x) throws SQLException {
+    public void updateLong(String columnLabel, long x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateLong");
     }
 
@@ -381,7 +381,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
+    public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateNCharacterStream");
     }
 
@@ -391,7 +391,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
+    public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateNCharacterStream");
     }
 
@@ -406,12 +406,12 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+    public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateNClob");
     }
 
     @Override
-    public final void updateNClob(String columnLabel, Reader reader) throws SQLException {
+    public void updateNClob(String columnLabel, Reader reader) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateNClob");
     }
 
@@ -421,7 +421,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
+    public void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateNClob");
     }
 
@@ -431,7 +431,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateNString(String columnLabel, String nString) throws SQLException {
+    public void updateNString(String columnLabel, String nString) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateNString");
     }
 
@@ -441,7 +441,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateNull(String columnLabel) throws SQLException {
+    public void updateNull(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateNull");
     }
 
@@ -452,7 +452,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateObject(String columnLabel, Object x) throws SQLException {
+    public void updateObject(String columnLabel, Object x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateObject");
     }
 
@@ -462,7 +462,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateObject(String columnLabel, Object x, int scaleOrLength) throws SQLException {
+    public void updateObject(String columnLabel, Object x, int scaleOrLength) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateObject");
     }
 
@@ -472,7 +472,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateObject(String columnLabel, Object x, SQLType targetSqlType) throws SQLException {
+    public void updateObject(String columnLabel, Object x, SQLType targetSqlType) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateObject");
     }
 
@@ -482,7 +482,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateObject(String columnLabel, Object x, SQLType targetSqlType, int scaleOrLength) throws SQLException {
+    public void updateObject(String columnLabel, Object x, SQLType targetSqlType, int scaleOrLength) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateObject");
     }
 
@@ -492,7 +492,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateRef(String columnLabel, Ref x) throws SQLException {
+    public void updateRef(String columnLabel, Ref x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateRef");
     }
 
@@ -502,7 +502,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateRowId(String columnLabel, RowId x) throws SQLException {
+    public void updateRowId(String columnLabel, RowId x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateRowId");
     }
 
@@ -512,7 +512,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateShort(String columnLabel, short x) throws SQLException {
+    public void updateShort(String columnLabel, short x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateShort");
     }
 
@@ -522,7 +522,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+    public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateSQLXML");
     }
 
@@ -532,7 +532,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateString(String columnLabel, String x) throws SQLException {
+    public void updateString(String columnLabel, String x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateString");
     }
 
@@ -542,7 +542,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateTime(String columnLabel, Time x) throws SQLException {
+    public void updateTime(String columnLabel, Time x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateTime");
     }
 
@@ -552,7 +552,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final void updateTimestamp(String columnLabel, Timestamp x) throws SQLException {
+    public void updateTimestamp(String columnLabel, Timestamp x) throws SQLException {
         throw new SQLFeatureNotSupportedException("updateTimestamp");
     }
 
@@ -562,7 +562,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Timestamp getTimestamp(String columnLabel) throws SQLException {
+    public Timestamp getTimestamp(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getTimestamp");
     }
 
@@ -572,7 +572,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Timestamp getTimestamp(String columnLabel, Calendar cal) throws SQLException {
+    public Timestamp getTimestamp(String columnLabel, Calendar cal) throws SQLException {
         throw new SQLFeatureNotSupportedException("getTimestamp");
     }
 
@@ -582,7 +582,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final URL getURL(String columnLabel) throws SQLException {
+    public URL getURL(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getURL");
     }
 
@@ -592,7 +592,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Time getTime(String columnLabel) throws SQLException {
+    public Time getTime(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getTime");
     }
 
@@ -602,12 +602,12 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Time getTime(String columnLabel, Calendar cal) throws SQLException {
+    public Time getTime(String columnLabel, Calendar cal) throws SQLException {
         throw new SQLFeatureNotSupportedException("getTime");
     }
 
     @Override
-    public Object getObject(int columnIndex) throws SQLException {
+    public final Object getObject(int columnIndex) throws SQLException {
         throw new SQLFeatureNotSupportedException("getObject");
     }
 
@@ -622,7 +622,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Object getObject(String columnLabel, Map<String, Class<?>> map) throws SQLException {
+    public Object getObject(String columnLabel, Map<String, Class<?>> map) throws SQLException {
         throw new SQLFeatureNotSupportedException("getObject");
     }
 
@@ -632,7 +632,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
+    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
         throw new SQLFeatureNotSupportedException("getObject");
     }
 
@@ -642,7 +642,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Ref getRef(String columnLabel) throws SQLException {
+    public Ref getRef(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getRef");
     }
 
@@ -652,7 +652,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final RowId getRowId(String columnLabel) throws SQLException {
+    public RowId getRowId(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getRowId");
     }
 
@@ -662,7 +662,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final short getShort(String columnLabel) throws SQLException {
+    public short getShort(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getShort");
     }
 
@@ -672,7 +672,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final SQLXML getSQLXML(String columnLabel) throws SQLException {
+    public SQLXML getSQLXML(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getSQLXML");
     }
 
@@ -682,7 +682,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Clob getClob(String columnLabel) throws SQLException {
+    public Clob getClob(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getClob");
     }
 
@@ -692,7 +692,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Date getDate(String columnLabel) throws SQLException {
+    public Date getDate(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getDate");
     }
 
@@ -712,7 +712,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final double getDouble(String columnLabel) throws SQLException {
+    public double getDouble(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getDouble");
     }
 
@@ -722,7 +722,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final float getFloat(String columnLabel) throws SQLException {
+    public float getFloat(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getFloat");
     }
 
@@ -732,7 +732,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final int getInt(String columnLabel) throws SQLException {
+    public int getInt(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getInt");
     }
 
@@ -742,7 +742,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final long getLong(String columnLabel) throws SQLException {
+    public long getLong(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getLong");
     }
 
@@ -752,7 +752,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Reader getNCharacterStream(String columnLabel) throws SQLException {
+    public Reader getNCharacterStream(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getNCharacterStream");
     }
 
@@ -762,7 +762,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final NClob getNClob(String columnLabel) throws SQLException {
+    public NClob getNClob(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getNClob");
     }
 
@@ -772,7 +772,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Array getArray(String columnLabel) throws SQLException {
+    public Array getArray(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getArray");
     }
 
@@ -782,7 +782,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final InputStream getAsciiStream(String columnLabel) throws SQLException {
+    public InputStream getAsciiStream(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getAsciiStream");
     }
 
@@ -792,7 +792,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final BigDecimal getBigDecimal(String columnLabel) throws SQLException {
+    public BigDecimal getBigDecimal(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getBigDecimal");
     }
 
@@ -802,7 +802,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final InputStream getBinaryStream(String columnLabel) throws SQLException {
+    public InputStream getBinaryStream(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getBinaryStream");
     }
 
@@ -812,7 +812,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Blob getBlob(String columnLabel) throws SQLException {
+    public Blob getBlob(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getBlob");
     }
 
@@ -827,7 +827,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final byte getByte(String columnLabel) throws SQLException {
+    public byte getByte(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getByte");
     }
 
@@ -837,7 +837,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final byte[] getBytes(String columnLabel) throws SQLException {
+    public byte[] getBytes(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getBytes");
     }
 
@@ -847,13 +847,18 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final Reader getCharacterStream(String columnLabel) throws SQLException {
+    public Reader getCharacterStream(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getCharacterStream");
     }
 
     @Override
     public final String getString(int columnIndex) throws SQLException {
-        throw new SQLFeatureNotSupportedException("getCharacterStream columnIndex");
+        throw new SQLFeatureNotSupportedException("getString");
+    }
+
+    @Override
+    public String getString(String columnLabel) throws SQLException {
+        throw new SQLFeatureNotSupportedException("getString");
     }
 
     @Override
@@ -862,7 +867,7 @@ public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet 
     }
 
     @Override
-    public final String getNString(String columnLabel) throws SQLException {
+    public String getNString(String columnLabel) throws SQLException {
         throw new SQLFeatureNotSupportedException("getNString");
     }
 

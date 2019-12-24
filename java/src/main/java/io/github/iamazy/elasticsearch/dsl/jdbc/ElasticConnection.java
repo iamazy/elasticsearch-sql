@@ -1,5 +1,6 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import org.elasticsearch.client.RestHighLevelClient;
 
 import java.sql.DatabaseMetaData;
@@ -13,13 +14,15 @@ import java.util.Properties;
  * @date 2019/12/21
  * @descrition
  **/
-public class ElasticConnection extends AbstractConnection{
+public class ElasticConnection extends AbstractConnection {
 
     private RestHighLevelClient client;
 
-    public ElasticConnection(String url, Properties properties,RestHighLevelClient client){
-        super(url,properties);
-        this.client=client;
+    private String database;
+
+    ElasticConnection(String url, Properties properties, RestHighLevelClient client) {
+        super(url, properties);
+        this.client = client;
     }
 
     RestHighLevelClient getRestClient() {
@@ -38,6 +41,17 @@ public class ElasticConnection extends AbstractConnection{
 
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
-        return null;
+        return new ElasticDatabaseMetaData(this.url);
+    }
+
+    String getDatabaseName() {
+        if (database == null) {
+            String[] items = url.split("/");
+            database = items[items.length - 1];
+            if (database.contains(CoreConstants.COND)) {
+                database = database.split("[?]")[0];
+            }
+        }
+        return database;
     }
 }

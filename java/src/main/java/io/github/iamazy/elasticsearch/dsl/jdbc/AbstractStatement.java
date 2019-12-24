@@ -13,6 +13,8 @@ public abstract class AbstractStatement extends AbstractFeatureNotSupportedState
 
     private boolean isClosed=false;
 
+
+
     @Override
     public void close() throws SQLException {
         isClosed=true;

@@ -12,7 +12,9 @@ public interface ElasticClientProvider {
     /**
      * create client from url
      * @param url
+     * @param username
+     * @param password
      * @return
      */
-    RestHighLevelClient fromUrl(String url);
+    RestHighLevelClient fromUrl(String url, String username,String password);
 }
