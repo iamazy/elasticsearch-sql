@@ -74,9 +74,8 @@ public class ElasticClientManager implements ElasticClientProvider {
                         return httpAsyncClientBuilder;
                     });
         }
-        SniffOnFailureListener sniffOnFailureListener;
         if (ClusterMode.CLUSTER.equals(mode)) {
-            sniffOnFailureListener = new SniffOnFailureListener();
+            SniffOnFailureListener sniffOnFailureListener = new SniffOnFailureListener();
             restClientBuilder.setFailureListener(sniffOnFailureListener);
             restHighLevelClient = new RestHighLevelClient(restClientBuilder);
             NodesSniffer nodesSniffer = new ElasticsearchNodesSniffer(restHighLevelClient.getLowLevelClient(),
