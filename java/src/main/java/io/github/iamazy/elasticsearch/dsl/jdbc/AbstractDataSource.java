@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * @date 2019/12/16
  * @descrition
  **/
-public class AbstractDataSource implements DataSource {
+public abstract class AbstractDataSource implements DataSource {
     @Override
     public Connection getConnection() throws SQLException {
         return null;
