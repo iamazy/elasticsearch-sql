@@ -63,7 +63,6 @@ public class ElasticStatement extends AbstractStatement {
                 }
                 case UPDATE_BY_QUERY: {
                     BulkByScrollResponse response = connection.getRestClient().updateByQuery(parseResult.getUpdateByQueryRequest(), RequestOptions.DEFAULT);
-                    setQueryTimeout((int) response.getTook().getSeconds());
                     return (int) response.getUpdated();
                 }
                 case DELETE: {
@@ -72,7 +71,6 @@ public class ElasticStatement extends AbstractStatement {
                 }
                 case DELETE_BY_QUERY: {
                     BulkByScrollResponse response = connection.getRestClient().deleteByQuery(parseResult.getDeleteByQueryRequest(), RequestOptions.DEFAULT);
-                    setQueryTimeout((int) response.getTook().getSeconds());
                     return (int) response.getDeleted();
                 }
                 default: {
@@ -109,15 +107,5 @@ public class ElasticStatement extends AbstractStatement {
     @Override
     protected ResultSet executeQuery(String sql, Object[] args) throws SQLException {
         return executeQuery(sql);
-    }
-
-    @Override
-    public int getQueryTimeout() throws SQLException {
-        return super.getQueryTimeout();
-    }
-
-    @Override
-    public void setQueryTimeout(int seconds) throws SQLException {
-        super.setQueryTimeout(seconds);
     }
 }
