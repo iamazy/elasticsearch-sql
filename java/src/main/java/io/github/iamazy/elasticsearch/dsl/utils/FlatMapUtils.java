@@ -22,7 +22,7 @@ public class FlatMapUtils {
                 if (StringUtils.isNotBlank(parent)) {
                     dataInfo.put(parent + CoreConstants.DOT + entry.getKey(), entry.getValue() != null ? entry.getValue() : StringUtils.EMPTY);
                 } else {
-                    dataInfo.put(entry.getKey(), entry.getValue() != null ? entry.getValue().toString() : StringUtils.EMPTY);
+                    dataInfo.put(entry.getKey(), entry.getValue() != null ? entry.getValue() : StringUtils.EMPTY);
                 }
             } else {
                 Map<String, ?> childMap = (Map<String, ?>) entry.getValue();
