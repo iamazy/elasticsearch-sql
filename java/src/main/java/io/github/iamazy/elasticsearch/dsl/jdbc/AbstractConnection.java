@@ -8,24 +8,24 @@ import java.util.Properties;
  * @date 2019/12/16
  * @descrition
  **/
-public abstract class AbstractConnection extends AbstractFeatureNotSupportedConnection{
+public abstract class AbstractConnection extends AbstractFeatureNotSupportedConnection {
 
     protected String url;
     protected Properties properties;
-    private boolean closed=false;
+    protected boolean closed = false;
     private int transactionIsolation;
 
-    public AbstractConnection(String url,Properties properties){
-        this.url=url;
-        this.properties=properties;
+    public AbstractConnection(String url, Properties properties) {
+        this.url = url;
+        this.properties = properties;
     }
 
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        if(isWrapperFor(iface)){
-            return (T)this;
+        if (isWrapperFor(iface)) {
+            return (T) this;
         }
-        throw new SQLException(String.format("[%s] cannot be unwrapped as [%s]",getClass().getName(),iface.getName()));
+        throw new SQLException(String.format("[%s] cannot be unwrapped as [%s]", getClass().getName(), iface.getName()));
     }
 
     @Override
