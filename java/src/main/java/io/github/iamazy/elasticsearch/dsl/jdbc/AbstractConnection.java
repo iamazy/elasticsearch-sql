@@ -11,11 +11,11 @@ import java.util.Properties;
 public abstract class AbstractConnection extends AbstractFeatureNotSupportedConnection {
 
     protected String url;
-    protected Properties properties;
-    protected boolean closed = false;
+    Properties properties;
+    boolean closed = false;
     private int transactionIsolation;
 
-    public AbstractConnection(String url, Properties properties) {
+    AbstractConnection(String url, Properties properties) {
         this.url = url;
         this.properties = properties;
     }
