@@ -26,6 +26,12 @@ public class ElasticConnection extends AbstractConnection {
     ElasticConnection(String url, Properties properties, RestHighLevelClient client) {
         super(url, properties);
         this.client = client;
+        String[] items = url.split("/");
+        String database = items[items.length - 1];
+        if (database.contains(CoreConstants.COND)) {
+            database = database.split("[?]")[0];
+        }
+        this.databases = Arrays.asList(database.split("[,]"));
     }
 
     RestHighLevelClient getRestClient() {
@@ -58,14 +64,6 @@ public class ElasticConnection extends AbstractConnection {
     }
 
     List<String> getDatabaseNames() {
-        if (databases == null) {
-            String[] items = url.split("/");
-            String database = items[items.length - 1];
-            if (database.contains(CoreConstants.COND)) {
-                database = database.split("[?]")[0];
-            }
-            return Arrays.asList(database.split("[,]"));
-        }
         return databases;
     }
 
@@ -73,13 +71,9 @@ public class ElasticConnection extends AbstractConnection {
     public void close() throws SQLException {
         try {
             client.close();
+            closed = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean isClosed() {
-        return client == null;
     }
 }
