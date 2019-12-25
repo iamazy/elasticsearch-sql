@@ -1,7 +1,9 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcSearchResponse;
+import org.elasticsearch.search.Scroll;
 
+import java.io.InputStream;
 import java.sql.*;
 import java.util.Objects;
 
@@ -12,15 +14,20 @@ import java.util.Objects;
  **/
 public class ElasticResultSet extends AbstractResultSet {
 
-    public static final ElasticResultSetMetaData RESULT_SET_META_DATA = new ElasticResultSetMetaData();
+    private static final ElasticResultSetMetaData RESULT_SET_META_DATA = new ElasticResultSetMetaData();
 
     private JdbcSearchResponse response;
 
     private int rowCursor = -1;
 
-    public ElasticResultSet(Statement statement, JdbcSearchResponse response) {
+    ElasticResultSet(Statement statement, JdbcSearchResponse response) {
         super(statement);
         this.response = response;
+    }
+
+    ElasticResultSet(Statement statement, InputStream inputStream){
+        super(statement);
+
     }
 
     @Override
