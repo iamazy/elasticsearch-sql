@@ -1,5 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
+import org.elasticsearch.Version;
+
 import java.sql.*;
 
 /**
@@ -9,18 +11,18 @@ import java.sql.*;
  **/
 public class ElasticDatabaseMetaData implements DatabaseMetaData {
 
-    private static final String ELASTIC_DRIVER_NAME="ElasticDriver";
-    private static final String ELASTIC_DRIVER_PRODUCT_VERSION="2.4.4";
-    private static final Integer ELASTIC_DRIVER_PRODUCT_MAJOR_VERSION=2;
-    private static final Integer ELASTIC_DRIVER_PRODUCT_MINOR_VERSION=4;
-    private static final String ELASTIC_DRIVER_PRODUCT_NAME="elasticsearch-sql";
+    private static final String ELASTIC_DRIVER_NAME = ElasticDriver.class.getName();
+    private static final String ELASTIC_DRIVER_PRODUCT_VERSION = Version.CURRENT.toString();
+    private static final byte ELASTIC_DRIVER_PRODUCT_MAJOR_VERSION = Version.CURRENT.major;
+    private static final byte ELASTIC_DRIVER_PRODUCT_MINOR_VERSION = Version.CURRENT.minor;
+    private static final String ELASTIC_DRIVER_PRODUCT_NAME = "elasticsearch-sql";
 
     private String url;
-    private String username=null;
+    private String username;
 
-    public ElasticDatabaseMetaData(String url){
-        this.url=url;
-        this.username="";
+    ElasticDatabaseMetaData(String url, String username) {
+        this.url = url;
+        this.username = username;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class ElasticDatabaseMetaData implements DatabaseMetaData {
 
     @Override
     public boolean isReadOnly() throws SQLException {
-        return true;
+        return false;
     }
 
     @Override
