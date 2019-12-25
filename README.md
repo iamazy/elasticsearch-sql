@@ -50,7 +50,7 @@ Elasticsearch-SQL
 **7.5.0** [![7.5.0 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=master)](https://travis-ci.org/iamazy/elasticsearch-sql)
 
 ## Description
-rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**
+rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**, support **jdbc**
 
 ## Changelog
 [Changelog](https://github.com/iamazy/elasticsearch-sql/blob/master/CHANGELOG)
