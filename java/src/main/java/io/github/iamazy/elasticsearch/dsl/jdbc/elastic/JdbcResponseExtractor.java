@@ -132,7 +132,7 @@ public class JdbcResponseExtractor {
         aggMap.put(cardinality.getName(), cardinality.getValue());
     }
 
-    public void parseAggregations(Aggregations aggregations, Map<String, Object> aggMap, String parent) {
+    private void parseAggregations(Aggregations aggregations, Map<String, Object> aggMap, String parent) {
         for (Aggregation aggregation : aggregations) {
             if (aggregation instanceof ParsedNested) {
                 parseNestedAggregation(aggregation,aggMap);
