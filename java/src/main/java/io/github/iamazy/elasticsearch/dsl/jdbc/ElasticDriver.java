@@ -44,7 +44,7 @@ public class ElasticDriver implements Driver {
             String password=info.getOrDefault("password","").toString();
             restHighLevelClient = elasticClientProvider.fromUrl(url,username,password);
             if (restHighLevelClient == null) {
-                throw new SQLException(String.format("ElasticDriver.connect] Failed to build elastic client for url[%s]", url));
+                throw new SQLException(String.format("Failed to create elastic client for url[%s]", url));
             }
         }
         return new ElasticConnection(url, info, restHighLevelClient);
