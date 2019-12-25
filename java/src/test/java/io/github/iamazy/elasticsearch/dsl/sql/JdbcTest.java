@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql;
 
 import java.sql.*;
+import java.util.Arrays;
 
 /**
  * @author iamazy
@@ -24,7 +25,7 @@ public class JdbcTest {
 
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT * FROM {} where name = 'iamazy' limit 10";
+            sql = "SELECT * FROM device_search where name = 'iamazy' limit 10";
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
                 String id  = rs.getString("_id");
@@ -60,7 +61,7 @@ public class JdbcTest {
         try{
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            String sql = "SELECT * FROM {} where name = ? and _id = ? limit 10";
+            String sql = "SELECT * FROM device_search limit 10";
             ps = conn.prepareStatement(sql);
             ps.setString(1,"aaa");
             ps.setInt(2,111);
@@ -93,15 +94,47 @@ public class JdbcTest {
         }
     }
 
-    public static void insert(){
+    public static void insert1(){
         Connection conn = null;
         Statement ps = null;
         try{
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL,USER,PASS);
-            String sql = "insert into {}(name,age,list,_id) values('aaa',11,[1,2,2,1],111)";
+            String sql = "insert into device_search(name,age,list,_id) values('aaa',11,[1,2,2,1],111)";
             ps = conn.createStatement();
             int rs = ps.executeUpdate(sql);
+            System.out.println(rs);
+            ps.close();
+            conn.close();
+        } catch(Exception se){
+            se.printStackTrace();
+        }
+        finally{
+            try{
+                if(ps!=null) ps.close();
+            }catch(SQLException ignored){
+            }
+            try{
+                if(conn!=null) conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+    }
+
+    public static void insert2(){
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try{
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            String sql = "insert into device_search(name,age,list,_id) values(?,?,?,?)";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1,"bbb");
+            ps.setInt(2,3231);
+            ps.setObject(3, Arrays.asList(1,3,2));
+            ps.setString(4,"8373");
+            int rs = ps.executeUpdate();
             System.out.println(rs);
             ps.close();
             conn.close();

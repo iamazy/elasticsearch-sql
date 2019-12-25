@@ -8,6 +8,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -19,7 +21,7 @@ public class ElasticConnection extends AbstractConnection {
 
     private RestHighLevelClient client;
 
-    private String database;
+    private List<String> databases;
 
     ElasticConnection(String url, Properties properties, RestHighLevelClient client) {
         super(url, properties);
@@ -55,15 +57,16 @@ public class ElasticConnection extends AbstractConnection {
         return new ElasticDatabaseMetaData(this.url);
     }
 
-    String getDatabaseName() {
-        if (database == null) {
+    List<String> getDatabaseNames() {
+        if (databases == null) {
             String[] items = url.split("/");
-            database = items[items.length - 1];
+            String database = items[items.length - 1];
             if (database.contains(CoreConstants.COND)) {
                 database = database.split("[?]")[0];
             }
+            return Arrays.asList(database.split("[,]"));
         }
-        return database;
+        return databases;
     }
 
     @Override

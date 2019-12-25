@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +36,8 @@ public class ElasticStatement extends AbstractStatement {
 
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
-        ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql.replaceFirst("\\{}", connection.getDatabaseName()));
+        ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql);
+        checkDatabase(parseResult.getIndices());
         assert parseResult.getSqlOperation() == SqlOperation.SELECT;
         try {
             SearchResponse searchResponse = connection.getRestClient().search(parseResult.toRequest(), RequestOptions.DEFAULT);
@@ -54,7 +56,8 @@ public class ElasticStatement extends AbstractStatement {
 
     @Override
     public int executeUpdate(String sql) throws SQLException {
-        ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql.replaceFirst("\\{}", connection.getDatabaseName()));
+        ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql);
+        checkDatabase(parseResult.getIndices());
         try {
             switch (parseResult.getSqlOperation()) {
                 case INSERT: {
@@ -110,11 +113,7 @@ public class ElasticStatement extends AbstractStatement {
 
     @Override
     protected ResultSet executeQuery(String sql, Object[] args) throws SQLException {
-        int count = StringUtils.countMatches(sql, CoreConstants.COND);
-        assert count == args.length;
-        for(Object item:args){
-            sql = sql.replaceFirst("\\?",item.toString());
-        }
+        sql = prepareExecute(sql,args);
         return executeQuery(sql);
     }
 
@@ -126,5 +125,20 @@ public class ElasticStatement extends AbstractStatement {
     @Override
     public boolean isClosed() {
         return connection.isClosed();
+    }
+
+    String prepareExecute(String sql, Object[] args) {
+        int count = StringUtils.countMatches(sql, CoreConstants.COND);
+        assert count == args.length;
+        for (Object item : args) {
+            sql = sql.replaceFirst("\\?", item.toString());
+        }
+        return sql;
+    }
+
+    private void checkDatabase(List<String> indices) throws SQLException {
+        if (!connection.getDatabaseNames().containsAll(indices)) {
+            throw new SQLException("[invalid] database queried must be contained in " + connection.getDatabaseNames());
+        }
     }
 }

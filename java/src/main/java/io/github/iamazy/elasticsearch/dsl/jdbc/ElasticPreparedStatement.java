@@ -35,26 +35,15 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
     @Override
     public ResultSet executeQuery() throws SQLException {
         if (paramMap.size() > 0) {
-            List<SqlParam> params = Lists.newArrayList(paramMap.values());
-            params.sort((o1, o2) -> {
-                if (o1.index < o2.index) {
-                    return -1;
-                } else if (o1.index > o2.index) {
-                    return 1;
-                }
-                return 0;
-            });
-            return executeQuery(sql, params.stream().map(input -> {
-                Objects.requireNonNull(input);
-                return input.value;
-            }).toArray(Object[]::new));
+            return executeQuery(sql, composeParams(paramMap));
         }
         return executeQuery(sql);
     }
 
     @Override
     public int executeUpdate() throws SQLException {
-        return super.executeUpdate();
+        sql = prepareExecute(sql, composeParams(paramMap));
+        return executeUpdate(sql);
     }
 
     @Override
@@ -109,7 +98,7 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
 
     @Override
     public void setString(int parameterIndex, String x) throws SQLException {
-        paramMap.put(parameterIndex, new SqlParam(parameterIndex, x));
+        paramMap.put(parameterIndex, new SqlParam(parameterIndex, "'"+x+"'"));
     }
 
     @Override
@@ -157,6 +146,22 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
     @Override
     public ParameterMetaData getParameterMetaData() throws SQLException {
         return null;
+    }
+
+    private Object[] composeParams(Map<Integer, SqlParam> paramMap) {
+        List<SqlParam> params = Lists.newArrayList(paramMap.values());
+        params.sort((o1, o2) -> {
+            if (o1.index < o2.index) {
+                return -1;
+            } else if (o1.index > o2.index) {
+                return 1;
+            }
+            return 0;
+        });
+        return params.stream().map(input -> {
+            Objects.requireNonNull(input);
+            return input.value;
+        }).toArray(Object[]::new);
     }
 
     private static class SqlParam {
