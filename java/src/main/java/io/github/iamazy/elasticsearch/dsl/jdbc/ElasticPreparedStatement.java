@@ -21,7 +21,7 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
 
     private String sql;
 
-    public ElasticPreparedStatement(ElasticConnection connection, String sql) {
+    ElasticPreparedStatement(ElasticConnection connection, String sql) {
         super(connection);
         this.sql = sql;
     }
@@ -120,6 +120,21 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
     }
 
     @Override
+    public void setMaxRows(int max) throws SQLException {
+        super.setMaxRows(max);
+    }
+
+    @Override
+    public void setMaxFieldSize(int max) throws SQLException {
+        super.setMaxFieldSize(max);
+    }
+
+    @Override
+    public void setFetchSize(int rows) throws SQLException {
+        super.setFetchSize(rows);
+    }
+
+    @Override
     public void clearParameters() throws SQLException {
         paramMap.clear();
     }
@@ -168,17 +183,9 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
         private int index;
         private Object value;
 
-        public SqlParam(int index, Object value) {
+        SqlParam(int index, Object value) {
             this.index = index;
             this.value = value;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public int getIndex() {
-            return index;
         }
     }
 }
