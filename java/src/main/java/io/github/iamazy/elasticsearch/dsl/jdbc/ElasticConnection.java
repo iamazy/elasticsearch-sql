@@ -4,10 +4,7 @@ import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import org.elasticsearch.client.RestHighLevelClient;
 
 import java.io.IOException;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -53,14 +50,26 @@ public class ElasticConnection extends AbstractConnection {
         return super.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
+
+
+    /**
+     * @param sql
+     * @param resultSetType
+     * @param resultSetConcurrency
+     * @return
+     * @throws SQLException
+     */
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+        if (resultSetType == ResultSet.TYPE_SCROLL_INSENSITIVE && resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) {
+
+        }
         return super.prepareStatement(sql, resultSetType, resultSetConcurrency);
     }
 
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
-        return new ElasticDatabaseMetaData(this.url);
+        return new ElasticDatabaseMetaData(this.url,this.properties.getOrDefault("user","").toString());
     }
 
     List<String> getDatabaseNames() {
