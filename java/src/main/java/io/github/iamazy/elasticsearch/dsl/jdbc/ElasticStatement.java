@@ -1,9 +1,11 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcResponseExtractor;
 import io.github.iamazy.elasticsearch.dsl.sql.ElasticSql2DslParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
@@ -12,6 +14,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * @author iamazy
@@ -45,7 +49,7 @@ public class ElasticStatement extends AbstractStatement {
 
     @Override
     public int executeUpdate(String sql, String[] columnNames) throws SQLException {
-        return super.executeUpdate(sql, columnNames);
+        return executeUpdate(sql);
     }
 
     @Override
@@ -106,6 +110,21 @@ public class ElasticStatement extends AbstractStatement {
 
     @Override
     protected ResultSet executeQuery(String sql, Object[] args) throws SQLException {
+        int count = StringUtils.countMatches(sql, CoreConstants.COND);
+        assert count == args.length;
+        for(Object item:args){
+            sql = sql.replaceFirst("\\?",item.toString());
+        }
         return executeQuery(sql);
+    }
+
+    @Override
+    public void close() throws SQLException {
+        connection.close();
+    }
+
+    @Override
+    public boolean isClosed() {
+        return connection.isClosed();
     }
 }
