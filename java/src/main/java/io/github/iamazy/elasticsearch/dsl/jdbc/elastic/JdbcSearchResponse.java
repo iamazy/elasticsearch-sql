@@ -13,6 +13,7 @@ public class JdbcSearchResponse {
     private long took;
     private long total;
     private int size;
+    private String sql;
 
     private List<Map<String,Object>> result;
 
@@ -46,5 +47,13 @@ public class JdbcSearchResponse {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getSql() {
+        return sql;
+    }
+
+    public void setSql(String sql) {
+        this.sql = sql;
     }
 }

@@ -1,6 +1,8 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
+import io.github.iamazy.elasticsearch.dsl.jdbc.statement.ElasticPreparedStatement;
+import io.github.iamazy.elasticsearch.dsl.jdbc.statement.ElasticStatement;
 import org.elasticsearch.client.RestHighLevelClient;
 
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class ElasticConnection extends AbstractConnection {
         this.databases = Arrays.asList(database.split("[,]"));
     }
 
-    RestHighLevelClient getRestClient() {
+    public RestHighLevelClient getRestClient() {
         return client;
     }
 
@@ -45,13 +47,6 @@ public class ElasticConnection extends AbstractConnection {
         return new ElasticPreparedStatement(this, sql);
     }
 
-    @Override
-    public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        return super.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
-    }
-
-
-
     /**
      * @param sql
      * @param resultSetType
@@ -61,18 +56,15 @@ public class ElasticConnection extends AbstractConnection {
      */
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-        if (resultSetType == ResultSet.TYPE_SCROLL_INSENSITIVE && resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) {
-
-        }
-        return super.prepareStatement(sql, resultSetType, resultSetConcurrency);
+        return new ElasticPreparedStatement(this, sql, resultSetType, resultSetConcurrency);
     }
 
     @Override
     public DatabaseMetaData getMetaData() throws SQLException {
-        return new ElasticDatabaseMetaData(this.url,this.properties.getOrDefault("user","").toString());
+        return new ElasticDatabaseMetaData(this.url, this.properties.getOrDefault("user", "").toString());
     }
 
-    List<String> getDatabaseNames() {
+    public List<String> getDatabaseNames() {
         return databases;
     }
 

@@ -1,4 +1,6 @@
-package io.github.iamazy.elasticsearch.dsl.jdbc;
+package io.github.iamazy.elasticsearch.dsl.jdbc.statement;
+
+import io.github.iamazy.elasticsearch.dsl.jdbc.ElasticConnection;
 
 import java.io.InputStream;
 import java.io.Reader;

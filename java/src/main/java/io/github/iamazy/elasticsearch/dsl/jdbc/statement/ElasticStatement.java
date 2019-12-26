@@ -1,12 +1,17 @@
-package io.github.iamazy.elasticsearch.dsl.jdbc;
+package io.github.iamazy.elasticsearch.dsl.jdbc.statement;
 
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
+import io.github.iamazy.elasticsearch.dsl.jdbc.ElasticConnection;
+import io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcResponseExtractor;
+import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcSearchResponse;
+import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticResultSet;
 import io.github.iamazy.elasticsearch.dsl.sql.ElasticSql2DslParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 
@@ -14,9 +19,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author iamazy
@@ -29,7 +32,7 @@ public class ElasticStatement extends AbstractStatement {
     private ResultSet resultSet;
     private ElasticSql2DslParser elasticSql2DslParser;
 
-    ElasticStatement(ElasticConnection connection) {
+    public ElasticStatement(ElasticConnection connection) {
         this.connection = connection;
         this.elasticSql2DslParser = new ElasticSql2DslParser();
     }
@@ -47,6 +50,29 @@ public class ElasticStatement extends AbstractStatement {
         } catch (IOException e) {
             throw new SQLException(e.getMessage());
         }
+    }
+
+    public ResultSet executeScrollQuery(String sql, String scrollId) throws SQLException, IOException {
+        JdbcResponseExtractor jdbcResponseExtractor = new JdbcResponseExtractor();
+        SearchResponse searchResponse;
+        if (StringUtils.isBlank(scrollId)) {
+            ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql);
+            checkDatabase(parseResult.getIndices());
+            assert parseResult.getSqlOperation() == SqlOperation.SELECT;
+            parseResult.toRequest().scroll(JdbcConstants.SCROLL);
+            parseResult.toRequest().source().size(JdbcConstants.DEFAULT_SCROLL_SIZE);
+            searchResponse = connection.getRestClient().search(parseResult.toRequest(), RequestOptions.DEFAULT);
+        } else {
+            SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
+            scrollRequest.scroll(JdbcConstants.SCROLL);
+            searchResponse = connection.getRestClient().scroll(scrollRequest, RequestOptions.DEFAULT);
+        }
+        JdbcSearchResponse jdbcSearchResponse = jdbcResponseExtractor.parseScrollSearchResponse(searchResponse);
+        if(StringUtils.isBlank(jdbcSearchResponse.getSql())){
+            jdbcSearchResponse.setSql(sql);
+        }
+        this.resultSet = new ElasticResultSet(this, jdbcSearchResponse);
+        return resultSet;
     }
 
     @Override
@@ -113,7 +139,7 @@ public class ElasticStatement extends AbstractStatement {
 
     @Override
     protected ResultSet executeQuery(String sql, Object[] args) throws SQLException {
-        sql = prepareExecute(sql,args);
+        sql = prepareExecute(sql, args);
         return executeQuery(sql);
     }
 

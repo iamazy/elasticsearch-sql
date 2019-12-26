@@ -1,9 +1,10 @@
-package io.github.iamazy.elasticsearch.dsl.jdbc;
+package io.github.iamazy.elasticsearch.dsl.jdbc.result;
 
+import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcScrollSearchResponse;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcSearchResponse;
-import org.elasticsearch.search.Scroll;
+import io.github.iamazy.elasticsearch.dsl.jdbc.statement.ElasticStatement;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Objects;
 
@@ -20,20 +21,32 @@ public class ElasticResultSet extends AbstractResultSet {
 
     private int rowCursor = -1;
 
-    ElasticResultSet(Statement statement, JdbcSearchResponse response) {
+    public ElasticResultSet(Statement statement, JdbcSearchResponse response) {
         super(statement);
         this.response = response;
     }
 
-    ElasticResultSet(Statement statement, InputStream inputStream){
-        super(statement);
-
+    public JdbcSearchResponse getResponse() {
+        return response;
     }
 
     @Override
     public boolean next() throws SQLException {
-        rowCursor++;
-        return rowCursor + 1 <= getFetchSize();
+        if(response instanceof JdbcScrollSearchResponse){
+            rowCursor++;
+            if(rowCursor+1==getFetchSize()){
+                ElasticStatement statement=(ElasticStatement)this.statement;
+                try {
+                    ElasticResultSet resultSet =(ElasticResultSet) statement.executeScrollQuery(response.getSql(), ((JdbcScrollSearchResponse) response).getScrollId());
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else {
+            rowCursor++;
+            return rowCursor + 1 <= getFetchSize();
+        }
     }
 
     @Override

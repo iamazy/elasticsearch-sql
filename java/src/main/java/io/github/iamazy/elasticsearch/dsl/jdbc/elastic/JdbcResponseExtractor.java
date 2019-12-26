@@ -25,7 +25,7 @@ import java.util.*;
  **/
 public class JdbcResponseExtractor {
 
-    private void parseTermsAggregation(Aggregation aggregation,Map<String,Object> aggMap,String parent){
+    private void parseTermsAggregation(Aggregation aggregation, Map<String, Object> aggMap, String parent) {
         Terms buckets = (Terms) aggregation;
         Map<String, Object> tmpSubAgg = new LinkedHashMap<>(0);
         Map<String, Object> subAggMap = new LinkedHashMap<>(0);
@@ -59,7 +59,7 @@ public class JdbcResponseExtractor {
         }
     }
 
-    private void parseCompositeAggregation(Aggregation aggregation, Map<String, Object> aggMap, String parent){
+    private void parseCompositeAggregation(Aggregation aggregation, Map<String, Object> aggMap, String parent) {
         ParsedComposite composite = (ParsedComposite) aggregation;
         Map<String, Object> tmpSubAgg = new LinkedHashMap<>(0);
         for (ParsedComposite.ParsedBucket bucket : composite.getBuckets()) {
@@ -73,7 +73,7 @@ public class JdbcResponseExtractor {
                     value = entry.getValue();
                 }
                 //过滤blank field的情况
-                if(value != null && StringUtils.isNotBlank(field)) {
+                if (value != null && StringUtils.isNotBlank(field)) {
                     tmpSubAgg.put(value.toString(), bucket.getDocCount());
                 }
             }
@@ -89,7 +89,7 @@ public class JdbcResponseExtractor {
         }
     }
 
-    private void parseTopHitsAggregation(Aggregation aggregation,Map<String,Object> aggMap){
+    private void parseTopHitsAggregation(Aggregation aggregation, Map<String, Object> aggMap) {
         TopHits topHits = (TopHits) aggregation;
         SearchHit[] hits = topHits.getHits().getHits();
         List<Map<String, Object>> topHitList = new ArrayList<>(0);
@@ -99,7 +99,7 @@ public class JdbcResponseExtractor {
         aggMap.put(aggregation.getName(), topHitList);
     }
 
-    private void parseRangeAggregation(Aggregation aggregation,Map<String,Object> aggMap){
+    private void parseRangeAggregation(Aggregation aggregation, Map<String, Object> aggMap) {
         Range range = (Range) aggregation;
         List<Map<String, Object>> rangeList = new ArrayList<>(0);
         for (Range.Bucket bucket : range.getBuckets()) {
@@ -110,24 +110,24 @@ public class JdbcResponseExtractor {
         aggMap.put(range.getName(), rangeList);
     }
 
-    private void parseGeoBoundAggregation(Aggregation aggregation,Map<String,Object> aggMap){
+    private void parseGeoBoundAggregation(Aggregation aggregation, Map<String, Object> aggMap) {
         GeoBounds geoBounds = (GeoBounds) aggregation;
         Map<String, Object> coordinate = new LinkedHashMap<>(0);
-        FlatMapUtils.flatPut("leftTop.lat",geoBounds.topLeft().lat(),coordinate);
-        FlatMapUtils.flatPut("leftTop.lon",geoBounds.topLeft().lon(),coordinate);
-        FlatMapUtils.flatPut("rightBottom.lat",geoBounds.bottomRight().lat(),coordinate);
-        FlatMapUtils.flatPut("rightBottom.lon",geoBounds.bottomRight().lon(),coordinate);
+        FlatMapUtils.flatPut("leftTop.lat", geoBounds.topLeft().lat(), coordinate);
+        FlatMapUtils.flatPut("leftTop.lon", geoBounds.topLeft().lon(), coordinate);
+        FlatMapUtils.flatPut("rightBottom.lat", geoBounds.bottomRight().lat(), coordinate);
+        FlatMapUtils.flatPut("rightBottom.lon", geoBounds.bottomRight().lon(), coordinate);
         aggMap.put(aggregation.getName(), coordinate);
     }
 
-    private void parseNestedAggregation(Aggregation aggregation, Map<String, Object> aggMap){
-        Nested nested = (Nested)aggregation;
+    private void parseNestedAggregation(Aggregation aggregation, Map<String, Object> aggMap) {
+        Nested nested = (Nested) aggregation;
         if (nested.getAggregations() != null && nested.getAggregations().asList().size() > 0) {
             parseAggregations(nested.getAggregations(), aggMap, null);
         }
     }
 
-    private void parseCardinalityAggregation(Aggregation aggregation,Map<String,Object> aggMap){
+    private void parseCardinalityAggregation(Aggregation aggregation, Map<String, Object> aggMap) {
         Cardinality cardinality = (Cardinality) aggregation;
         aggMap.put(cardinality.getName(), cardinality.getValue());
     }
@@ -135,40 +135,46 @@ public class JdbcResponseExtractor {
     private void parseAggregations(Aggregations aggregations, Map<String, Object> aggMap, String parent) {
         for (Aggregation aggregation : aggregations) {
             if (aggregation instanceof ParsedNested) {
-                parseNestedAggregation(aggregation,aggMap);
+                parseNestedAggregation(aggregation, aggMap);
             } else if (aggregation instanceof ParsedComposite) {
-                parseCompositeAggregation(aggregation,aggMap,parent);
+                parseCompositeAggregation(aggregation, aggMap, parent);
             } else if (aggregation instanceof ParsedTerms) {
-                parseTermsAggregation(aggregation,aggMap,parent);
+                parseTermsAggregation(aggregation, aggMap, parent);
             } else if (aggregation instanceof ParsedTopHits) {
-                parseTopHitsAggregation(aggregation,aggMap);
+                parseTopHitsAggregation(aggregation, aggMap);
             } else if (aggregation instanceof ParsedCardinality) {
-                parseCardinalityAggregation(aggregation,aggMap);
+                parseCardinalityAggregation(aggregation, aggMap);
             } else if (aggregation instanceof ParsedRange) {
-                parseRangeAggregation(aggregation,aggMap);
+                parseRangeAggregation(aggregation, aggMap);
             } else if (aggregation instanceof ParsedGeoBounds) {
-                parseGeoBoundAggregation(aggregation,aggMap);
+                parseGeoBoundAggregation(aggregation, aggMap);
             }
         }
     }
 
 
-    public JdbcSearchResponse parseSearchResponse(SearchResponse response){
-        JdbcSearchResponse jdbcSearchResponse=new JdbcSearchResponse();
+    public JdbcSearchResponse parseSearchResponse(SearchResponse response) {
+        JdbcSearchResponse jdbcSearchResponse = new JdbcSearchResponse();
         jdbcSearchResponse.setSize(response.getHits().getHits().length);
         jdbcSearchResponse.setTook(response.getTook().getMillis());
-        if(response.getHits().getTotalHits()!=null) {
+        if (response.getHits().getTotalHits() != null) {
             jdbcSearchResponse.setTotal(response.getHits().getTotalHits().value);
         }
-        List<Map<String,Object>> result=new ArrayList<>(jdbcSearchResponse.getSize());
+        List<Map<String, Object>> result = new ArrayList<>(jdbcSearchResponse.getSize());
         for (SearchHit hit : response.getHits().getHits()) {
-            hit.getSourceAsMap().put("_id",hit.getId());
-            if(hit.field("_routing")!=null){
-                hit.getSourceAsMap().put("_routing",hit.field("_routing"));
+            hit.getSourceAsMap().put("_id", hit.getId());
+            if (hit.field("_routing") != null) {
+                hit.getSourceAsMap().put("_routing", hit.field("_routing"));
             }
-            result.add(FlatMapUtils.flat(hit.getSourceAsMap(),null));
+            result.add(FlatMapUtils.flat(hit.getSourceAsMap(), null));
         }
         jdbcSearchResponse.setResult(result);
         return jdbcSearchResponse;
+    }
+
+    public JdbcSearchResponse parseScrollSearchResponse(SearchResponse response) {
+        JdbcSearchResponse searchResponse = parseSearchResponse(response);
+        String scrollId = response.getScrollId();
+        return new JdbcScrollSearchResponse(searchResponse,scrollId);
     }
 }

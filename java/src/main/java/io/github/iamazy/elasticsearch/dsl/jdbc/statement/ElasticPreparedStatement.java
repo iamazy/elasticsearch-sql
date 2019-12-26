@@ -1,9 +1,15 @@
-package io.github.iamazy.elasticsearch.dsl.jdbc;
+package io.github.iamazy.elasticsearch.dsl.jdbc.statement;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import io.github.iamazy.elasticsearch.dsl.jdbc.ElasticConnection;
 import io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants;
+import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcScrollSearchResponse;
+import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticResultSet;
+import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticResultSetMetaData;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.sql.Date;
@@ -21,9 +27,21 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
 
     private String sql;
 
-    ElasticPreparedStatement(ElasticConnection connection, String sql) {
+    private boolean scroll = false;
+
+    private String scrollId = StringUtils.EMPTY;
+
+    public ElasticPreparedStatement(ElasticConnection connection, String sql) {
         super(connection);
         this.sql = sql;
+    }
+
+    public ElasticPreparedStatement(ElasticConnection connection, String sql, int resultSetType, int resultSetConcurrency) {
+        super(connection);
+        this.sql = sql;
+        if (resultSetType == ResultSet.TYPE_SCROLL_INSENSITIVE && resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) {
+            this.scroll = true;
+        }
     }
 
     @Override
@@ -34,10 +52,20 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
 
     @Override
     public ResultSet executeQuery() throws SQLException {
-        if (paramMap.size() > 0) {
-            return executeQuery(sql, composeParams(paramMap));
+        if (scroll) {
+            try {
+                ElasticResultSet resultSet = (ElasticResultSet) executeScrollQuery(sql, StringUtils.isBlank(scrollId) ? null : scrollId);
+                this.scrollId = ((JdbcScrollSearchResponse) resultSet.getResponse()).getScrollId();
+                return resultSet;
+            } catch (IOException e) {
+                throw new SQLException(e.getMessage());
+            }
+        } else {
+            if (paramMap.size() > 0) {
+                return executeQuery(sql, composeParams(paramMap));
+            }
+            return executeQuery(sql);
         }
-        return executeQuery(sql);
     }
 
     @Override
@@ -98,7 +126,7 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
 
     @Override
     public void setString(int parameterIndex, String x) throws SQLException {
-        paramMap.put(parameterIndex, new SqlParam(parameterIndex, "'"+x+"'"));
+        paramMap.put(parameterIndex, new SqlParam(parameterIndex, "'" + x + "'"));
     }
 
     @Override

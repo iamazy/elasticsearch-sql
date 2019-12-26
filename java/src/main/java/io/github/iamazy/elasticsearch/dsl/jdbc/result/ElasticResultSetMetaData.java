@@ -1,4 +1,4 @@
-package io.github.iamazy.elasticsearch.dsl.jdbc;
+package io.github.iamazy.elasticsearch.dsl.jdbc.result;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
