@@ -154,7 +154,40 @@ public class JdbcTest {
         }
     }
 
+    public static void scroll(){
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try{
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            String sql = "SELECT * FROM device_search_test";
+            ps = conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = ps.executeQuery();
+            int i=0;
+            while(rs.next()){
+                i++;
+                System.out.println(rs.getString("_id")+"--"+ i);
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch(Exception se){
+            se.printStackTrace();
+        }
+        finally{
+            try{
+                if(ps!=null) ps.close();
+            }catch(SQLException ignored){
+            }
+            try{
+                if(conn!=null) conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+    }
+
     public static void main(String[] args) {
-        prepareStatement1();
+        scroll();
     }
 }
