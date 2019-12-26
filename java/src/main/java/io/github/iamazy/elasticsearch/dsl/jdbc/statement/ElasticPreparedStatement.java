@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.github.iamazy.elasticsearch.dsl.jdbc.ElasticConnection;
 import io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants;
-import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcScrollSearchResponse;
-import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticResultSet;
 import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticResultSetMetaData;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -28,8 +25,6 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
     private String sql;
 
     private boolean scroll = false;
-
-    private String scrollId = StringUtils.EMPTY;
 
     public ElasticPreparedStatement(ElasticConnection connection, String sql) {
         super(connection);
@@ -54,9 +49,7 @@ public class ElasticPreparedStatement extends AbstractFeatureNotSupportedPrepare
     public ResultSet executeQuery() throws SQLException {
         if (scroll) {
             try {
-                ElasticResultSet resultSet = (ElasticResultSet) executeScrollQuery(sql, StringUtils.isBlank(scrollId) ? null : scrollId);
-                this.scrollId = ((JdbcScrollSearchResponse) resultSet.getResponse()).getScrollId();
-                return resultSet;
+                return executeScrollQuery(sql, null);
             } catch (IOException e) {
                 throw new SQLException(e.getMessage());
             }
