@@ -32,21 +32,20 @@ public class ElasticResultSet extends AbstractResultSet {
 
     @Override
     public boolean next() throws SQLException {
-        if(response instanceof JdbcScrollSearchResponse){
-            rowCursor++;
-            if(rowCursor+1==getFetchSize()){
-                ElasticStatement statement=(ElasticStatement)this.statement;
+        rowCursor++;
+        if (response instanceof JdbcScrollSearchResponse) {
+            if (rowCursor == getFetchSize()) {
+                ElasticStatement elasticStatement = (ElasticStatement) this.statement;
                 try {
-                    ElasticResultSet resultSet =(ElasticResultSet) statement.executeScrollQuery(response.getSql(), ((JdbcScrollSearchResponse) response).getScrollId());
-
+                    ElasticResultSet resultSet = (ElasticResultSet) elasticStatement.executeScrollQuery(response.getSql(), ((JdbcScrollSearchResponse) response).getScrollId());
+                    response = resultSet.response;
+                    rowCursor = 0;
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new SQLException(e.getMessage());
                 }
             }
-        }else {
-            rowCursor++;
-            return rowCursor + 1 <= getFetchSize();
         }
+        return rowCursor + 1 <= getFetchSize();
     }
 
     @Override

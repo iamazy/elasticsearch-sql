@@ -72,7 +72,7 @@ public class RestSqlAction extends BaseRestHandler {
 
     private RestChannelConsumer explain(ElasticSqlParseResult parseResult, XContentBuilder builder) {
         if (parseResult.getSqlOperation() == SqlOperation.SELECT) {
-            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.toRequest().source())));
+            return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(parseResult.getSearchRequest().source())));
         }
         return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"not support explaining desc,delete,update syntax yet!!!\"\n}"));
     }
@@ -112,7 +112,7 @@ public class RestSqlAction extends BaseRestHandler {
             }
             default:
             case SELECT: {
-                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.search(parseResult.toRequest()).actionGet())));
+                return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.search(parseResult.getSearchRequest()).actionGet())));
             }
         }
     }

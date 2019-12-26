@@ -58,6 +58,7 @@ public class ElasticSqlParseResult {
     private transient List<SortBuilder> orderBy = new ArrayList<>(0);
     private transient List<AggregationBuilder> groupBy = new ArrayList<>(0);
     private transient SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    private transient SearchRequest searchRequest;
     private transient ReindexRequest reindexRequest;
     private transient IndexRequest indexRequest;
     private transient UpdateRequest updateRequest;
@@ -184,6 +185,17 @@ public class ElasticSqlParseResult {
         this.deleteRequest = deleteRequest;
     }
 
+    public SearchRequest getSearchRequest() {
+        if(searchRequest==null){
+            searchRequest=toRequest();
+        }
+        return searchRequest;
+    }
+
+    public void setSearchRequest(SearchRequest searchRequest) {
+        this.searchRequest = searchRequest;
+    }
+
     public List<SortBuilder> getOrderBy() {
         return orderBy;
     }
@@ -218,7 +230,7 @@ public class ElasticSqlParseResult {
     //endregion
 
 
-    public SearchRequest toRequest() {
+    private SearchRequest toRequest() {
         SearchRequest searchRequest = new SearchRequest();
         List<String> indexList = indices.parallelStream().map(StringManager::removeStringSymbol).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(indexList)) {

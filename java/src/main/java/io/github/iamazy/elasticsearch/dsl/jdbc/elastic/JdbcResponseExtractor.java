@@ -160,21 +160,24 @@ public class JdbcResponseExtractor {
         if (response.getHits().getTotalHits() != null) {
             jdbcSearchResponse.setTotal(response.getHits().getTotalHits().value);
         }
-        List<Map<String, Object>> result = new ArrayList<>(jdbcSearchResponse.getSize());
-        for (SearchHit hit : response.getHits().getHits()) {
-            hit.getSourceAsMap().put("_id", hit.getId());
-            if (hit.field("_routing") != null) {
-                hit.getSourceAsMap().put("_routing", hit.field("_routing"));
+        SearchHit[] searchHits = response.getHits().getHits();
+        if (searchHits != null && searchHits.length > 0) {
+            List<Map<String, Object>> result = new ArrayList<>(searchHits.length);
+            for (SearchHit hit : response.getHits().getHits()) {
+                hit.getSourceAsMap().put("_id", hit.getId());
+                if (hit.field("_routing") != null) {
+                    hit.getSourceAsMap().put("_routing", hit.field("_routing").getValue());
+                }
+                result.add(FlatMapUtils.flat(hit.getSourceAsMap(), null));
             }
-            result.add(FlatMapUtils.flat(hit.getSourceAsMap(), null));
+            jdbcSearchResponse.setResult(result);
         }
-        jdbcSearchResponse.setResult(result);
         return jdbcSearchResponse;
     }
 
     public JdbcSearchResponse parseScrollSearchResponse(SearchResponse response) {
         JdbcSearchResponse searchResponse = parseSearchResponse(response);
         String scrollId = response.getScrollId();
-        return new JdbcScrollSearchResponse(searchResponse,scrollId);
+        return new JdbcScrollSearchResponse(searchResponse, scrollId);
     }
 }

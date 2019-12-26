@@ -43,7 +43,7 @@ public class ElasticStatement extends AbstractStatement {
         checkDatabase(parseResult.getIndices());
         assert parseResult.getSqlOperation() == SqlOperation.SELECT;
         try {
-            SearchResponse searchResponse = connection.getRestClient().search(parseResult.toRequest(), RequestOptions.DEFAULT);
+            SearchResponse searchResponse = connection.getRestClient().search(parseResult.getSearchRequest(), RequestOptions.DEFAULT);
             JdbcResponseExtractor jdbcResponseExtractor = new JdbcResponseExtractor();
             this.resultSet = new ElasticResultSet(this, jdbcResponseExtractor.parseSearchResponse(searchResponse));
             return resultSet;
@@ -59,9 +59,10 @@ public class ElasticStatement extends AbstractStatement {
             ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql);
             checkDatabase(parseResult.getIndices());
             assert parseResult.getSqlOperation() == SqlOperation.SELECT;
-            parseResult.toRequest().scroll(JdbcConstants.SCROLL);
-            parseResult.toRequest().source().size(JdbcConstants.DEFAULT_SCROLL_SIZE);
-            searchResponse = connection.getRestClient().search(parseResult.toRequest(), RequestOptions.DEFAULT);
+            parseResult.getSearchRequest().scroll(JdbcConstants.SCROLL);
+            parseResult.getSearchRequest().source().size(JdbcConstants.DEFAULT_SCROLL_SIZE);
+            parseResult.getSearchRequest().source().trackTotalHits(true);
+            searchResponse = connection.getRestClient().search(parseResult.getSearchRequest(), RequestOptions.DEFAULT);
         } else {
             SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
             scrollRequest.scroll(JdbcConstants.SCROLL);

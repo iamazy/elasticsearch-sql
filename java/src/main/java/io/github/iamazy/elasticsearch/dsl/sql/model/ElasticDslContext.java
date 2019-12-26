@@ -28,6 +28,6 @@ public class ElasticDslContext {
 
     @Override
     public String toString() {
-        return parseResult.toDsl(parseResult.toRequest());
+        return parseResult.toDsl(parseResult.getSearchRequest());
     }
 }

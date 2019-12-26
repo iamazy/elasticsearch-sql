@@ -23,7 +23,7 @@ public interface JdbcConstants {
 
     Pattern IP_PORT_PATTERN = Pattern.compile("://(.*):(\\d+)/");
 
-    Scroll SCROLL = new Scroll(TimeValue.timeValueMinutes(1400L));
+    Scroll SCROLL = new Scroll(TimeValue.timeValueMinutes(1));
 
     int DEFAULT_SCROLL_SIZE=3000;
 }
