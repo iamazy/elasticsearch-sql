@@ -168,7 +168,7 @@ public class JdbcResponseExtractor {
                 if (hit.field("_routing") != null) {
                     hit.getSourceAsMap().put("_routing", hit.field("_routing").getValue());
                 }
-                result.add(FlatMapUtils.flat(hit.getSourceAsMap(), null));
+                result.add(hit.getSourceAsMap());
             }
             jdbcSearchResponse.setResult(result);
         }
