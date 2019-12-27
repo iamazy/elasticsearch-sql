@@ -50,7 +50,7 @@ Elasticsearch-SQL
 **7.5.0** [![7.5.0 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=master)](https://travis-ci.org/iamazy/elasticsearch-sql)
 
 ## Description
-rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**, support **jdbc**
+rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**, support [**jdbc**](https://github.com/iamazy/elasticsearch-sql/wiki/Jdbc)
 
 ## Changelog
 [Changelog](https://github.com/iamazy/elasticsearch-sql/blob/master/CHANGELOG)
@@ -185,6 +185,7 @@ POST _isql/_explain
 - [x] [SQL Delete](https://github.com/iamazy/elasticsearch-sql/wiki/Delete)
 - [x] [ES DeleteByQuery](https://github.com/iamazy/elasticsearch-sql/wiki/Delete)
 - [x] [SQL Insert](https://github.com/iamazy/elasticsearch-sql/wiki/Insert)
+- [x] [Java Jdbc](https://github.com/iamazy/elasticsearch-sql/wiki/Jdbc)
 
 #### Todo
 - [ ] SQL Having
