@@ -4,7 +4,7 @@ jdk:
   - openjdk13
 
 before_install:
-  - cd java
+  - cd elasticsearch-sql-core
 
 install:
   - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dgpg.skip=true
