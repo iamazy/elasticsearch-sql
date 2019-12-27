@@ -24,10 +24,7 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +38,7 @@ public class ElasticSqlParseResult {
     private int size = 15;
 
     private List<String> indices;
+    private Map<String,String> aliasMap=new HashMap<>(0);
 
     private SqlOperation sqlOperation = SqlOperation.SELECT;
     private transient boolean trackTotalHits = false;
@@ -99,6 +97,10 @@ public class ElasticSqlParseResult {
 
     public List<String> getIndices() {
         return indices;
+    }
+
+    public Map<String, String> getAliasMap() {
+        return aliasMap;
     }
 
     public void setIndices(List<String> indices) {

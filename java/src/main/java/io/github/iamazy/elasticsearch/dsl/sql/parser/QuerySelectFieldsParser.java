@@ -48,8 +48,13 @@ public class QuerySelectFieldsParser implements QueryParser {
                 } else {
                     if (fieldName.fieldName instanceof ElasticsearchParser.FieldNameContext) {
                         ElasticsearchParser.FieldNameContext fieldNameContext = (ElasticsearchParser.FieldNameContext) fieldName.fieldName;
+                        //highlighter
                         if (fieldNameContext.highlighter != null) {
                             dslContext.getParseResult().getHighlighter().add(fieldNameContext.field.getText());
+                        }
+                        //add aliases map
+                        if(fieldName.alias!=null){
+                            dslContext.getParseResult().getAliasMap().put(fieldName.alias.getText(),fieldName.fieldName.getText());
                         }
                         includeFields.add(fieldNameContext.field.getText());
                     } else if (fieldName.fieldName instanceof ElasticsearchParser.DistinctNameContext) {

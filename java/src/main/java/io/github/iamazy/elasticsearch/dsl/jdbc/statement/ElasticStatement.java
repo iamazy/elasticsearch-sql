@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author iamazy
@@ -31,6 +32,7 @@ public class ElasticStatement extends AbstractStatement {
     protected ElasticConnection connection;
     private ResultSet resultSet;
     private ElasticSql2DslParser elasticSql2DslParser;
+    private Map<String,String> aliasMap;
 
     public ElasticStatement(ElasticConnection connection) {
         this.connection = connection;
@@ -45,7 +47,7 @@ public class ElasticStatement extends AbstractStatement {
         try {
             SearchResponse searchResponse = connection.getRestClient().search(parseResult.getSearchRequest(), RequestOptions.DEFAULT);
             JdbcResponseExtractor jdbcResponseExtractor = new JdbcResponseExtractor();
-            this.resultSet = new ElasticResultSet(this, jdbcResponseExtractor.parseSearchResponse(searchResponse));
+            this.resultSet = new ElasticResultSet(this, jdbcResponseExtractor.parseSearchResponse(searchResponse,parseResult.getAliasMap()));
             return resultSet;
         } catch (IOException e) {
             throw new SQLException(e.getMessage());
@@ -62,13 +64,14 @@ public class ElasticStatement extends AbstractStatement {
             parseResult.getSearchRequest().scroll(JdbcConstants.SCROLL);
             parseResult.getSearchRequest().source().size(JdbcConstants.DEFAULT_SCROLL_SIZE);
             parseResult.getSearchRequest().source().trackTotalHits(true);
+            this.aliasMap=parseResult.getAliasMap();
             searchResponse = connection.getRestClient().search(parseResult.getSearchRequest(), RequestOptions.DEFAULT);
         } else {
             SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
             scrollRequest.scroll(JdbcConstants.SCROLL);
             searchResponse = connection.getRestClient().scroll(scrollRequest, RequestOptions.DEFAULT);
         }
-        JdbcSearchResponse jdbcSearchResponse = jdbcResponseExtractor.parseScrollSearchResponse(searchResponse);
+        JdbcSearchResponse jdbcSearchResponse = jdbcResponseExtractor.parseScrollSearchResponse(searchResponse,this.aliasMap);
         if(StringUtils.isBlank(jdbcSearchResponse.getSql())){
             jdbcSearchResponse.setSql(sql);
         }
@@ -131,6 +134,10 @@ public class ElasticStatement extends AbstractStatement {
     @Override
     public ResultSet getResultSet() throws SQLException {
         return resultSet;
+    }
+
+    public Map<String, String> getAliasMap() {
+        return aliasMap;
     }
 
     @Override

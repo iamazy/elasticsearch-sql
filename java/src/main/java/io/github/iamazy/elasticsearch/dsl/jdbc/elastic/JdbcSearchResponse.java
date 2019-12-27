@@ -13,6 +13,7 @@ public class JdbcSearchResponse {
     private long took;
     private long total;
     private int size;
+    private Map<String,String> aliasMap;
     private String sql;
 
     private List<Map<String,Object>> result;
@@ -47,6 +48,14 @@ public class JdbcSearchResponse {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public Map<String, String> getAliasMap() {
+        return aliasMap;
+    }
+
+    public void setAliasMap(Map<String, String> aliasMap) {
+        this.aliasMap = aliasMap;
     }
 
     public String getSql() {

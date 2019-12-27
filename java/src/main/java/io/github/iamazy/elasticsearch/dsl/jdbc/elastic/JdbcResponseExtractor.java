@@ -2,6 +2,7 @@ package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 
 import io.github.iamazy.elasticsearch.dsl.utils.FlatMapUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -152,8 +153,7 @@ public class JdbcResponseExtractor {
         }
     }
 
-
-    public JdbcSearchResponse parseSearchResponse(SearchResponse response) {
+    public JdbcSearchResponse parseSearchResponse(SearchResponse response,Map<String,String> aliasMap) {
         JdbcSearchResponse jdbcSearchResponse = new JdbcSearchResponse();
         jdbcSearchResponse.setSize(response.getHits().getHits().length);
         jdbcSearchResponse.setTook(response.getTook().getMillis());
@@ -171,12 +171,13 @@ public class JdbcResponseExtractor {
                 result.add(hit.getSourceAsMap());
             }
             jdbcSearchResponse.setResult(result);
+            jdbcSearchResponse.setAliasMap(aliasMap);
         }
         return jdbcSearchResponse;
     }
 
-    public JdbcSearchResponse parseScrollSearchResponse(SearchResponse response) {
-        JdbcSearchResponse searchResponse = parseSearchResponse(response);
+    public JdbcSearchResponse parseScrollSearchResponse(SearchResponse response,Map<String,String> aliasMap) {
+        JdbcSearchResponse searchResponse = parseSearchResponse(response,aliasMap);
         String scrollId = response.getScrollId();
         return new JdbcScrollSearchResponse(searchResponse, scrollId);
     }

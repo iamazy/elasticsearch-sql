@@ -47,7 +47,11 @@ public class ElasticResultSet extends AbstractResultSet {
 
     @Override
     public String getString(String columnLabel) throws SQLException {
-        Object result = FlatMapUtils.flatGet(columnLabel,this.response.getResult().get(rowCursor));
+        String fieldName=columnLabel;
+        if(this.response.getAliasMap().containsKey(columnLabel)){
+            fieldName=this.response.getAliasMap().get(fieldName);
+        }
+        Object result = FlatMapUtils.flatGet(fieldName,this.response.getResult().get(rowCursor));
         Objects.requireNonNull(result);
         return result.toString();
     }

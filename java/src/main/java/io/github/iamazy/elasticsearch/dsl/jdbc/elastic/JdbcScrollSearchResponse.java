@@ -15,6 +15,7 @@ public final class JdbcScrollSearchResponse extends JdbcSearchResponse {
         setSize(response.getSize());
         setTook(response.getTook());
         setTotal(response.getTotal());
+        setAliasMap(response.getAliasMap());
     }
 
     public String getScrollId() {
