@@ -3,6 +3,7 @@ package io.github.iamazy.elasticsearch.dsl.jdbc.result;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcScrollSearchResponse;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcSearchResponse;
 import io.github.iamazy.elasticsearch.dsl.jdbc.statement.ElasticStatement;
+import io.github.iamazy.elasticsearch.dsl.utils.FlatMapUtils;
 
 import java.io.IOException;
 import java.sql.*;
@@ -26,10 +27,6 @@ public class ElasticResultSet extends AbstractResultSet {
         this.response = response;
     }
 
-    public JdbcSearchResponse getResponse() {
-        return response;
-    }
-
     @Override
     public boolean next() throws SQLException {
         rowCursor++;
@@ -50,21 +47,19 @@ public class ElasticResultSet extends AbstractResultSet {
 
     @Override
     public String getString(String columnLabel) throws SQLException {
-        Object result = this.response.getResult().get(rowCursor).get(columnLabel);
+        Object result = FlatMapUtils.flatGet(columnLabel,this.response.getResult().get(rowCursor));
         Objects.requireNonNull(result);
         return result.toString();
     }
 
     @Override
     public boolean getBoolean(String columnLabel) throws SQLException {
-        Object result = this.response.getResult().get(rowCursor).get(columnLabel);
-        Objects.requireNonNull(result);
-        return Boolean.parseBoolean(result.toString());
+        return Boolean.parseBoolean(getString(columnLabel));
     }
 
     @Override
     public Object getObject(String columnLabel) throws SQLException {
-        return this.response.getResult().get(rowCursor).get(columnLabel);
+        return FlatMapUtils.flatGet(columnLabel,this.response.getResult().get(rowCursor));
     }
 
     @Override
@@ -84,37 +79,27 @@ public class ElasticResultSet extends AbstractResultSet {
 
     @Override
     public long getLong(String columnLabel) throws SQLException {
-        Object result = this.response.getResult().get(rowCursor).get(columnLabel);
-        Objects.requireNonNull(result);
-        return Long.parseLong(result.toString());
+        return Long.parseLong(getString(columnLabel));
     }
 
     @Override
     public int getInt(String columnLabel) throws SQLException {
-        Object result = this.response.getResult().get(rowCursor).get(columnLabel);
-        Objects.requireNonNull(result);
-        return Integer.parseInt(result.toString());
+        return Integer.parseInt(getString(columnLabel));
     }
 
     @Override
     public double getDouble(String columnLabel) throws SQLException {
-        Object result = this.response.getResult().get(rowCursor).get(columnLabel);
-        Objects.requireNonNull(result);
-        return Double.parseDouble(result.toString());
+        return Double.parseDouble(getString(columnLabel));
     }
 
     @Override
     public short getShort(String columnLabel) throws SQLException {
-        Object result = this.response.getResult().get(rowCursor).get(columnLabel);
-        Objects.requireNonNull(result);
-        return Short.parseShort(result.toString());
+        return Short.parseShort(getString(columnLabel));
     }
 
     @Override
     public float getFloat(String columnLabel) throws SQLException {
-        Object result = this.response.getResult().get(rowCursor).get(columnLabel);
-        Objects.requireNonNull(result);
-        return Float.parseFloat(result.toString());
+        return Float.parseFloat(getString(columnLabel));
     }
 
     @Override
