@@ -39,7 +39,9 @@ http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 ">
             <outputDirectory/>
             <useProjectArtifact>true</useProjectArtifact>
             <useTransitiveFiltering>true</useTransitiveFiltering>
+            <useStrictFiltering>true</useStrictFiltering>
             <includes>
+                <include>io.github.iamazy.elasticsearch.dsl:elasticsearch-sql-core</include>
                 <include>com.google.guava:guava</include>
                 <include>org.apache.commons:commons-collections4</include>
                 <include>org.apache.commons:commons-lang3</include>
@@ -47,6 +49,11 @@ http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 ">
                 <include>org.elasticsearch.plugin:parent-join-client</include>
                 <include>com.fasterxml.jackson.core:jackson-annotations</include>
             </includes>
+            <excludes>
+                <exclude>org.elasticsearch:elasticsearch*:*</exclude>
+                <exclude>org.locationtech.spatial4j:spatial4j</exclude>
+                <exclude>org.locationtech.jts:jts-core</exclude>
+            </excludes>
         </dependencySet>
     </dependencySets>
 </assembly>

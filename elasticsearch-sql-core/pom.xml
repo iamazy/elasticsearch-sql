@@ -97,29 +97,7 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>disable-javadoc-doclint</id>
-            <activation>
-                <jdk>[13,)</jdk>
-            </activation>
-            <properties>
-                <javadoc.opts>-Xdoclint:none</javadoc.opts>
-            </properties>
-        </profile>
-    </profiles>
-
     <build>
-        <resources>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>es-plugin.properties</include>
-                    <include>plugin-descriptor.properties</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -167,49 +145,7 @@
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/main/resources</directory>
-                                    <filtering>true</filtering>
-                                    <includes>
-                                        <include>plugin-descriptor.properties</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <descriptors>
-                        <descriptor>${basedir}/src/assembly/zip.xml</descriptor>
-                    </descriptors>
-                    <finalName>elasticsearch</finalName>
-                </configuration>
-            </plugin>
+
             <!--执行测试用例的插件-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -238,17 +174,6 @@
                         </tag>
                     </tags>
                 </configuration>
-                <!--                <executions>-->
-                <!--                    <execution>-->
-                <!--                        <id>attach-javadocs</id>-->
-                <!--                        <goals>-->
-                <!--                            <goal>jar</goal>-->
-                <!--                        </goals>-->
-                <!--                        <configuration>-->
-                <!--                            <additionalparam>-Xdoclint:none</additionalparam>-->
-                <!--                        </configuration>-->
-                <!--                    </execution>-->
-                <!--                </executions>-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
