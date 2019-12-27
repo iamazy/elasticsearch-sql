@@ -47,6 +47,7 @@ public class ElasticStatement extends AbstractStatement {
         try {
             SearchResponse searchResponse = connection.getRestClient().search(parseResult.getSearchRequest(), RequestOptions.DEFAULT);
             JdbcResponseExtractor jdbcResponseExtractor = new JdbcResponseExtractor();
+            this.aliasMap=parseResult.getAliasMap();
             this.resultSet = new ElasticResultSet(this, jdbcResponseExtractor.parseSearchResponse(searchResponse,parseResult.getAliasMap()));
             return resultSet;
         } catch (IOException e) {
