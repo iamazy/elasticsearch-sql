@@ -289,8 +289,6 @@ public class ElasticSql2DslParserTest {
         System.out.println(System.currentTimeMillis()-now);
     }
 
-
-
     @Test
     public void groupBy(){
         long now=System.currentTimeMillis();
