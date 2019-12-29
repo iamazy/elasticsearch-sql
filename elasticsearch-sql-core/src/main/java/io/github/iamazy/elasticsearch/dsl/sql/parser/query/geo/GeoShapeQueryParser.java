@@ -53,9 +53,9 @@ public class GeoShapeQueryParser implements ExpressionQueryParser<ElasticsearchP
             }
             case ElasticsearchParser.MULTILINESTRING: {
                 ElasticsearchParser.PolygonContext polygonContext = geoShapeClauseContext.polygon();
-                List<Line> lines=new ArrayList<>(0);
+                List<Line> lines = new ArrayList<>(0);
                 for (ElasticsearchParser.PointsContext pointsContext : polygonContext.points()) {
-                    lines.add(new Line(traversePointsX(pointsContext),traversePointsY(pointsContext)));
+                    lines.add(new Line(traversePointsX(pointsContext), traversePointsY(pointsContext)));
                 }
                 return new MultiLine(lines);
             }
@@ -64,7 +64,7 @@ public class GeoShapeQueryParser implements ExpressionQueryParser<ElasticsearchP
             }
             default:
             case ElasticsearchParser.MULTIPOLYGON: {
-                List<Polygon> multiPolygon=new ArrayList<>(0);
+                List<Polygon> multiPolygon = new ArrayList<>(0);
                 ElasticsearchParser.MultiPolygonContext multiPolygonContext = geoShapeClauseContext.multiPolygon();
                 for (ElasticsearchParser.PolygonContext polygonContext : multiPolygonContext.polygon()) {
                     multiPolygon.add(parsePolygonContext(polygonContext));
@@ -94,36 +94,36 @@ public class GeoShapeQueryParser implements ExpressionQueryParser<ElasticsearchP
         return points;
     }
 
-    private Line parseLineContext(ElasticsearchParser.PointsContext pointsContext){
-        return new Line(traversePointsX(pointsContext),traversePointsY(pointsContext));
+    private Line parseLineContext(ElasticsearchParser.PointsContext pointsContext) {
+        return new Line(traversePointsX(pointsContext), traversePointsY(pointsContext));
     }
 
-    private LinearRing parseLinearRingContext(ElasticsearchParser.PointsContext pointsContext){
-        return new LinearRing(traversePointsX(pointsContext),traversePointsY(pointsContext));
+    private LinearRing parseLinearRingContext(ElasticsearchParser.PointsContext pointsContext) {
+        return new LinearRing(traversePointsX(pointsContext), traversePointsY(pointsContext));
     }
 
-    private double[] traversePointsX(ElasticsearchParser.PointsContext pointsContext){
-        double[] lats=new double[pointsContext.point().size()];
-        for(int i=0;i<pointsContext.point().size();i++){
-            lats[i]=Double.parseDouble(pointsContext.point(i).lon.getText());
+    private double[] traversePointsX(ElasticsearchParser.PointsContext pointsContext) {
+        double[] lats = new double[pointsContext.point().size()];
+        for (int i = 0; i < pointsContext.point().size(); i++) {
+            lats[i] = Double.parseDouble(pointsContext.point(i).lon.getText());
         }
         return lats;
     }
 
-    private double[] traversePointsY(ElasticsearchParser.PointsContext pointsContext){
-        double[] lons=new double[pointsContext.point().size()];
-        for(int i=0;i<pointsContext.point().size();i++){
-            lons[i]=Double.parseDouble(pointsContext.point(i).lat.getText());
+    private double[] traversePointsY(ElasticsearchParser.PointsContext pointsContext) {
+        double[] lons = new double[pointsContext.point().size()];
+        for (int i = 0; i < pointsContext.point().size(); i++) {
+            lons[i] = Double.parseDouble(pointsContext.point(i).lat.getText());
         }
         return lons;
     }
 
     private Polygon parsePolygonContext(ElasticsearchParser.PolygonContext polygonContext) {
-        LinearRing linearRing= parseLinearRingContext(polygonContext.points(0));
-        List<LinearRing> linearRings=new ArrayList<>(0);
+        LinearRing linearRing = parseLinearRingContext(polygonContext.points(0));
+        List<LinearRing> linearRings = new ArrayList<>(0);
         for (int i = 1; i < polygonContext.points().size(); i++) {
             linearRings.add(parseLinearRingContext(polygonContext.points(i)));
         }
-        return new Polygon(linearRing,linearRings);
+        return new Polygon(linearRing, linearRings);
     }
 }
