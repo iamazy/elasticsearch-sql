@@ -36,6 +36,6 @@ public class QueryFromParser implements QueryParser {
         }else if(dslContext.getSqlContext().updateOperation()!=null){
             dslContext.getParseResult().setSqlOperation(SqlOperation.UPDATE);
         }
-        dslContext.getParseResult().setIndices(indices);
+        dslContext.getParseResult().getIndices().addAll(indices);
     }
 }
