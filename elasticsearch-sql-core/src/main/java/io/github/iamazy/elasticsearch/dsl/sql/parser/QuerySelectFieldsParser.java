@@ -6,6 +6,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.GroupByQueryParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.collapse.CollapseBuilder;
@@ -67,8 +68,8 @@ public class QuerySelectFieldsParser implements QueryParser {
                                 dslContext.getParseResult().getHighlighter().add(distinctName);
                             }
                         }
-                        if (dslContext.getParseResult().getCollapseBuilder() == null) {
-                            dslContext.getParseResult().setCollapseBuilder(new CollapseBuilder(distinctName));
+                        if (StringUtils.isNotBlank(dslContext.getParseResult().getDistinctName())){
+                            dslContext.getParseResult().setDistinctName(distinctName);
                         }
                         includeFields.add(distinctName);
                     } else {
