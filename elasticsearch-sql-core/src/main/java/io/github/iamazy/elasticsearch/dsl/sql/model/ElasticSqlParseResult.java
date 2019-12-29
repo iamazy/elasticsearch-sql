@@ -43,7 +43,7 @@ public class ElasticSqlParseResult {
 
     private SqlOperation sqlOperation = SqlOperation.SELECT;
     private transient boolean trackTotalHits = false;
-    
+
     private Set<String> highlighter = new HashSet<>(0);
     private List<String> routingBy = new ArrayList<>(0);
     private List<String> includeFields = new ArrayList<>(0);
