@@ -194,7 +194,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             return likeQueryParser.parse(likeClauseContext);
         }
         // NOT
-        else if(binaryContext.notClause()!=null){
+        else if (binaryContext.notClause() != null) {
             return parseNotExpressionContext(binaryContext.notClause());
         }
         throw new ElasticSql2DslException("[syntax error] not supported yet");
@@ -206,8 +206,8 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         }
     }
 
-    private AtomicQuery parseNotExpressionContext(ElasticsearchParser.NotClauseContext notClauseContext){
-        AtomicQuery query=parseExpressionContext(notClauseContext.expression());
+    private AtomicQuery parseNotExpressionContext(ElasticsearchParser.NotClauseContext notClauseContext) {
+        AtomicQuery query = parseExpressionContext(notClauseContext.expression());
         return new AtomicQuery(QueryBuilders.boolQuery().mustNot(query.getQueryBuilder()));
     }
 
@@ -231,6 +231,16 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             return fullTextQueryParser.parse((ElasticsearchParser.FullTextContext) expressionContext);
         } else if (expressionContext instanceof ElasticsearchParser.BetweenAndContext) {
             return betweenAndQueryParser.parse((ElasticsearchParser.BetweenAndContext) expressionContext);
+        } else if (expressionContext instanceof ElasticsearchParser.NameExprContext) {
+            ElasticsearchParser.NameExprContext nameExprContext = (ElasticsearchParser.NameExprContext) expressionContext;
+            if (nameExprContext.nameClause() instanceof ElasticsearchParser.FunctionNameContext) {
+                ElasticsearchParser.FunctionNameContext functionNameContext = (ElasticsearchParser.FunctionNameContext) nameExprContext.nameClause();
+                String functionName = functionNameContext.functionName.getText();
+                functionNameContext.collection().identity();
+                throw new ElasticSql2DslException("not support yet");
+            }else{
+                throw new ElasticSql2DslException("not support yet");
+            }
         } else {
             throw new ElasticSql2DslException("not support yet");
         }
@@ -250,6 +260,9 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
             return true;
         }
         if (expressionContext instanceof ElasticsearchParser.FullTextContext) {
+            return true;
+        }
+        if (expressionContext instanceof ElasticsearchParser.NameExprContext) {
             return true;
         }
         return expressionContext instanceof ElasticsearchParser.JoinContext;
