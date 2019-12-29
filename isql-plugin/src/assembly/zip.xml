@@ -50,7 +50,12 @@ http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 ">
                 <include>com.fasterxml.jackson.core:jackson-annotations</include>
             </includes>
             <excludes>
-                <exclude>org.elasticsearch:elasticsearch*:*</exclude>
+                <exclude>com.fasterxml.jackson.core:jackson-core</exclude>
+                <exclude>com.fasterxml.jackson.core:jackson-databind</exclude>
+                <exclude>org.elasticsearch:elasticsearch</exclude>
+                <exclude>org.elasticsearch.client:elasticsearch-rest-high-level-client</exclude>
+                <exclude>org.elasticsearch.client:elasticsearch-rest-client</exclude>
+                <exclude>org.elasticsearch.client:elasticsearch-rest-client-sniffer</exclude>
                 <exclude>org.locationtech.spatial4j:spatial4j</exclude>
                 <exclude>org.locationtech.jts:jts-core</exclude>
             </excludes>
