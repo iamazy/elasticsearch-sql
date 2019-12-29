@@ -294,7 +294,7 @@ public class ElasticSql2DslParserTest {
     @Test
     public void groupBy(){
         long now=System.currentTimeMillis();
-        String sql="select max(name),avg(height),avg(name),min(name) from student group by name,age,height";
+        String sql="select max(name) as max_name,avg(height) as avg_height,avg(name) as avg_name,min(name) as min_name from student group by name,age,height";
         ElasticSql2DslParser parser=new ElasticSql2DslParser();
         ElasticSqlParseResult parseResult = parser.parse(sql);
         System.out.println(parseResult.toPrettyDsl(parseResult.getSearchRequest()));

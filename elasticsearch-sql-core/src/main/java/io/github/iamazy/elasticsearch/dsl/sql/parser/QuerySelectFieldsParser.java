@@ -114,8 +114,12 @@ public class QuerySelectFieldsParser implements QueryParser {
                     aggregationSet.add(groupByQueryParser.parse(functionNameContext.functionName.getText(), field));
                     aggregationMap.put(idx, aggregationSet);
                 }
+
             } else {
                 throw new ElasticSql2DslException("only support field or groupBy function in groupBy syntax");
+            }
+            if(nameOperandContext.alias!=null){
+                dslContext.getParseResult().getAliasMap().put(nameOperandContext.alias.getText(),nameOperandContext.fieldName.getText());
             }
         }
         if (groupByFields.size() > 0) {
