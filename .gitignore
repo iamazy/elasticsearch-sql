@@ -8,3 +8,6 @@ java/target/
 *.class
 *.iml
 .idea/
+isql-plugin/target/
+elasticsearch-sql-core/target
+elasticsearch-sql-jdbc/target
