@@ -1,4 +1,4 @@
-// Generated from C:/Users/iamazy/Documents/GitHub/elasticsearch-sql/java/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/iamazy/Documents/GitHub/elasticsearch-sql/elasticsearch-sql-core/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -92,13 +92,6 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLrName(ElasticsearchParser.LrNameContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code groupByFunctionName}
-	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code binaryName}
 	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
@@ -495,16 +488,4 @@ public interface ElasticsearchParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#groupByFunctionClause}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitGroupByFunctionClause(ElasticsearchParser.GroupByFunctionClauseContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ElasticsearchParser#count}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCount(ElasticsearchParser.CountContext ctx);
 }

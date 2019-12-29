@@ -1,4 +1,4 @@
-// Generated from C:/Users/iamazy/Documents/GitHub/elasticsearch-sql/java/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
+// Generated from C:/Users/iamazy/Documents/GitHub/elasticsearch-sql/elasticsearch-sql-core/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -145,18 +145,6 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLrName(ElasticsearchParser.LrNameContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code groupByFunctionName}
-	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
-	 * @param ctx the parse tree
-	 */
-	void enterGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code groupByFunctionName}
-	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
-	 * @param ctx the parse tree
-	 */
-	void exitGroupByFunctionName(ElasticsearchParser.GroupByFunctionNameContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code binaryName}
 	 * labeled alternative in {@link ElasticsearchParser#nameClause}.
@@ -823,24 +811,4 @@ public interface ElasticsearchParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDisMaxClause(ElasticsearchParser.DisMaxClauseContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#groupByFunctionClause}.
-	 * @param ctx the parse tree
-	 */
-	void enterGroupByFunctionClause(ElasticsearchParser.GroupByFunctionClauseContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#groupByFunctionClause}.
-	 * @param ctx the parse tree
-	 */
-	void exitGroupByFunctionClause(ElasticsearchParser.GroupByFunctionClauseContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ElasticsearchParser#count}.
-	 * @param ctx the parse tree
-	 */
-	void enterCount(ElasticsearchParser.CountContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ElasticsearchParser#count}.
-	 * @param ctx the parse tree
-	 */
-	void exitCount(ElasticsearchParser.CountContext ctx);
 }

@@ -1,6 +1,6 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser.aggs;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AggregateQuery;
@@ -14,7 +14,6 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author iamazy
@@ -57,6 +56,7 @@ public class AggregateByQueryParser implements QueryParser {
         if (aggregateItemClauseContext.subAggregationClause().size() > 0) {
             Object o = parseSubAggregationClauseContext(aggregateQuery.getAggregationBuilder(), aggregateItemClauseContext.subAggregationClause());
             if (o instanceof List) {
+                @SuppressWarnings("unchecked")
                 List<AggregationBuilder> subAggs = (List<AggregationBuilder>) o;
                 for (AggregationBuilder agg : subAggs) {
                     aggregateQuery.getAggregationBuilder().subAggregation(agg);
@@ -134,8 +134,8 @@ public class AggregateByQueryParser implements QueryParser {
         throw new ElasticSql2DslException("not support yet");
     }
 
-    private static Set<AggregationParser> buildAggregationChain() {
-        return ImmutableSet.of(
+    private static List<AggregationParser> buildAggregationChain() {
+        return ImmutableList.of(
                 new TermsAggregationParser(),
                 new TopHitsAggregationParser(),
                 new CardinalityAggregationParser(),

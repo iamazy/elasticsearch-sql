@@ -1,6 +1,6 @@
 package io.github.iamazy.elasticsearch.dsl.sql;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.antlr4.Walker;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
@@ -15,7 +15,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.query.score.DisMaxQueryPars
 import io.github.iamazy.elasticsearch.dsl.sql.parser.reindex.ReindexQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.update.UpdateQueryParser;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author iamazy
@@ -39,8 +39,8 @@ public class ElasticSql2DslParser {
      *
      * @return QueryParser Set ,
      */
-    private static Set<QueryParser> buildSqlParserChain(){
-        return ImmutableSet.of(
+    private static List<QueryParser> buildSqlParserChain(){
+        return ImmutableList.of(
                 new QuerySelectFieldsParser(),
                 new QueryFromParser(),
                 new QueryWhereConditionParser(),

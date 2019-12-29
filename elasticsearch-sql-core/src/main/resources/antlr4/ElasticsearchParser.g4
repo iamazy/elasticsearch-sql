@@ -46,7 +46,6 @@ nameClause:
 	| left = nameClause op = (STAR | DIVIDE | MOD | PLUS | MINUS) right = nameClause	# binaryName
 	| functionName = ID params = collection									# functionName
 	| highlighter = HIGHLIGHTER? field = ID									# fieldName
-	| groupByFunctionClause                                                 # groupByFunctionName
 ;
 
 identity: ID | number = ( INT | FLOAT ) | str = STRING | list = identityList;
@@ -234,10 +233,3 @@ functionScoreClause:
 disMaxClause:
 	DIS_MAX expression (BOOLOR expression)* (AND TIE_BREAKER EQ tieBreaker = FLOAT)?
 ;
-
-//GroupByFunction
-groupByFunctionClause:
-    count
-;
-
-count:COUNT LPAREN DISTINCT? field=ID (COMMA size=INT)? RPAREN;

@@ -7,6 +7,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.GroupByQueryParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.common.collect.Tuple;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.collapse.CollapseBuilder;
@@ -54,8 +55,8 @@ public class QuerySelectFieldsParser implements QueryParser {
                             dslContext.getParseResult().getHighlighter().add(fieldNameContext.field.getText());
                         }
                         //add aliases map
-                        if(fieldName.alias!=null){
-                            dslContext.getParseResult().getAliasMap().put(fieldName.alias.getText(),fieldName.fieldName.getText());
+                        if (fieldName.alias != null) {
+                            dslContext.getParseResult().getAliasMap().put(fieldName.alias.getText(), fieldName.fieldName.getText());
                         }
                         includeFields.add(fieldNameContext.field.getText());
                     } else if (fieldName.fieldName instanceof ElasticsearchParser.DistinctNameContext) {
@@ -68,7 +69,7 @@ public class QuerySelectFieldsParser implements QueryParser {
                                 dslContext.getParseResult().getHighlighter().add(distinctName);
                             }
                         }
-                        if (StringUtils.isNotBlank(dslContext.getParseResult().getDistinctName())){
+                        if (StringUtils.isNotBlank(dslContext.getParseResult().getDistinctName())) {
                             dslContext.getParseResult().setDistinctName(distinctName);
                         }
                         includeFields.add(distinctName);
@@ -99,25 +100,7 @@ public class QuerySelectFieldsParser implements QueryParser {
                 //check whether field is valid
                 checkGroupByField(fieldNameContext.field.getText(), groupByFields);
                 //there is no need to build aggregation builder, because it's has been built.
-            } else if (nameOperandContext.fieldName instanceof ElasticsearchParser.GroupByFunctionNameContext) {
-                ElasticsearchParser.GroupByFunctionNameContext groupByFunctionNameContext = (ElasticsearchParser.GroupByFunctionNameContext) nameOperandContext.fieldName;
-                ElasticsearchParser.GroupByFunctionClauseContext groupByFunctionClauseContext = groupByFunctionNameContext.groupByFunctionClause();
-                if (groupByFunctionClauseContext.count() != null) {
-                    ElasticsearchParser.CountContext countContext = groupByFunctionClauseContext.count();
-                    String field = countContext.field.getText();
-                    checkGroupByField(countContext.field.getText(), groupByFields);
-                    int idx = groupByFields.indexOf(field);
-                    if (countContext.DISTINCT() != null) {
-                        if (aggregationMap.containsKey(idx)) {
-                            aggregationMap.get(idx).add(groupByQueryParser.parse("count", field, true));
-                        } else {
-                            Set<AggregationBuilder> aggregationSet = new HashSet<>(0);
-                            aggregationSet.add(groupByQueryParser.parse("count", field, true));
-                            aggregationMap.put(idx, aggregationSet);
-                        }
-                    }
-                }
-            } else if (nameOperandContext.fieldName instanceof ElasticsearchParser.FunctionNameContext) {
+            }  else if (nameOperandContext.fieldName instanceof ElasticsearchParser.FunctionNameContext) {
                 ElasticsearchParser.FunctionNameContext functionNameContext = (ElasticsearchParser.FunctionNameContext) nameOperandContext.fieldName;
                 //only support one params groupBy function at the moment
                 String field = functionNameContext.params.identity(0).ID().getText();
@@ -135,34 +118,37 @@ public class QuerySelectFieldsParser implements QueryParser {
                 throw new ElasticSql2DslException("only support field or groupBy function in groupBy syntax");
             }
         }
-        AggregationBuilder aggregationBuilder = null;
-        for (int i = groupByFields.size() - 1; i >= 0; i--) {
-            if (aggregationBuilder == null) {
-                aggregationBuilder = AggregationBuilders.terms("count_" + groupByFields.get(i)).field(groupByFields.get(i));
-                buildGroupBy(i, aggregationMap, aggregationBuilder);
-            } else {
-                AggregationBuilder parentAggregationBuilder = AggregationBuilders.terms("count_" + groupByFields.get(i)).field(groupByFields.get(i));
-                parentAggregationBuilder.subAggregation(aggregationBuilder);
-                buildGroupBy(i, aggregationMap, parentAggregationBuilder);
-                aggregationBuilder = parentAggregationBuilder;
+        if (groupByFields.size() > 0) {
+            AggregationBuilder aggregationBuilder = null;
+            List<AggregationBuilder> aggregationBuilders = new ArrayList<>(0);
+            for (int i = groupByFields.size() - 1; i >= 0; i--) {
+                String field = groupByFields.get(i);
+                if (aggregationBuilder == null) {
+                    aggregationBuilder = AggregationBuilders.terms("terms_" + field).field(field).size(5000);
+                    aggregationBuilders.add(aggregationBuilder);
+                    if (aggregationMap.containsKey(i)) {
+                        aggregationBuilders.addAll(aggregationMap.get(i));
+                    }
+                }else{
+                    aggregationBuilder = AggregationBuilders.terms("terms_" + field).field(field).size(5000);
+                    for(AggregationBuilder aggregation:aggregationBuilders){
+                        aggregationBuilder.subAggregation(aggregation);
+                    }
+                    aggregationBuilders.clear();
+                    if(aggregationMap.containsKey(i)){
+                        aggregationBuilders.addAll(aggregationMap.get(i));
+                    }
+                    aggregationBuilders.add(aggregationBuilder);
+                }
             }
+            dslContext.getParseResult().getGroupBy().addAll(aggregationBuilders);
         }
-
-        dslContext.getParseResult().getGroupBy().add(aggregationBuilder);
     }
 
 
     private void checkGroupByField(String field, List<String> fields) {
         if (!fields.contains(field)) {
             throw new ElasticSql2DslException("selected field must be contained by groupBy fields");
-        }
-    }
-
-    private void buildGroupBy(int idx, Map<Integer, Set<AggregationBuilder>> aggregationMap, AggregationBuilder aggregationBuilder) {
-        if (aggregationMap.containsKey(idx)) {
-            for (AggregationBuilder aggregation : aggregationMap.get(idx)) {
-                aggregationBuilder.subAggregation(aggregation);
-            }
         }
     }
 }

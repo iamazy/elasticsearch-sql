@@ -12,15 +12,12 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 @SuppressWarnings("unstable")
 public class CountGroupByParser extends GroupByParser {
 
-    public CountGroupByParser(){
-        this.funcName="count";
+    public CountGroupByParser() {
+        this.funcName = "count";
     }
 
     @Override
     public AggregationBuilder parse(String field, Object... params) {
-        if(params.length==1&&params[0].equals(true)){
-            return AggregationBuilders.cardinality("distinct_"+field).field(field);
-        }
-        return AggregationBuilders.terms("count_"+field).field(field);
+        return AggregationBuilders.cardinality("cardinality_" + field).field(field);
     }
 }
