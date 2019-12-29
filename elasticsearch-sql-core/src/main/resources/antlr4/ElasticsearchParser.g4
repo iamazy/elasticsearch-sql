@@ -164,10 +164,6 @@ subAggregationClause: GT LPAREN aggregationClause RPAREN;
 
 aggregateItemClause: ID collection ((COMMA aggregationClause)| subAggregationClause)*;
 
-//compositeAggregationClause:
-//    AFTER ID EQ identity (COMMA ID EQ identity)*
-//;
-
 routingClause: ROUTING BY STRING ( COMMA STRING)*;
 
 orderClause: ORDER BY order ( COMMA order)*;
