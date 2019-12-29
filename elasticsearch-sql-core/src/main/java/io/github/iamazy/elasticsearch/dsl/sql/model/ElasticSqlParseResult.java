@@ -100,10 +100,6 @@ public class ElasticSqlParseResult {
         return aliasMap;
     }
 
-    public boolean trackTotalHits() {
-        return trackTotalHits;
-    }
-
     public void trackTotalHits(boolean trackTotalHits) {
         this.trackTotalHits = trackTotalHits;
     }
@@ -185,10 +181,6 @@ public class ElasticSqlParseResult {
             searchRequest=toRequest();
         }
         return searchRequest;
-    }
-
-    public void setSearchRequest(SearchRequest searchRequest) {
-        this.searchRequest = searchRequest;
     }
 
     public List<SortBuilder> getOrderBy() {
