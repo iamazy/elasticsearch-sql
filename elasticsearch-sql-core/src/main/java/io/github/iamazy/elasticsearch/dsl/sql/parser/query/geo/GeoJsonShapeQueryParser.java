@@ -23,27 +23,28 @@ import java.io.IOException;
  * @date 2019/9/23
  * @descrition
  **/
-public class GeoJsonShapeQueryParser  implements ExpressionQueryParser<ElasticsearchParser.GeoJsonShapeClauseContext> {
+public class GeoJsonShapeQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoJsonShapeClauseContext> {
 
 
     @Override
     public AtomicQuery parse(ElasticsearchParser.GeoJsonShapeClauseContext expression) {
         try {
-            QueryBuilder queryBuilder= QueryBuilders.geoShapeQuery(expression.field.getText(),parseGeometry(StringManager.removeStringSymbol(expression.geojson.getText())))
+            QueryBuilder queryBuilder = QueryBuilders.geoShapeQuery(expression.field.getText(), parseGeometry(StringManager.removeStringSymbol(expression.geojson.getText())))
                     .relation(GeoUtils.parseGeoRelation(expression.relation.getType()));
             return new AtomicQuery(queryBuilder);
         } catch (Exception e) {
-            throw new ElasticSql2DslException("geo shape parse error: "+e.getMessage());
+            throw new ElasticSql2DslException("geo shape parse error: " + e.getMessage());
         }
     }
 
     @Override
     public boolean isMatchExpressionInvocation(Class clazz) {
-        return ElasticsearchParser.GeoJsonShapeClauseContext.class==clazz;
+        return ElasticsearchParser.GeoJsonShapeClauseContext.class == clazz;
     }
 
     /**
      * turn GeoJson to ShapeBuilder
+     *
      * @param geometry
      * @return
      * @throws IOException
