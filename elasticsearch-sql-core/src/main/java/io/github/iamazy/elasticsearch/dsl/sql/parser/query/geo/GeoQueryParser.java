@@ -18,38 +18,37 @@ public class GeoQueryParser implements ExpressionQueryParser<ElasticsearchParser
     private GeoShapeQueryParser geoShapeQueryParser;
     private GeoJsonShapeQueryParser geoJsonShapeQueryParser;
 
-    public GeoQueryParser(){
-        this.geoDistanceQueryParser=new GeoDistanceQueryParser();
-        this.geoBoundingBoxQueryParser=new GeoBoundingBoxQueryParser();
-        this.geoPolygonQueryParser=new GeoPolygonQueryParser();
-        this.geoShapeQueryParser=new GeoShapeQueryParser();
-        this.geoJsonShapeQueryParser=new GeoJsonShapeQueryParser();
+    public GeoQueryParser() {
+        this.geoDistanceQueryParser = new GeoDistanceQueryParser();
+        this.geoBoundingBoxQueryParser = new GeoBoundingBoxQueryParser();
+        this.geoPolygonQueryParser = new GeoPolygonQueryParser();
+        this.geoShapeQueryParser = new GeoShapeQueryParser();
+        this.geoJsonShapeQueryParser = new GeoJsonShapeQueryParser();
     }
 
     @Override
     public AtomicQuery parse(ElasticsearchParser.GeoContext expression) {
-        if(expression.geoClause().geoDistanceClause()!=null){
+        if (expression.geoClause().geoDistanceClause() != null) {
             return geoDistanceQueryParser.parse(expression.geoClause().geoDistanceClause());
-        }else if(expression.geoClause().geoBoundingBoxClause()!=null){
+        } else if (expression.geoClause().geoBoundingBoxClause() != null) {
             return geoBoundingBoxQueryParser.parse(expression.geoClause().geoBoundingBoxClause());
-        }else if(expression.geoClause().geoPolygonClause()!=null){
+        } else if (expression.geoClause().geoPolygonClause() != null) {
             return geoPolygonQueryParser.parse(expression.geoClause().geoPolygonClause());
-        }else if(expression.geoClause().geoShapeClause()!=null){
+        } else if (expression.geoClause().geoShapeClause() != null) {
             return geoShapeQueryParser.parse(expression.geoClause().geoShapeClause());
-        }else if(expression.geoClause().geoJsonShapeClause()!=null){
+        } else if (expression.geoClause().geoJsonShapeClause() != null) {
             return geoJsonShapeQueryParser.parse(expression.geoClause().geoJsonShapeClause());
-        }
-        else{
+        } else {
             throw new ElasticSql2DslException("geo query only support GeoDistanceQuery yet");
         }
     }
 
     @Override
     public boolean isMatchExpressionInvocation(Class clazz) {
-        return ElasticsearchParser.GeoContext.class==clazz
-                || ElasticsearchParser.GeoDistanceClauseContext.class==clazz
-                || ElasticsearchParser.GeoBoundingBoxClauseContext.class==clazz
-                || ElasticsearchParser.GeoPolygonClauseContext.class==clazz
-                || ElasticsearchParser.GeoShapeClauseContext.class==clazz;
+        return ElasticsearchParser.GeoContext.class == clazz
+                || ElasticsearchParser.GeoDistanceClauseContext.class == clazz
+                || ElasticsearchParser.GeoBoundingBoxClauseContext.class == clazz
+                || ElasticsearchParser.GeoPolygonClauseContext.class == clazz
+                || ElasticsearchParser.GeoShapeClauseContext.class == clazz;
     }
 }
