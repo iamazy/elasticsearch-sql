@@ -6,6 +6,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.indices.mapping.get.GetFieldMappingsRequest;
 import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -37,22 +38,18 @@ public class ElasticSqlParseResult {
     private int from = 0;
     private int size = 15;
 
-    private List<String> indices;
+    private List<String> indices=new ArrayList<>(0);
     private Map<String,String> aliasMap=new HashMap<>(0);
 
     private SqlOperation sqlOperation = SqlOperation.SELECT;
     private transient boolean trackTotalHits = false;
-
-
-    /**
-     * 需要高亮显示的字段
-     */
+    
     private Set<String> highlighter = new HashSet<>(0);
     private List<String> routingBy = new ArrayList<>(0);
     private List<String> includeFields = new ArrayList<>(0);
     private List<String> excludeFields = new ArrayList<>(0);
     private transient QueryBuilder whereCondition = QueryBuilders.matchAllQuery();
-    private transient CollapseBuilder collapseBuilder;
+    private transient String distinctName;
     private transient List<SortBuilder> orderBy = new ArrayList<>(0);
     private transient List<AggregationBuilder> groupBy = new ArrayList<>(0);
     private transient SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -101,10 +98,6 @@ public class ElasticSqlParseResult {
 
     public Map<String, String> getAliasMap() {
         return aliasMap;
-    }
-
-    public void setIndices(List<String> indices) {
-        this.indices = indices;
     }
 
     public boolean trackTotalHits() {
@@ -206,12 +199,12 @@ public class ElasticSqlParseResult {
         return groupBy;
     }
 
-    public void setCollapseBuilder(CollapseBuilder collapseBuilder) {
-        this.collapseBuilder = collapseBuilder;
+    public String getDistinctName() {
+        return distinctName;
     }
 
-    public CollapseBuilder getCollapseBuilder() {
-        return collapseBuilder;
+    public void setDistinctName(String distinctName) {
+        this.distinctName = distinctName;
     }
 
     public GetMappingsRequest getMappingsRequest() {
@@ -249,8 +242,8 @@ public class ElasticSqlParseResult {
             searchSourceBuilder.highlighter(highlightBuilder);
         }
         searchSourceBuilder.query(whereCondition);
-        if (collapseBuilder != null) {
-            searchSourceBuilder.collapse(collapseBuilder);
+        if (StringUtils.isNotBlank(distinctName)) {
+            searchSourceBuilder.collapse(new CollapseBuilder(distinctName));
         }
         if (CollectionUtils.isNotEmpty(orderBy)) {
             for (SortBuilder sortBuilder : orderBy) {
