@@ -215,8 +215,7 @@ public class ElasticSqlParseResult {
         this.fieldMappingsRequest = fieldMappingsRequest;
     }
     //endregion
-
-
+    
     private SearchRequest toRequest() {
         SearchRequest searchRequest = new SearchRequest();
         List<String> indexList = indices.parallelStream().map(StringManager::removeStringSymbol).collect(Collectors.toList());
