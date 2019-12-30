@@ -1,11 +1,9 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
-import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.score.FunctionScoreQueryParser;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
 /**

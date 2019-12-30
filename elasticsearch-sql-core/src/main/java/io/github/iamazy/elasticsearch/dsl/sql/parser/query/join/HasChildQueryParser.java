@@ -5,7 +5,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.BoolExpressionParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 import org.apache.lucene.search.join.ScoreMode;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.join.query.JoinQueryBuilders;
 

@@ -4,7 +4,6 @@ import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 import io.github.iamazy.elasticsearch.dsl.utils.GeoUtils;
-import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.index.query.GeoBoundingBoxQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
