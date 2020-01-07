@@ -1,10 +1,10 @@
 
 .DS_Store
-antlr4/.antlr/
-java/.idea/
-java/target/
 *.atn
 *.html
 *.class
 *.iml
 .idea/
+isql-plugin/target/
+elasticsearch-sql-core/target
+elasticsearch-sql-jdbc/target
