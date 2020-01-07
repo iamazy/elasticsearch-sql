@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.node.NodeClient;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentParser;
@@ -32,7 +33,8 @@ public class RestSqlAction extends BaseRestHandler {
 
     private final ElasticSql2DslParser sql2DslParser;
 
-    RestSqlAction(RestController restController) {
+    RestSqlAction(Settings settings, RestController restController) {
+        super(settings);
         restController.registerHandler(RestRequest.Method.POST, "/_isql/_explain", this);
         restController.registerHandler(RestRequest.Method.GET, "/_isql/_explain", this);
         restController.registerHandler(RestRequest.Method.POST, "/_isql", this);
