@@ -48,7 +48,10 @@ Elasticsearch-SQL
 **7.4.1** [![7.4.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.4.1)](https://travis-ci.org/iamazy/elasticsearch-sql)
 **7.4.2** [![7.4.2 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.4.2)](https://travis-ci.org/iamazy/elasticsearch-sql)
 **7.5.0** [![7.5.0 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.5.0)](https://travis-ci.org/iamazy/elasticsearch-sql)
-**7.5.1** [![7.5.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=master)](https://travis-ci.org/iamazy/elasticsearch-sql)
+**7.5.1** [![7.5.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.5.1)](https://travis-ci.org/iamazy/elasticsearch-sql)
+**7.5.2** [![7.5.2 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.5.2)](https://travis-ci.org/iamazy/elasticsearch-sql)
+**7.6.0** [![7.6.0 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.6.0)](https://travis-ci.org/iamazy/elasticsearch-sql)
+
 
 ## Description
 rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with **antlr4**, support [**jdbc**](https://github.com/iamazy/elasticsearch-sql/wiki/Jdbc)
