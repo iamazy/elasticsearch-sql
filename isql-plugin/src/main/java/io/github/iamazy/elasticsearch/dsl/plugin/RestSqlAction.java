@@ -21,6 +21,8 @@ import org.elasticsearch.tasks.LoggingTaskListener;
 import org.elasticsearch.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -32,17 +34,23 @@ public class RestSqlAction extends BaseRestHandler {
 
     private final ElasticSql2DslParser sql2DslParser;
 
-    RestSqlAction(RestController restController) {
-        restController.registerHandler(RestRequest.Method.POST, "/_isql/_explain", this);
-        restController.registerHandler(RestRequest.Method.GET, "/_isql/_explain", this);
-        restController.registerHandler(RestRequest.Method.POST, "/_isql", this);
-        restController.registerHandler(RestRequest.Method.GET, "/_isql", this);
+    RestSqlAction() {
         this.sql2DslParser = new ElasticSql2DslParser();
     }
 
     @Override
     public String getName() {
         return "isql";
+    }
+
+    @Override
+    public List<Route> routes() {
+        List<Route> routes = new ArrayList<>(4);
+        routes.add(new Route(RestRequest.Method.POST, "/_isql/_explain"));
+        routes.add(new Route(RestRequest.Method.POST, "/_isql/_explain"));
+        routes.add(new Route(RestRequest.Method.POST, "/_isql"));
+        routes.add(new Route(RestRequest.Method.POST, "/_isql"));
+        return routes;
     }
 
     @Override
