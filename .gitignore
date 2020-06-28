@@ -5,6 +5,7 @@
 *.class
 *.iml
 .idea/
+target/
 isql-plugin/target/
 elasticsearch-sql-core/target
 elasticsearch-sql-jdbc/target
