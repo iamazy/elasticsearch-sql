@@ -5,7 +5,15 @@ import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 import io.github.iamazy.elasticsearch.dsl.utils.GeoUtils;
-import org.elasticsearch.geometry.*;
+import org.elasticsearch.geometry.Geometry;
+import org.elasticsearch.geometry.Line;
+import org.elasticsearch.geometry.LinearRing;
+import org.elasticsearch.geometry.MultiLine;
+import org.elasticsearch.geometry.MultiPoint;
+import org.elasticsearch.geometry.MultiPolygon;
+import org.elasticsearch.geometry.Point;
+import org.elasticsearch.geometry.Polygon;
+import org.elasticsearch.geometry.Rectangle;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 

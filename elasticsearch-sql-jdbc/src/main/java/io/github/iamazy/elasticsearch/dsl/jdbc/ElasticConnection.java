@@ -6,7 +6,10 @@ import io.github.iamazy.elasticsearch.dsl.jdbc.statement.ElasticStatement;
 import org.elasticsearch.client.RestHighLevelClient;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;

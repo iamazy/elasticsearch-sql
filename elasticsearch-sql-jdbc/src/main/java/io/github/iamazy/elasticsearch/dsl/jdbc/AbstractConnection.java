@@ -1,6 +1,8 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
