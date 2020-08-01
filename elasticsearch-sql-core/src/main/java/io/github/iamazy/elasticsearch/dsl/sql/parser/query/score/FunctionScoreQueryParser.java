@@ -5,7 +5,9 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.BoolExpressionParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.functionscore.*;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
+import org.elasticsearch.index.query.functionscore.WeightBuilder;
 
 /**
  * @author iamazy

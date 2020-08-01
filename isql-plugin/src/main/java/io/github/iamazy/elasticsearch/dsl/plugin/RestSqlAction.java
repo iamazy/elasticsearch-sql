@@ -6,7 +6,7 @@ import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.client.node.NodeClient;
-import org.elasticsearch.cluster.metadata.MappingMetaData;
+import org.elasticsearch.cluster.metadata.MappingMetadata;
 import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
@@ -16,7 +16,12 @@ import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.index.reindex.ReindexAction;
 import org.elasticsearch.index.reindex.UpdateByQueryAction;
-import org.elasticsearch.rest.*;
+
+import org.elasticsearch.rest.BaseRestHandler;
+import org.elasticsearch.rest.BytesRestResponse;
+import org.elasticsearch.rest.RestHandler;
+import org.elasticsearch.rest.RestRequest;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.tasks.LoggingTaskListener;
 import org.elasticsearch.tasks.Task;
 
@@ -44,8 +49,8 @@ public class RestSqlAction extends BaseRestHandler {
     }
 
     @Override
-    public List<Route> routes() {
-        List<Route> routes = new ArrayList<>(4);
+    public List<RestHandler.Route> routes() {
+        List<RestHandler.Route> routes = new ArrayList<>(4);
         routes.add(new Route(RestRequest.Method.POST, "/_isql/_explain"));
         routes.add(new Route(RestRequest.Method.POST, "/_isql/_explain"));
         routes.add(new Route(RestRequest.Method.POST, "/_isql"));
@@ -91,8 +96,8 @@ public class RestSqlAction extends BaseRestHandler {
                 if (parseResult.getFieldMappingsRequest() != null) {
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(nodeClient.admin().indices().getFieldMappings(parseResult.getFieldMappingsRequest()).actionGet())));
                 } else if (parseResult.getMappingsRequest() != null) {
-                    ImmutableOpenMap<String, MappingMetaData> objectObjectCursors = nodeClient.admin().indices().getMappings(parseResult.getMappingsRequest()).actionGet().mappings().get(parseResult.getMappingsRequest().indices()[0]);
-                    for (ObjectObjectCursor<String, MappingMetaData> objectObjectCursor : objectObjectCursors) {
+                    ImmutableOpenMap<String, MappingMetadata> objectObjectCursors = nodeClient.admin().indices().getMappings(parseResult.getMappingsRequest()).actionGet().mappings().get(parseResult.getMappingsRequest().indices()[0]);
+                    for (ObjectObjectCursor<String, MappingMetadata> objectObjectCursor : objectObjectCursors) {
                         return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.OK, builder.value(objectObjectCursor.value.getSourceAsMap())));
                     }
                     return channel -> channel.sendResponse(new BytesRestResponse(RestStatus.BAD_REQUEST, XContentType.JSON.mediaType(), "{\n\t\"error\":\"sql parse failed!!!\"\n}"));

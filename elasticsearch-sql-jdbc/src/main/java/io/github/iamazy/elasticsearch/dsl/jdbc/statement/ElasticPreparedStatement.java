@@ -8,9 +8,16 @@ import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticResultSetMetaData;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.*;
 import java.sql.Date;
-import java.util.*;
+import java.sql.ParameterMetaData;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 /**

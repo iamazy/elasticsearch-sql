@@ -7,7 +7,12 @@ import io.github.iamazy.elasticsearch.dsl.jdbc.exception.InvalidUrlException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
-import org.elasticsearch.client.*;
+import org.elasticsearch.client.HttpAsyncResponseConsumerFactory;
+import org.elasticsearch.client.NodeSelector;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.sniff.ElasticsearchNodesSniffer;
 import org.elasticsearch.client.sniff.NodesSniffer;
 import org.elasticsearch.client.sniff.SniffOnFailureListener;
@@ -16,10 +21,19 @@ import org.elasticsearch.client.sniff.Sniffer;
 import javax.net.ssl.SSLContext;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
-import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.*;
+
+import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.DEFAULT_IP;
+import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.DEFAULT_PORT;
+import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.ELASTIC_DRIVER_PREFIX;
+import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.IP_PORT_PATTERN;
 import static io.github.iamazy.elasticsearch.dsl.jdbc.ssl.SslContextManager.TRUST_ALL_CERTS;
 
 /**

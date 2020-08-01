@@ -11,7 +11,9 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.query.geo.GeoQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.join.JoinQueryParser;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.query.nested.NestedQueryParser;
 import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 
 /**
  * @author iamazy

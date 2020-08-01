@@ -6,7 +6,12 @@ import io.github.iamazy.elasticsearch.dsl.jdbc.statement.ElasticStatement;
 import io.github.iamazy.elasticsearch.dsl.utils.FlatMapUtils;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Date;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 /**

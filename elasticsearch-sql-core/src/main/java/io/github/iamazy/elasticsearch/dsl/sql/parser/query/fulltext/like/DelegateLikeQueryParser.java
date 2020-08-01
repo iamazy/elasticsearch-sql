@@ -3,7 +3,9 @@ package io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.like;
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 import io.github.iamazy.elasticsearch.dsl.sql.model.AtomicQuery;
 
-import static io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchLexer.*;
+import static io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser.FUZZY;
+import static io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser.PREFIX;
+import static io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser.WILDCARD;
 
 /**
  * @author iamazy

@@ -2,7 +2,11 @@ package io.github.iamazy.elasticsearch.dsl.jdbc;
 
 import org.elasticsearch.Version;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.RowIdLifetime;
+import java.sql.SQLException;
 
 /**
  * @author iamazy
