@@ -68,9 +68,9 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 ## Maven
 ```xml
 <dependency>
-        <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
-        <artifactId>elasticsearch-sql-all</artifactId>
-        <version>7.8.1.1</version>
+    <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
+    <artifactId>elasticsearch-sql-all</artifactId>
+    <version>7.8.1.1</version>
 </dependency>
 ```
 或者
