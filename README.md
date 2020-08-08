@@ -67,11 +67,18 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 
 ## Maven
 ```xml
-<dependency>
-    <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
-    <artifactId>elasticsearch-sql</artifactId>
-    <version>7.3.2.3</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
+        <artifactId>elasticsearch-sql-core</artifactId>
+        <version>7.8.1</version>
+    </dependency>
+    <dependency>
+        <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
+        <artifactId>elasticsearch-sql-jdbc</artifactId>
+        <version>7.8.1</version>
+    </dependency>
+</dependencies>
 ```
 
 ## Plugin(isql)
