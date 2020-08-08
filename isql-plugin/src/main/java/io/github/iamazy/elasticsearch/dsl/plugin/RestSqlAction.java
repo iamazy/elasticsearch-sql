@@ -33,7 +33,6 @@ import java.util.List;
 /**
  * @author iamazy
  * @date 2019/4/23
- * @descrition
  **/
 public class RestSqlAction extends BaseRestHandler {
 

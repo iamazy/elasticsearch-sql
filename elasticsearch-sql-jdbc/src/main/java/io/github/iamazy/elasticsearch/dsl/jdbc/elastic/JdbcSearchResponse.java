@@ -6,7 +6,6 @@ import java.util.Map;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public class JdbcSearchResponse {
 

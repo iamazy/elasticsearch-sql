@@ -3,7 +3,6 @@ package io.github.iamazy.elasticsearch.dsl.jdbc;
 /**
  * @author iamazy
  * @date 2019/12/24
- * @descrition
  **/
 public enum ClusterMode {
 

@@ -5,7 +5,6 @@ import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
 /**
  * @author iamazy
  * @date 2019/7/29
- * @descrition
  **/
 public class ElasticDslContext {
 

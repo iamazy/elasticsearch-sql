@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 /**
  * @author iamazy
  * @date 2019/7/30
- * @descrition sql operation must be selection
  **/
 public class QuerySelectFieldsParser implements QueryParser {
 

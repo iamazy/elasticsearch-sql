@@ -12,7 +12,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 /**
  * @author iamazy
  * @date 2019/8/2
- * @descrition
  **/
 public class NestedQueryParser implements ExpressionQueryParser<ElasticsearchParser.NestedContext> {
 

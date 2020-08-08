@@ -18,7 +18,6 @@ import java.util.function.Supplier;
 /**
  * @author iamazy
  * @date 2019/4/23
- * @descrition
  **/
 public class SqlPlugin extends Plugin implements ActionPlugin {
 

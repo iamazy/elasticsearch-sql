@@ -6,7 +6,6 @@ import javax.net.ssl.X509TrustManager;
 /**
  * @author iamazy
  * @date 2019/2/15
- * @descrition
  **/
 public class SslContextManager {
 

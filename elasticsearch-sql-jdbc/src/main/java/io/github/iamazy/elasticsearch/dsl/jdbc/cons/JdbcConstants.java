@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public interface JdbcConstants {
 

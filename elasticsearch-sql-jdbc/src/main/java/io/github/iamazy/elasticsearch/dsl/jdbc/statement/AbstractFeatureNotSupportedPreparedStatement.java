@@ -23,7 +23,6 @@ import java.util.Calendar;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public abstract class AbstractFeatureNotSupportedPreparedStatement extends ElasticStatement implements PreparedStatement {
 

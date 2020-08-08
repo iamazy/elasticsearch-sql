@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author iamazy
  * @date 2019-08-05
- * @descrition
  **/
 public class DerivativeAggregationParser implements AggregationParser {
 

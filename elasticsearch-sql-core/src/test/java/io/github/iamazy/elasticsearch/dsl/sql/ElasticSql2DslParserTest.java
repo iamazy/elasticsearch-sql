@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * @author iamazy
  * @date 2019/7/26
- * @descrition 注意：为了展示友好的json格式，使用jackson对json进行了pretty了，所以显示在解析时间不是真正的elasticsearch-sql解析成dsl的时间 <br/>
+ 注意：为了展示友好的json格式，使用jackson对json进行了pretty了，所以显示在解析时间不是真正的elasticsearch-sql解析成dsl的时间 <br/>
  *             需要将parseResult.toPrettyDsl()变成parseResult.toDsl()
  **/
 public class ElasticSql2DslParserTest {

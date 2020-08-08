@@ -8,7 +8,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 /**
  * @author iamazy
  * @date 2019/8/2
- * @descrition
  **/
 public class GeoQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoContext> {
 

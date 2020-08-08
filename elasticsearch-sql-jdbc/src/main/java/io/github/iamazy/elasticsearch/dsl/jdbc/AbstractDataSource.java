@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 /**
  * @author iamazy
  * @date 2019/12/16
- * @descrition
  **/
 public abstract class AbstractDataSource implements DataSource {
     @Override

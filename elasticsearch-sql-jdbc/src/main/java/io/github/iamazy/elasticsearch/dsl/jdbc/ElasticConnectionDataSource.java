@@ -13,7 +13,6 @@ import java.sql.SQLException;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public class ElasticConnectionDataSource extends DriverManagerDataSource implements ElasticDataSource {
 

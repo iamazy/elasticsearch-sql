@@ -10,7 +10,6 @@ import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
 /**
  * @author iamazy
  * @date 2019-08-10
- * @descrition
  **/
 public class QueryDescParser implements QueryParser {
 

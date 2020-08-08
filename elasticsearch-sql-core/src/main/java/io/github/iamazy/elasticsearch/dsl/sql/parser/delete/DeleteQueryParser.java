@@ -16,7 +16,6 @@ import java.util.List;
 /**
  * @author iamazy
  * @date 2019/12/14
- * @descrition
  **/
 public class DeleteQueryParser implements QueryParser {
 

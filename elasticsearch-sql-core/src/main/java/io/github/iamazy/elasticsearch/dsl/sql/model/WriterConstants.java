@@ -5,7 +5,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.ElasticSqlScript;
 /**
  * @author iamazy
  * @date 2019/7/26
- * @descrition
  **/
 public final class WriterConstants {
 

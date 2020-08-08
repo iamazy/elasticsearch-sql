@@ -7,7 +7,6 @@ import java.sql.Statement;
 /**
  * @author iamazy
  * @date 2019/12/16
- * @descrition
  **/
 public abstract class AbstractResultSet extends AbstractFeatureNotSupportedResultSet {
 

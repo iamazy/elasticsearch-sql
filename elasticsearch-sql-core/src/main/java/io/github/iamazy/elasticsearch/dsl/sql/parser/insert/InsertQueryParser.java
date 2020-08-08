@@ -17,7 +17,6 @@ import java.util.Map;
 /**
  * @author iamazy
  * @date 2019/12/14
- * @descrition not support insert nested object
  **/
 public class InsertQueryParser implements QueryParser {
 

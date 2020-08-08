@@ -22,7 +22,6 @@ import java.util.Set;
 /**
  * @author iamazy
  * @date 2019/7/29
- * @descrition
  **/
 public class BoolExpressionParser {
 

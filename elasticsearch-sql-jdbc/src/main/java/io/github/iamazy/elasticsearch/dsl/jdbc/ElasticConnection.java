@@ -17,7 +17,6 @@ import java.util.Properties;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public class ElasticConnection extends AbstractConnection {
 

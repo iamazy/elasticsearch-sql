@@ -6,7 +6,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 /**
  * @author iamazy
  * @date 2019/7/30
- * @descrition
  **/
 public class QueryLimitParser implements QueryParser{
 

@@ -30,7 +30,6 @@ import java.util.Map;
 /**
  * @author iamazy
  * @date 2019/12/23
- * @descrition
  **/
 public class JdbcResponseExtractor {
 

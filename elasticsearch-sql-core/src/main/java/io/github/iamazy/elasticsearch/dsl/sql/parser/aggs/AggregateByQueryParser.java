@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * @author iamazy
  * @date 2019-08-03
- * @descrition
+
  **/
 public class AggregateByQueryParser implements QueryParser {
 

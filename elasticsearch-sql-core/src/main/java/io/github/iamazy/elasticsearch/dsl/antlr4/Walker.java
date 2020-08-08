@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author iamazy
  * @date 2019/7/26
- * @descrition
  **/
 public class Walker {
 

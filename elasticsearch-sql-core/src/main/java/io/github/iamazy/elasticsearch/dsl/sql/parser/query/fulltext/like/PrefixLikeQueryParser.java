@@ -11,7 +11,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 /**
  * @author iamazy
  * @date 2019/11/21
- * @descrition
  **/
 public class PrefixLikeQueryParser extends AbstractExactQueryParser implements LikeQueryParser {
 

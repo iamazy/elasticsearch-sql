@@ -24,7 +24,6 @@ import java.util.Map;
 /**
  * @author iamazy
  * @date 2019/12/16
- * @descrition
  **/
 public abstract class AbstractFeatureNotSupportedResultSet implements ResultSet {
 

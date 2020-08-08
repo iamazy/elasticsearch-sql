@@ -10,7 +10,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 /**
  * @author iamazy
  * @date 2019/9/10
- * @descrition
  **/
 public class DisMaxQueryParser implements QueryParser {
 

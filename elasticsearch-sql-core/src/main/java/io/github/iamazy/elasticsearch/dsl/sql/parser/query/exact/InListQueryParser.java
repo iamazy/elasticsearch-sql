@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 /**
  * @author iamazy
  * @date 2019/7/31
- * @descrition
  **/
 public class InListQueryParser extends AbstractExactQueryParser{
 

@@ -11,7 +11,6 @@ import java.sql.SQLException;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public class ElasticDatabaseMetaData implements DatabaseMetaData {
 

@@ -18,7 +18,6 @@ import org.elasticsearch.index.query.RangeQueryBuilder;
 /**
  * @author iamazy
  * @date 2019/7/29
- * @descrition
  **/
 public class BinaryQueryParser extends AbstractExactQueryParser {
 

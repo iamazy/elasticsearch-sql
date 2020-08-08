@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * @author iamazy
  * @date 2019/9/23
- * @descrition
  **/
 public class GeoShapeQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoShapeClauseContext> {
 

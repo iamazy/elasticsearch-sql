@@ -12,7 +12,6 @@ import org.elasticsearch.index.query.functionscore.WeightBuilder;
 /**
  * @author iamazy
  * @date 2019/8/13
- * @descrition
  **/
 public class FunctionScoreQueryParser implements ExpressionQueryParser<ElasticsearchParser.FunctionScoreClauseContext> {
 

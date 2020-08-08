@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public class ElasticDriver implements Driver {
 

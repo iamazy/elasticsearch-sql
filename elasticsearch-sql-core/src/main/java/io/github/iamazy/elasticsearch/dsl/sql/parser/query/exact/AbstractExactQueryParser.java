@@ -9,7 +9,6 @@ import org.elasticsearch.index.query.QueryBuilder;
 /**
  * @author iamazy
  * @date 2019/7/29
- * @descrition
  **/
 public abstract class AbstractExactQueryParser {
 

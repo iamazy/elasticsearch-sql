@@ -10,7 +10,6 @@ import java.util.List;
 /**
  * @author iamazy
  * @date 2019/7/30
- * @descrition
  **/
 public class QueryFromParser implements QueryParser {
 

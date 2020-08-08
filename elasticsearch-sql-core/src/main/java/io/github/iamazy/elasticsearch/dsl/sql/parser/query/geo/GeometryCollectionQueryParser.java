@@ -8,7 +8,6 @@ import org.elasticsearch.common.geo.builders.GeometryCollectionBuilder;
 /**
  * @author iamazy
  * @date 2019/9/24
- * @descrition
  **/
 public class GeometryCollectionQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoPolygonClauseContext> {
     @Override

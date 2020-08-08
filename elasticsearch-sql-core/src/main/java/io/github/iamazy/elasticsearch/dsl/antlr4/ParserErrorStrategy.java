@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.Token;
 /**
  * @author iamazy
  * @date 2019/7/26
- * @descrition
  **/
 final class ParserErrorStrategy extends DefaultErrorStrategy {
 

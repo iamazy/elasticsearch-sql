@@ -20,7 +20,6 @@ import java.io.IOException;
 /**
  * @author iamazy
  * @date 2019/9/23
- * @descrition
  **/
 public class GeoJsonShapeQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoJsonShapeClauseContext> {
 

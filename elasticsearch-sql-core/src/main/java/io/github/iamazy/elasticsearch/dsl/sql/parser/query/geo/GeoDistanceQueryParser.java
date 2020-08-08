@@ -12,7 +12,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 /**
  * @author iamazy
  * @date 2019/7/30
- * @descrition
  **/
 public class GeoDistanceQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoDistanceClauseContext> {
 

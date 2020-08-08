@@ -9,7 +9,6 @@ import java.util.Map;
 /**
  * @author iamazy
  * @date 2019/12/14
- * @descrition
  **/
 @SuppressWarnings({"unchecked", "beta"})
 public class FlatMapUtils {

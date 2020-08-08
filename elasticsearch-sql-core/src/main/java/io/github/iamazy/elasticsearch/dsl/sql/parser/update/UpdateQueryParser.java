@@ -22,7 +22,6 @@ import java.util.Map;
 /**
  * @author iamazy
  * @date 2019/12/14
- * @descrition
  **/
 public class UpdateQueryParser implements QueryParser {
 

@@ -7,7 +7,6 @@ import org.elasticsearch.common.geo.ShapeRelation;
 /**
  * @author iamazy
  * @date 2019/9/8
- * @descrition
  **/
 public class GeoUtils {
 

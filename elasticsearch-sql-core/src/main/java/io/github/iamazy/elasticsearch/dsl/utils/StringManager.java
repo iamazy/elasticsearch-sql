@@ -3,7 +3,6 @@ package io.github.iamazy.elasticsearch.dsl.utils;
 /**
  * @author iamazy
  * @date 2019/7/30
- * @descrition
  **/
 public class StringManager {
 

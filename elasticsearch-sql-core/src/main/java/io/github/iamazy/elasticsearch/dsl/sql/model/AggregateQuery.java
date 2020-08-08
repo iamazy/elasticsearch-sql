@@ -5,7 +5,6 @@ import org.elasticsearch.search.aggregations.AggregationBuilder;
 /**
  * @author iamazy
  * @date 2019-08-05
- * @descrition
  **/
 public class AggregateQuery {
 

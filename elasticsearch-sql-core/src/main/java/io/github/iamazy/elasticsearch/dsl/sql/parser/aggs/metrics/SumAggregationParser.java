@@ -10,7 +10,6 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 /**
  * @author iamazy
  * @date 2019-08-05
- * @descrition
  **/
 public class SumAggregationParser implements AggregationParser {
 

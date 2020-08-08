@@ -6,9 +6,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 /**
  * @author iamazy
  * @date 2019/7/30
- * @descrition
  **/
-
 public interface ExpressionQueryParser<T extends ParserRuleContext> {
     AtomicQuery parse(T expression);
 

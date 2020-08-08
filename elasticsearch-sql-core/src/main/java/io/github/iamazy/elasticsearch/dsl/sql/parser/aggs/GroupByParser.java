@@ -6,7 +6,6 @@ import org.elasticsearch.search.aggregations.AggregationBuilder;
 /**
  * @author iamazy
  * @date 2019/9/3
- * @descrition
  **/
 public abstract class GroupByParser {
     protected String funcName;

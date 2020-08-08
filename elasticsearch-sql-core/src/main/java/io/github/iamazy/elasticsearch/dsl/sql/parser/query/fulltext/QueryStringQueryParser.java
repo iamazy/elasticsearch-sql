@@ -10,7 +10,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 /**
  * @author iamazy
  * @date 2019-08-03
- * @descrition
  **/
 public class QueryStringQueryParser implements ExpressionQueryParser<ElasticsearchParser.QueryStringClauseContext> {
     @Override

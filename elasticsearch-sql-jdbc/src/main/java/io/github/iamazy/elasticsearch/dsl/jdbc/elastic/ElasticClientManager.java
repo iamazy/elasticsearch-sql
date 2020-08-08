@@ -39,7 +39,6 @@ import static io.github.iamazy.elasticsearch.dsl.jdbc.ssl.SslContextManager.TRUS
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public class ElasticClientManager implements ElasticClientProvider {
 

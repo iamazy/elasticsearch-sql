@@ -7,7 +7,6 @@ import java.sql.SQLWarning;
 /**
  * @author iamazy
  * @date 2019/12/16
- * @descrition
  **/
 public abstract class AbstractStatement extends AbstractFeatureNotSupportedStatement {
 

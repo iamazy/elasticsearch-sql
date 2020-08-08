@@ -5,7 +5,6 @@ import java.util.Objects;
 /**
  * @author iamazy
  * @date 2019/7/26
- * @descrition Represents a location in sql code (name of token + character offset)
  **/
 public final class Location {
 

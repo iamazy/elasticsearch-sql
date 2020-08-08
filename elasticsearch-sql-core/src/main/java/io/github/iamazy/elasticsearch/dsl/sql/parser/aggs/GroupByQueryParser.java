@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * @author iamazy
  * @date 2019-08-06
- * @descrition
  **/
 @SuppressWarnings("unstable")
 public class GroupByQueryParser{

@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
 /**
  * @author iamazy
  * @date 2019/7/26
- * @descrition
  **/
 public class ElasticSqlParseResult {
 

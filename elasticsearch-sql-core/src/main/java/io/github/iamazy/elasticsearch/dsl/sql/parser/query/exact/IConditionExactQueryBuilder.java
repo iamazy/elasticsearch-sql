@@ -6,7 +6,6 @@ import org.elasticsearch.index.query.QueryBuilder;
 /**
  * @author iamazy
  * @date 2019/7/29
- * @descrition
  **/
 @FunctionalInterface
 public interface IConditionExactQueryBuilder {

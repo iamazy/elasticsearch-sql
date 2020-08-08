@@ -10,7 +10,6 @@ import static io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser.WILD
 /**
  * @author iamazy
  * @date 2019/11/21
- * @descrition
  **/
 public class DelegateLikeQueryParser {
 

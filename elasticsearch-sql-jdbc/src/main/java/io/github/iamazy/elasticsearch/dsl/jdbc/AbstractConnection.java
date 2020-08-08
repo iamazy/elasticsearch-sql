@@ -10,7 +10,6 @@ import java.util.Properties;
 /**
  * @author iamazy
  * @date 2019/12/16
- * @descrition
  **/
 public abstract class AbstractConnection extends AbstractFeatureNotSupportedConnection {
 

@@ -17,7 +17,6 @@ import java.util.Objects;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public class ElasticResultSet extends AbstractResultSet {
 

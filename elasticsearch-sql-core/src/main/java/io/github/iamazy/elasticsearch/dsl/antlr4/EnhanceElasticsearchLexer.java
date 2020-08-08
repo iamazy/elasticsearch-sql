@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.CharStream;
 /**
  * @author iamazy
  * @date 2019/7/29
- * @descrition
  **/
 public class EnhanceElasticsearchLexer extends  ElasticsearchLexer {
 

@@ -3,7 +3,6 @@ package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 /**
  * @author iamazy
  * @date 2019/12/26
- * @descrition
  **/
 public final class JdbcScrollSearchResponse extends JdbcSearchResponse {
 

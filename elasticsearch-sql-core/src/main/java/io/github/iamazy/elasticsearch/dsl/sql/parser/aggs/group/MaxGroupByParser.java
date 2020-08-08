@@ -7,7 +7,6 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 /**
  * @author iamazy
  * @date 2019/9/4
- * @descrition
  **/
 @SuppressWarnings("unstable")
 public class MaxGroupByParser extends GroupByParser {

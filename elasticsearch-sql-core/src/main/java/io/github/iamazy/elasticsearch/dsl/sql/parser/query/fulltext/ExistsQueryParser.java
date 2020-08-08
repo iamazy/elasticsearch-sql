@@ -8,7 +8,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 /**
  * @author iamazy
  * @date 2019/8/14
- * @descrition
  **/
 public class ExistsQueryParser implements ExpressionQueryParser<ElasticsearchParser.IsClauseContext> {
 

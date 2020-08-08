@@ -9,7 +9,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.query.fulltext.like.Delegat
 /**
  * @author iamazy
  * @date 2019/8/2
- * @descrition
  **/
 public class LikeQueryParser extends AbstractExactQueryParser implements ExpressionQueryParser<ElasticsearchParser.LikeClauseContext> {
 

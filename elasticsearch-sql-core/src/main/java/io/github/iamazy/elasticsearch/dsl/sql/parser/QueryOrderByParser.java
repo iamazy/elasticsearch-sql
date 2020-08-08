@@ -10,7 +10,6 @@ import org.elasticsearch.search.sort.SortOrder;
 /**
  * @author iamazy
  * @date 2019-08-04
- * @descrition
  **/
 public class QueryOrderByParser implements QueryParser {
 

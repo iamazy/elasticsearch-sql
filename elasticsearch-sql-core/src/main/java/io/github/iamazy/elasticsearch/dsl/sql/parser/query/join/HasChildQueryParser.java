@@ -11,7 +11,6 @@ import org.elasticsearch.join.query.JoinQueryBuilders;
 /**
  * @author iamazy
  * @date 2019/8/2
- * @descrition
  **/
 public class HasChildQueryParser implements ExpressionQueryParser<ElasticsearchParser.HasChildClauseContext> {
 

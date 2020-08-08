@@ -5,7 +5,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public interface ElasticClientProvider {
 

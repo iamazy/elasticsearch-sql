@@ -23,7 +23,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author iamazy
  * @date 2019/8/14
- * @descrition
  **/
 public class ReindexQueryParser implements QueryParser {
 

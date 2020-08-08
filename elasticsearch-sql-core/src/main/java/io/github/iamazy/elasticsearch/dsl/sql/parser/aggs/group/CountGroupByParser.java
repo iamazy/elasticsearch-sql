@@ -7,7 +7,6 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 /**
  * @author iamazy
  * @date 2019/9/3
- * @descrition
  **/
 @SuppressWarnings("unstable")
 public class CountGroupByParser extends GroupByParser {

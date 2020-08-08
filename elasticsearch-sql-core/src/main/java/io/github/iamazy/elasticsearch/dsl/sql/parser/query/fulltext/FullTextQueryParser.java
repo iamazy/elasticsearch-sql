@@ -8,7 +8,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 /**
  * @author iamazy
  * @date 2019-08-03
- * @descrition
  **/
 public class FullTextQueryParser implements ExpressionQueryParser<ElasticsearchParser.FullTextContext> {
 

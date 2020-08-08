@@ -19,7 +19,6 @@ import java.util.concurrent.Executor;
 /**
  * @author iamazy
  * @date 2019/12/16
- * @descrition
  **/
 public abstract class AbstractFeatureNotSupportedConnection implements Connection {
 

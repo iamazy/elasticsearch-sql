@@ -11,7 +11,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 /**
  * @author iamazy
  * @date 2019/8/28
- * @descrition
  **/
 public class GeoBoundingBoxQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoBoundingBoxClauseContext> {
 

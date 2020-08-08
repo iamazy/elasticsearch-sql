@@ -9,7 +9,6 @@ import org.elasticsearch.index.query.QueryBuilder;
 /**
  * @author iamazy
  * @date 2019/7/30
- * @descrition
  **/
 public class QueryWhereConditionParser extends BoolExpressionParser implements QueryParser {
 

@@ -12,7 +12,6 @@ import java.util.Set;
 /**
  * @author iamazy
  * @date 2019/8/13
- * @descrition
  **/
 public class MultiMatchQueryParser implements ExpressionQueryParser<ElasticsearchParser.MultiMatchClauseContext> {
     @Override

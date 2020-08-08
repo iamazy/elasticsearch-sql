@@ -6,7 +6,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 /**
  * @author iamazy
  * @date 2019/11/21
- * @descrition
  **/
 interface LikeQueryParser extends ExpressionQueryParser<ElasticsearchParser.LikeClauseContext> {
 }

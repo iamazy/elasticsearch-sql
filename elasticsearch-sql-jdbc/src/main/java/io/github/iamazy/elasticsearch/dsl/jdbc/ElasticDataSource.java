@@ -6,7 +6,6 @@ import java.sql.Connection;
 /**
  * @author iamazy
  * @date 2019/12/21
- * @descrition
  **/
 public interface ElasticDataSource extends DataSource {
 

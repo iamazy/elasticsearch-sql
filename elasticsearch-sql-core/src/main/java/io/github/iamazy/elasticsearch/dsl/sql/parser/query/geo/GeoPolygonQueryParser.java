@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * @author iamazy
  * @date 2019/9/8
- * @descrition
  **/
 public class GeoPolygonQueryParser implements ExpressionQueryParser<ElasticsearchParser.GeoPolygonClauseContext> {
     @Override
