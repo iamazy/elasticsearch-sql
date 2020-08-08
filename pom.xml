@@ -7,7 +7,7 @@
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
     <packaging>pom</packaging>
-    <version>7.8.1</version>
+    <version>7.8.1.1</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
     <url>https://github.com/iamazy/elasticsearch-sql</url>
@@ -17,6 +17,7 @@
         <module>elasticsearch-sql-core</module>
         <module>elasticsearch-sql-jdbc</module>
         <module>isql-plugin</module>
+        <module>elasticsearch-sql-all</module>
     </modules>
 
 
@@ -123,7 +124,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.0</version>
+                <version>3.0.0-M1</version>
             </plugin>
             <!--执行测试用例的插件-->
             <plugin>
@@ -153,11 +154,6 @@
                             <name>date</name>
                             <placement>a</placement>
                             <head>date:</head>
-                        </tag>
-                        <tag>
-                            <name>description</name>
-                            <placement>a</placement>
-                            <head>description:</head>
                         </tag>
                     </tags>
                 </configuration>

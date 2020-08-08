@@ -5,7 +5,7 @@
     <parent>
         <artifactId>elasticsearch-sql</artifactId>
         <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
-        <version>7.8.1</version>
+        <version>7.8.1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,10 +15,48 @@
         <dependency>
             <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
             <artifactId>elasticsearch-sql-core</artifactId>
+            <version>${elasticsearch.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
             <artifactId>elasticsearch-sql-jdbc</artifactId>
+            <version>${elasticsearch.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <defaultAuthor>iamazy</defaultAuthor>
+                    <tags>
+                        <tag>
+                            <name>date</name>
+                            <placement>a</placement>
+                            <head>date:</head>
+                        </tag>
+                    </tags>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
