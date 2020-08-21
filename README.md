@@ -57,6 +57,7 @@ Elasticsearch-SQL
 **7.7.1** [![7.7.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.7.1)](https://travis-ci.org/iamazy/elasticsearch-sql)
 **7.8.0** [![7.8.0 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.8.0)](https://travis-ci.org/iamazy/elasticsearch-sql)<br/>
 **7.8.1** [![7.8.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.8.1)](https://travis-ci.org/iamazy/elasticsearch-sql)
+**7.9.0** [![7.9.0 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.9.0)](https://travis-ci.org/iamazy/elasticsearch-sql)
 
 
 ## Description
@@ -70,7 +71,7 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 <dependency>
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql-all</artifactId>
-    <version>7.8.1.1</version>
+    <version>7.9.0-SNAPSHOT</version>
 </dependency>
 ```
 或者
@@ -79,12 +80,12 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
     <dependency>
         <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
         <artifactId>elasticsearch-sql-core</artifactId>
-        <version>7.8.1.1</version>
+        <version>7.9.0-SNAPSHOT</version>
     </dependency>
     <dependency>
         <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
         <artifactId>elasticsearch-sql-jdbc</artifactId>
-        <version>7.8.1.1</version>
+        <version>7.9.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
