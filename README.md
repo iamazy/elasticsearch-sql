@@ -60,6 +60,7 @@ Elasticsearch-SQL
 **7.8.1** [![7.8.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.8.1)](https://travis-ci.org/iamazy/elasticsearch-sql)
 **7.9.0** [![7.9.0 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.9.0)](https://travis-ci.org/iamazy/elasticsearch-sql)
 **7.9.1** [![7.9.1 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.9.1)](https://travis-ci.org/iamazy/elasticsearch-sql)
+**7.9.2** [![7.9.2 Build Status](https://travis-ci.org/iamazy/elasticsearch-sql.svg?branch=7.9.2)](https://travis-ci.org/iamazy/elasticsearch-sql)
 
 
 ## Description
