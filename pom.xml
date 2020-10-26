@@ -7,7 +7,7 @@
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql</artifactId>
     <packaging>pom</packaging>
-    <version>7.9.2</version>
+    <version>7.9.3</version>
     <name>elasticsearch-sql</name>
     <description>elasticsearch sql</description>
     <url>https://github.com/iamazy/elasticsearch-sql</url>
@@ -22,7 +22,7 @@
 
 
     <properties>
-        <elasticsearch.version>7.9.2</elasticsearch.version>
+        <elasticsearch.version>7.9.3</elasticsearch.version>
         <java.version>1.8</java.version>
         <antlr4.version>4.7.2</antlr4.version>
         <jackson.version>2.10.1</jackson.version>
