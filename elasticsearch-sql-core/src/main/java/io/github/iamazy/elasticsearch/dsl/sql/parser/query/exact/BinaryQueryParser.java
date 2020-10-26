@@ -178,7 +178,7 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
                         }
                         default:
                         case LessThanOrEqual: {
-                            return rangeQuery.lte(StringManager.removeStringSymbol(rightParams[1].toString()));
+                            return rangeQuery.lte(StringManager.removeStringSymbol(rightParams[0].toString()));
                         }
                     }
                 });
