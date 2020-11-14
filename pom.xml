@@ -83,7 +83,7 @@
             </properties>
         </profile>
         <profile>
-            <id>releases</id>
+            <id>release</id>
             <build>
                 <plugins>
                     <plugin>
