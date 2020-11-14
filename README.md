@@ -85,12 +85,12 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
     <dependency>
         <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
         <artifactId>elasticsearch-sql-core</artifactId>
-        <version>7.9.1</version>
+        <version>7.9.3</version>
     </dependency>
     <dependency>
         <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
         <artifactId>elasticsearch-sql-jdbc</artifactId>
-        <version>7.9.1</version>
+        <version>7.9.3</version>
     </dependency>
 </dependencies>
 ```
