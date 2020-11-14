@@ -163,15 +163,8 @@
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.6</version>
                 <executions>
-<!--                    <execution>-->
-<!--                        <id>ossrh</id>-->
-<!--                        <phase>verify</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>sign</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
                     <execution>
-                        <id>sign-artifacts</id>
+                        <id>ossrh</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>sign</goal>
