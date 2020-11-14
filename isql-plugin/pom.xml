@@ -86,7 +86,7 @@
                 <version>1.6</version>
                 <executions>
                     <execution>
-                        <id>ossrh</id>
+                        <id>sign-artifacts</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>sign</goal>
