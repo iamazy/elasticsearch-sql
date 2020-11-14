@@ -121,11 +121,11 @@
 <!--                    <autoReleaseAfterClose>true</autoReleaseAfterClose>-->
 <!--                </configuration>-->
 <!--            </plugin>-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-deploy-plugin</artifactId>-->
+<!--                <version>3.0.0-M1</version>-->
+<!--            </plugin>-->
             <!--执行测试用例的插件-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
