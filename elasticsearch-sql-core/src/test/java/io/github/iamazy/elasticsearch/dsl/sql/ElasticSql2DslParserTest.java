@@ -1,10 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql;
 
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticSqlParseResult;
-import org.elasticsearch.search.aggregations.bucket.composite.CompositeValuesSourceBuilder;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 /**
  * @author iamazy
