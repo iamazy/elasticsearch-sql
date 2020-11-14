@@ -26,11 +26,11 @@ jobs:
       - name: Publish to Apache Maven Central
         run: mvn clean deploy
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_USERNAME: iamazy
           MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Release on nexus
         uses: monkeyWie/maven-nexus-release@v1.0.0
         with:
-          maven-repo-server-username: ${{ secrets.MAVEN_USERNAME }}
+          maven-repo-server-username: iamazy
           maven-repo-server-password: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
