@@ -1,5 +1,4 @@
 Elasticsearch-SQL  
-![Maven Package](https://github.com/iamazy/elasticsearch-sql/workflows/Maven%20Package/badge.svg)
 -----------------
 
 ## Build status
