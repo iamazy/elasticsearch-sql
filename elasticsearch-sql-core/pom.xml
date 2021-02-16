@@ -5,7 +5,7 @@
     <parent>
         <artifactId>elasticsearch-sql</artifactId>
         <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
-        <version>7.10.2</version>
+        <version>7.11.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -38,6 +38,13 @@
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
             <version>${elasticsearch.version}</version>
+            <!-- TODO: could not found elasticsearch-plugin-classloader-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.elasticsearch</groupId>
+                    <artifactId>elasticsearch-plugin-classloader</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.elasticsearch.plugin</groupId>
