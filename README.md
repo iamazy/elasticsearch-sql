@@ -680,3 +680,7 @@ select name from student aggregate by terms(name,1)>(terms(aa,2),[apple,cardinal
   }
 }
 ```
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/iamazy/elasticsearch-sql.svg)](https://starchart.cc/iamazy/elasticsearch-sql)
+      
