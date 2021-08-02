@@ -12,3 +12,6 @@ install:
 script:
   - ulimit -a
   - mvn test
+cache:
+  directories:
+  - $HOME/.m2
