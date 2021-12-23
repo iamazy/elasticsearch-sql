@@ -270,4 +270,25 @@ public class ElasticSqlParseResult {
         }
     }
 
+    public String toDsl() {
+        this.getSearchRequest();
+        if (searchRequest == null){
+            return null;
+        }
+        return searchRequest.source().toString();
+    }
+
+    public String toPrettyDsl() {
+        try {
+            this.getSearchRequest();
+            if (searchRequest == null){
+                return null;
+            }
+            Object o = CoreConstants.OBJECT_MAPPER.readValue(toDsl(searchRequest), Object.class);
+            return CoreConstants.OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(o);
+        } catch (IOException e) {
+            throw new RuntimeException("Elasticsearch Dsl解析出错!!!");
+        }
+    }
+
 }
