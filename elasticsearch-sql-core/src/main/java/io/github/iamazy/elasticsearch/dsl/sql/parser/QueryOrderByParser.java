@@ -33,7 +33,7 @@ public class QueryOrderByParser implements QueryParser {
                         }else{
                             sortOrder=SortOrder.DESC;
                         }
-                        SortBuilder sortBuilder = SortBuilders.fieldSort(field).sortMode(SortMode.AVG).order(sortOrder);
+                        SortBuilder sortBuilder = SortBuilders.fieldSort(field).order(sortOrder);
                         dslContext.getParseResult().getOrderBy().add(sortBuilder);
                     }
                 }

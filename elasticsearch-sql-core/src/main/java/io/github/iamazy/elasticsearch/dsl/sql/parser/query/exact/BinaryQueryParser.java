@@ -266,6 +266,9 @@ public class BinaryQueryParser extends AbstractExactQueryParser {
         if (expressionContext instanceof ElasticsearchParser.NameExprContext) {
             return true;
         }
+        if (expressionContext instanceof ElasticsearchParser.InContext) {
+            return true;
+        }
         return expressionContext instanceof ElasticsearchParser.JoinContext;
     }
 }
