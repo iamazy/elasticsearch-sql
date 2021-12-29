@@ -1,0 +1,7 @@
+description: ""
+examples:
+  - description: "function_score"
+    sql: "select * from student where h!age> 10 and h!weight between 80 and 90 and color = 'red' func_score high > 160 && name ='小明' aggregate by terms(name,10),terms(age,10)>(cardinality(clazz));"
+
+  - description: "dis_max"
+    sql: "select * from student dis_max age>11 || name='小米宁' and ( height>1.6 or fruit ='apple') || firstName is not null and tie_breaker=0.7;"

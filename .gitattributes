@@ -1,0 +1,12 @@
+# https://www.cnblogs.com/gymmer/p/5984471.html
+
+# Normalize line endings to LF.
+* text eol=lf
+
+# Ensure the following are treated as binary.
+*.gif   binary
+*.jar   binary
+*.jpeg  binary
+*.jpg   binary
+*.png   binary
+*.vsd   binary

@@ -6,4 +6,5 @@
 .idea/
 **/target/
 ~/**
-
+elasticsearch-sql-core/gen
+elasticsearch-sql-core/src/main/resources/antlr4/ElasticsearchLexer.tokens

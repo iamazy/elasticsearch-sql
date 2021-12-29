@@ -1,0 +1,4 @@
+description: "不指定升降序则默认`desc`降序"
+examples:
+  - description: "示例1"
+    sql: "select * from apple order by minPrice, advicePrice asc;"

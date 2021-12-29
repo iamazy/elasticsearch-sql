@@ -1,0 +1,8 @@
+enabled: false
+description: "暂不支持更新`nested`对象和`array`对象"
+examples:
+  - description: "示例1"
+    sql: "update students set name='tom' identify by '123';"
+
+  - description: "示例2"
+    sql: "update student set class='1班',code=12,numList=[1,2,3,'4'] where age>10;"

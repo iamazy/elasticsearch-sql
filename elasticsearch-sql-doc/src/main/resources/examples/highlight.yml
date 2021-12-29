@@ -1,0 +1,4 @@
+description: "高亮通过在字段前添加`h!`标志"
+examples:
+  - description: "示例1"
+    sql: "select h!nickname, h!name, h!class, hobby from student where (h!name, age) ~= 'hahah' and h!ab = 'haliluya';"

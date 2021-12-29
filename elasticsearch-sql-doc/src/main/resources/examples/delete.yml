@@ -1,0 +1,8 @@
+enabled: false
+description: "不指定limit，默认删除条数为15条"
+examples:
+  - description: "示例1"
+    sql: "delete from students identify by '1234';"
+
+  - description: "示例2"
+    sql: "delete from students where grade <60 batch 1000 limit 10000;"

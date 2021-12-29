@@ -1,4 +1,4 @@
-// Generated from C:/Users/iamazy/Documents/GitHub/elasticsearch-sql/elasticsearch-sql-core/src/main/resources/antlr4\ElasticsearchParser.g4 by ANTLR 4.7.2
+// Generated from ElasticsearchParser.g4 by ANTLR 4.7.2
 package io.github.iamazy.elasticsearch.dsl.antlr4;
 
 import org.antlr.v4.runtime.ParserRuleContext;

@@ -14,7 +14,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
  **/
 public class CardinalityAggregationParser implements AggregationParser {
 
-    private final static String AGG_CARDINALITY_METHOD = "cardinality";
+    public final static String AGG_CARDINALITY_METHOD = "cardinality";
 
     @Override
     public void parseAggregateItemClauseContext(AggregateQuery aggregateQuery, ElasticsearchParser.AggregateItemClauseContext aggregateItemClauseContext) {

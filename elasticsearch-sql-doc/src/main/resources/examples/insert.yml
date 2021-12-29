@@ -1,0 +1,7 @@
+enabled: false
+description: "暂不支持插入nested对象和array对象"
+examples:
+  - description: "示例1"
+    sql: |
+      -- 不指定[_id] elasticsearch将自动生成
+      insert into students(name,age,numList,_id) values('iamazy','23',[1,2,3,'4'],'123');

@@ -1,0 +1,82 @@
+description: ""
+examples:
+  - description: "select示例1"
+    sql: "select productName from apple;"
+
+  - description: "select示例2"
+    sql: "select * from apple where minPrice > 5000;"
+
+  - description: "select示例3"
+    sql: "select ^productName, minPrice from apple;"
+
+  - description: "select示例4"
+    sql: "select ^product*,min* from apple;"
+
+  - description: "exists"
+    sql: "select * from apple where provider is not null;"
+
+  - description: "match"
+    sql: "select * from apple where provider ~= '苹果';"
+
+  - description: "not match"
+    sql: "select * from apple where provider !~= '苹果';"
+
+  - description: "match_phrase"
+    sql: "select * from apple where provider ~== '苹果';"
+
+  - description: "not match_phrase"
+    sql: "select * from apple where provider !~== '苹果';"
+
+  - description: "match_phrase_prefix"
+    sql: "select * from apple where provider ~=== '苹果';"
+
+  - description: "not match_phrase_prefix"
+    sql: "select * from apple where provider !~=== '苹果';"
+
+  - description: "multi_match"
+    sql: "select * from student where (name,age) ~= 'hahah';"
+
+  - description: "query_string"
+    sql: "select * from apple where query by '苹果';"
+
+  - description: "term"
+    sql: "select * from apple where provider = '苹果';"
+
+  - description: "not term"
+    sql: "select * from apple where provider != '苹果';"
+
+  - description: "terms"
+    sql: "select * from apple where provider in ('苹果','apple');"
+
+  - description: "not terms"
+    sql: "select * from apple where provider not in ('苹果','apple');"
+
+  - description: "fuzzy"
+    sql: "select * from apple where provider fuzzy like 'ca';"
+
+  - description: "prefix"
+    sql: "select * from apple where provider prefix like 'ca';"
+
+  - description: "wildcard"
+    sql: "select * from apple where provider wildcard like 'ki*y';"
+
+  - description: "regexp示例1"
+    sql: "select * from apple where provider like 'k.*y';"
+
+  - description: "regexp示例2"
+    sql: "select * from apple where provider regexp like 'k.*y';"
+
+  - description: "must not"
+    sql: "select * from aaa where (not provider ~=== 'apple') or provider !~= 'microsoft';"
+
+  - description: "range示例1"
+    sql: "select * from apple where minPrice ranged in (1,3];"
+
+  - description: "range示例2"
+    sql: "select * from apple where minPrice >1 and minPrice <=3;"
+
+  - description: "bool"
+    sql: "select * from apple where (provider='苹果' and minPrice>=5000) or productCode=404;"
+
+
+

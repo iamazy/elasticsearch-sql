@@ -1,5 +1,7 @@
 parser grammar ElasticsearchParser;
 
+@header {package io.github.iamazy.elasticsearch.dsl.antlr4;}
+
 options {
 	tokenVocab = ElasticsearchLexer;
 }
@@ -89,7 +91,7 @@ rangeItemClause:
     STRING|INT|FLOAT
 ;
 
-collection: LPAREN identity? ( COMMA identity)* RPAREN;
+collection: LPAREN ((DISTINCT? identity? ( COMMA identity)*) | STAR) RPAREN;
 
 identityList: LBRACKET identity (COMMA identity)* RBRACKET;
 

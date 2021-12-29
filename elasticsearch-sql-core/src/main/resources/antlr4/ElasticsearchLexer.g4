@@ -1,5 +1,7 @@
 lexer grammar ElasticsearchLexer;
 
+@header {package io.github.iamazy.elasticsearch.dsl.antlr4;}
+
 channels {
 	ESQLCOMMENT,
 	ERRORCHANNEL
@@ -123,7 +125,7 @@ CONSTANT_SCORE: C O N S T A N T UNDERLINE S C O R E | C O N S T UNDERLINE S C O 
 
 //GROUP BY FUNCTION
 
-COUNT: C O U N T;
+// COUNT: C O U N T;
 
 
 VAR_ASSIGN: ':=';

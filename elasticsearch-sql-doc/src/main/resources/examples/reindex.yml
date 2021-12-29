@@ -1,0 +1,5 @@
+enabled: false
+description: "elasticsearch的reindex"
+examples:
+  - description: "示例1"
+    sql: "insert into table1 select * from table2 where age>18 limit 1000 remote=('https://192.168.0.1:9200','admin','12345');"

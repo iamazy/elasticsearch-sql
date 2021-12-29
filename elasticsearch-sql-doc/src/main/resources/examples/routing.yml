@@ -1,0 +1,5 @@
+enabled: false
+description: "elasticsearch的`routing`查询"
+examples:
+  - description: "示例1"
+    sql: "select * from apple order by lastModified routing by 'fdsfdsfdf','hsdjkdsd' limit 20,10"

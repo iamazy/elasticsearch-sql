@@ -1,0 +1,40 @@
+description: "分组(或者分桶)聚合查询"
+examples:
+  - description: "group by示例1"
+    sql: "select max(age), count(name), max(height) from student group by name, age, height;"
+
+  - description: "group by示例2"
+    sql: "select max(age) from student group by class;"
+
+  - description: "group by示例3"
+    sql: "select count(*) from student group by class;"
+
+  - description: "group by示例4"
+    sql: "select count(distinct name) from student group by class;"
+
+  - description: "group by示例5"
+    sql: "select count(*), count(distinct name), max(age) from student where gender = '男';"
+
+  - description: "aggregate_sum"
+    sql: "select * from apple where provider = '苹果' aggregate by sum(price);"
+
+  - description: "aggregate_max"
+    sql: "select * from apple where provider = '苹果' aggregate by max(price);"
+
+  - description: "aggregate_min"
+    sql: "select * from apple where provider = '苹果' aggregate by min(price);"
+
+  - description: "aggregate_cardinality"
+    sql: "select * from apple aggregate by cardinality(productName);"
+
+  - description: "aggregate_terms"
+    sql: "select * from apple aggregate by terms(productName,10);"
+
+  - description: "aggregate_top_hits"
+    sql: "select * from apple aggregate by top_hits(10);"
+
+  - description: "sub-aggs"
+    sql: "select * from apple aggregate by terms(productName,10)>(terms(provider,10),cardinality(provider));"
+
+  - description: "nested"
+    sql: "select * from apple aggregate by [apple,terms(apple.color,2)];"

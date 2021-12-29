@@ -1,6 +1,7 @@
 package io.github.iamazy.elasticsearch.dsl.sql.parser;
 
 import io.github.iamazy.elasticsearch.dsl.antlr4.ElasticsearchParser;
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.sql.exception.ElasticSql2DslException;
 import io.github.iamazy.elasticsearch.dsl.sql.model.ElasticDslContext;
 import io.github.iamazy.elasticsearch.dsl.sql.parser.aggs.GroupByQueryParser;
@@ -10,12 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,17 +22,18 @@ public class QuerySelectFieldsParser implements QueryParser {
 
     @Override
     public void parse(ElasticDslContext dslContext) {
-        if (dslContext.getSqlContext().selectOperation() != null) {
-            if (dslContext.getSqlContext().selectOperation().groupByClause() == null) {
-                parseNotGroupByClause(dslContext);
+        ElasticsearchParser.SelectOperationContext selectContext = dslContext.getSqlContext().selectOperation();
+        if (selectContext != null) {
+            if (!ParserUtil.containsAggregation(selectContext.fieldList())) {
+                parseNoAggregationClause(dslContext);
             } else {
-                ElasticsearchParser.GroupByClauseContext groupByClauseContext = dslContext.getSqlContext().selectOperation().groupByClause();
-                parseGroupByClause(groupByClauseContext, dslContext);
+                ElasticsearchParser.GroupByClauseContext groupByClauseContext = selectContext.groupByClause();
+                parseGroupByAggregationClause(groupByClauseContext, dslContext);
             }
         }
     }
 
-    private void parseNotGroupByClause(ElasticDslContext dslContext) {
+    private void parseNoAggregationClause(ElasticDslContext dslContext) {
         ElasticsearchParser.SelectOperationContext selectOperationContext = dslContext.getSqlContext().selectOperation();
         ElasticsearchParser.FieldListContext fieldListContext = selectOperationContext.fieldList();
         if (fieldListContext.nameOperand().size() > 0) {
@@ -89,10 +86,10 @@ public class QuerySelectFieldsParser implements QueryParser {
         }
     }
 
-    private void parseGroupByClause(ElasticsearchParser.GroupByClauseContext groupByClauseContext, ElasticDslContext dslContext) {
+    private void parseGroupByAggregationClause(ElasticsearchParser.GroupByClauseContext groupByClauseContext, ElasticDslContext dslContext) {
         //only return aggregation data and not care about whether fields are included,excluded or highlighted
         dslContext.getParseResult().setSize(0);
-        List<String> groupByFields = groupByClauseContext.ID().stream().map(TerminalNode::getText).collect(Collectors.toList());
+        List<String> groupByFields = groupByClauseContext == null ? Collections.emptyList() : groupByClauseContext.ID().stream().map(TerminalNode::getText).collect(Collectors.toList());
         ElasticsearchParser.FieldListContext fieldListContext = dslContext.getSqlContext().selectOperation().fieldList();
         GroupByQueryParser groupByQueryParser = new GroupByQueryParser();
         Map<Integer, Set<AggregationBuilder>> aggregationMap = new HashMap<>(0);
@@ -105,15 +102,19 @@ public class QuerySelectFieldsParser implements QueryParser {
             }  else if (nameOperandContext.fieldName instanceof ElasticsearchParser.FunctionNameContext) {
                 ElasticsearchParser.FunctionNameContext functionNameContext = (ElasticsearchParser.FunctionNameContext) nameOperandContext.fieldName;
                 //only support one params groupBy function at the moment
-                String field = functionNameContext.params.identity(0).ID().getText();
-                checkGroupByField(field, groupByFields);
+                String field;
+                if (functionNameContext.params.STAR() != null) {
+                    field = CoreConstants.STAR;
+                } else {
+                    field = functionNameContext.params.identity(0).ID().getText();
+                }
                 int idx = groupByFields.indexOf(field);
                 //insert subAggregation
                 if (aggregationMap.containsKey(idx)) {
-                    aggregationMap.get(idx).add(groupByQueryParser.parse(functionNameContext.functionName.getText(), field));
+                    aggregationMap.get(idx).add(groupByQueryParser.parse(ParserUtil.extractFunctionName(functionNameContext), field));
                 } else {
                     Set<AggregationBuilder> aggregationSet = new HashSet<>(0);
-                    aggregationSet.add(groupByQueryParser.parse(functionNameContext.functionName.getText(), field));
+                    aggregationSet.add(groupByQueryParser.parse(ParserUtil.extractFunctionName(functionNameContext), field));
                     aggregationMap.put(idx, aggregationSet);
                 }
 
@@ -124,6 +125,7 @@ public class QuerySelectFieldsParser implements QueryParser {
                 dslContext.getParseResult().getAliasMap().put(nameOperandContext.alias.getText(),nameOperandContext.fieldName.getText());
             }
         }
+        // group by and aggregation
         if (groupByFields.size() > 0) {
             AggregationBuilder aggregationBuilder = null;
             List<AggregationBuilder> aggregationBuilders = new ArrayList<>(0);
@@ -134,6 +136,9 @@ public class QuerySelectFieldsParser implements QueryParser {
                     aggregationBuilders.add(aggregationBuilder);
                     if (aggregationMap.containsKey(i)) {
                         aggregationBuilders.addAll(aggregationMap.get(i));
+                    } else if (i == 0 && aggregationMap.containsKey(-1)) {
+                        // when aggregated field diff from grouped field
+                        aggregationBuilders.addAll(aggregationMap.get(-1));
                     }
                 }else{
                     aggregationBuilder = AggregationBuilders.terms("terms_" + field).field(field).size(5000);
@@ -143,11 +148,17 @@ public class QuerySelectFieldsParser implements QueryParser {
                     aggregationBuilders.clear();
                     if(aggregationMap.containsKey(i)){
                         aggregationBuilders.addAll(aggregationMap.get(i));
+                    } else if (i == 0 && aggregationMap.containsKey(-1)) {
+                        // when aggregated field diff from grouped field
+                        aggregationBuilders.addAll(aggregationMap.get(-1));
                     }
                     aggregationBuilders.add(aggregationBuilder);
                 }
             }
             dslContext.getParseResult().getGroupBy().addAll(aggregationBuilders);
+        } else if (aggregationMap.containsKey(-1)) {
+            // only aggregation, no group by
+            dslContext.getParseResult().getGroupBy().addAll(aggregationMap.get(-1));
         }
     }
 

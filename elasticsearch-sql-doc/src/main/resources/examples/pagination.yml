@@ -1,0 +1,7 @@
+description: "elasticsearch的from,size"
+examples:
+  - description: "示例1"
+    sql: "select productCode, provider from apple limit 10;"
+
+  - description: "示例2"
+    sql: "select productCode, provider from apple limit 10,50 track total;"

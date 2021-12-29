@@ -1,0 +1,7 @@
+description: "elasticsearch中的`has_parent`,`has_child`查询(`parent_id`暂未添加)"
+examples:
+  - description: "has_parent示例"
+    sql: "select * from fruit where has_parent(vegetable,weight between 100 and 400);"
+
+  - description: "has_child示例"
+    sql: "select * from fruit where has_child(apple,price in (10,20,30));"

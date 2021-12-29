@@ -1,0 +1,8 @@
+enabled: false
+description: "描述index、field等，`describe`也可写为`desc`简写"
+examples:
+  - description: "示例1"
+    sql: "describe student;"
+
+  - description: "示例2"
+    sql: "desc student/names;"

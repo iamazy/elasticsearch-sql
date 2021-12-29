@@ -1,0 +1,22 @@
+description: "目前支持的Geo查询 \n- geo_bounding_box \n- geo_polygon \n- geo_distance \n- geo_shape \n- geojson_shape \n"
+examples:
+  - description: "geo_bounding_box示例"
+    sql: "select * from student where location.coordinate between [30,70] and [20,50];"
+
+  - description: "geo_polygon示例"
+    sql: "select * from student where location.coordinate in [[30.132,50],[40,60],[50,212]];"
+
+  - description: "geo_distance示例"
+    sql: "select * from student where location.coordinate=[40,30] and distance='100km';"
+
+  - description: "geo_shape示例1"
+    sql: |
+      -- 语法: where [field] [relation] [coordinates] shaped as [shape]
+      select * from student where location.coordinate within [[10,10],[20,20]] shaped as envelope;
+
+  - description: "geo_shape示例2"
+    sql: "select * from student where location.coordinate contains [[[10,10],[20,20]],[[11,11],[21,21]]] shaped as multilinestring;"
+
+  - description: "geojson_shape"
+    sql: |
+      select * from student where location.coordinate disjoint `{"coordinates": [[-155.52, 19.61], [-156.22, 20.74], [-157.97, 21.46]], "type": "MultiPoint"}`;

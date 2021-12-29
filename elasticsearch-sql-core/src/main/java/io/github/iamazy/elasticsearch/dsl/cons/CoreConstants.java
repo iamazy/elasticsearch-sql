@@ -24,4 +24,5 @@ public interface CoreConstants {
     String UP_ARROW="^";
     String POUND="#";
     String DEFAULT_ES_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    String UNDERLINE_ID = "_id";
 }
