@@ -32,8 +32,6 @@ public class ElasticDriver implements Driver {
     private RestHighLevelClient restHighLevelClient;
     private ElasticClientProvider elasticClientProvider;
 
-    private ElasticDriver() {
-    }
 
     @Override
     public Connection connect(String url, Properties info) throws SQLException {
