@@ -7,6 +7,14 @@ public class FixedHistoryTest {
     protected static ElasticSql2DslParser parser = new ElasticSql2DslParser();
 
     @Test
+    public void fixedAt20220119(){
+        // 1. distinct
+        String distinctSql = "select distinct name from user ";
+        System.out.println(parser.parse(distinctSql).toDsl());
+
+    }
+
+    @Test
     public void fixedOn20211221() {
         // 1. 去掉默认sortMode=avg ,默认为null
         // @io/github/iamazy/elasticsearch/dsl/sql/parser/QueryOrderByParser.java:36

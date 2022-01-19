@@ -71,7 +71,7 @@ public class QuerySelectFieldsParser implements QueryParser {
                                 dslContext.getParseResult().getHighlighter().add(distinctName);
                             }
                         }
-                        if (StringUtils.isNotBlank(dslContext.getParseResult().getDistinctName())) {
+                        if (StringUtils.isBlank(dslContext.getParseResult().getDistinctName())) {
                             dslContext.getParseResult().setDistinctName(distinctName);
                         }
                         includeFields.add(distinctName);

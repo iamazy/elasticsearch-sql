@@ -6,3 +6,5 @@
 2019-09-10: add dis max support
 2019-09-23: add geo shape support
 2019-12-14: add insert/update support
+2021-12-21: remove order by default sortMode, fixed in语句不能参与or计算
+2022-01-19: fixed distinct support
