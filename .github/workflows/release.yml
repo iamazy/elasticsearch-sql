@@ -1,9 +1,10 @@
 name: deploy
 
 on:
-  workflow_dispatch:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*.*.*"
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
