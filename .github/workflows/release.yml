@@ -18,7 +18,7 @@ jobs:
 
       - name: Maven Install
         run: |
-          mvn clean install
+          mvn clean install -Dgpg.skip
 
       - name: Release
         uses: softprops/action-gh-release@v1
