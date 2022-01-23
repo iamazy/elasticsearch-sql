@@ -15,11 +15,10 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-          
+
       - name: Maven Install
         run: |
           mvn clean install
-          ls
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -30,4 +29,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           generate_release_notes: true
           files: |
-            elasticsearch-sql/isql-plugin/target/elasticsearch-sql-plugin.zip
+            isql-plugin/target/elasticsearch-sql-plugin.zip
