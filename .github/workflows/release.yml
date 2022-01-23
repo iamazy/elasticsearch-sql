@@ -17,6 +17,7 @@ jobs:
           java-version: 1.8
         run: |
           mvn clean install
+          ls
 
       - name: Release
         uses: softprops/action-gh-release@v1
