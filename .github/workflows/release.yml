@@ -20,14 +20,15 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: Elasticsearch v${{ github.ref_name }} Sql Plugin
-          prerelease: true
+          name: Elasticsearch ${{ github.ref_name }} Sql Plugin
+#          prerelease: true
           token: ${{ secrets.GITHUB_TOKEN }}
           generate_release_notes: true
           body:
             '
             ```
             1.  parse sql into elasticsearch dsl
+
             2.  query dataset with sql
             ```
             '
