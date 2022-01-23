@@ -9,7 +9,7 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
 <dependency>
     <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
     <artifactId>elasticsearch-sql-all</artifactId>
-    <version>7.15.2</version>
+    <version>${latest.version}</version>
 </dependency>
 ```
 或者
@@ -18,12 +18,12 @@ rewrite [elasticsearch-sql2](https://github.com/iamazy/elasticsearch-sql2) with 
     <dependency>
         <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
         <artifactId>elasticsearch-sql-core</artifactId>
-        <version>7.15.2</version>
+        <version>${latest.version}</version>
     </dependency>
     <dependency>
         <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
         <artifactId>elasticsearch-sql-jdbc</artifactId>
-        <version>7.15.2</version>
+        <version>${latest.version}</version>
     </dependency>
 </dependencies>
 ```
