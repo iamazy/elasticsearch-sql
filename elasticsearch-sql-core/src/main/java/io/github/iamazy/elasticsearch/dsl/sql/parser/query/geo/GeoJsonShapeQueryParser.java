@@ -7,7 +7,6 @@ import io.github.iamazy.elasticsearch.dsl.sql.parser.ExpressionQueryParser;
 import io.github.iamazy.elasticsearch.dsl.utils.GeoUtils;
 import io.github.iamazy.elasticsearch.dsl.utils.StringManager;
 import org.elasticsearch.common.geo.GeoJson;
-import org.elasticsearch.common.geo.GeometryParser;
 import org.elasticsearch.common.xcontent.LoggingDeprecationHandler;
 import org.elasticsearch.geometry.Geometry;
 import org.elasticsearch.geometry.utils.StandardValidator;

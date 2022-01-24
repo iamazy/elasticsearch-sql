@@ -15,7 +15,6 @@
         <dependency>
             <groupId>io.github.iamazy.elasticsearch.dsl</groupId>
             <artifactId>elasticsearch-sql-core</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
