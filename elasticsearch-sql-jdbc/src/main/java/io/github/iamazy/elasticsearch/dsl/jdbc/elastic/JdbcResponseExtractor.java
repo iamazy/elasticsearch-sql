@@ -1,9 +1,12 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 
+import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.utils.FlatMapUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.indices.GetMappingsResponse;
+import org.elasticsearch.cluster.metadata.MappingMetadata;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.Aggregations;
@@ -21,11 +24,8 @@ import org.elasticsearch.search.aggregations.metrics.ParsedGeoBounds;
 import org.elasticsearch.search.aggregations.metrics.ParsedTopHits;
 import org.elasticsearch.search.aggregations.metrics.TopHits;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * @author iamazy
@@ -187,5 +187,31 @@ public class JdbcResponseExtractor {
         JdbcSearchResponse searchResponse = parseSearchResponse(response,aliasMap);
         String scrollId = response.getScrollId();
         return new JdbcScrollSearchResponse(searchResponse, scrollId);
+    }
+
+    public JdbcDescResponse parseDescResponse(GetMappingsResponse response) throws SQLException {
+        JdbcDescResponse jdbcDescResponse = new JdbcDescResponse();
+        Optional<Map.Entry<String, MappingMetadata>> mapping = response.mappings().entrySet().stream().findFirst();
+        if (!mapping.isPresent()) {
+            throw new SQLException("mapping is not exists in response");
+        }
+        MappingMetadata mappingMetadata = mapping.get().getValue();
+        Map<String, Object> mappingMetaMap = mappingMetadata.getSourceAsMap();
+        //noinspection unchecked
+        Map<String, Map<String, Object>> propertiesMap = (Map<String, Map<String, Object>>) mappingMetaMap.get("properties");
+
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Map.Entry<String, Map<String, Object>> property : propertiesMap.entrySet()) {
+            Map<String, Object> desc = new HashMap<>();
+            desc.put("name", property.getKey());
+            desc.put("type", property.getValue().get("type"));
+            property.getValue().remove("type");
+            desc.put("extra", property);
+            result.add(desc);
+        }
+
+        jdbcDescResponse.setSize(result.size());
+        jdbcDescResponse.setResult(result);
+        return jdbcDescResponse;
     }
 }

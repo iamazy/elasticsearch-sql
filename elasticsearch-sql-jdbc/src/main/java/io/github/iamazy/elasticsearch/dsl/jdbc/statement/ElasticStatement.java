@@ -3,8 +3,10 @@ package io.github.iamazy.elasticsearch.dsl.jdbc.statement;
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.jdbc.ElasticConnection;
 import io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants;
+import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcDescResponse;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcResponseExtractor;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcSearchResponse;
+import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticDescResultSet;
 import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticResultSet;
 import io.github.iamazy.elasticsearch.dsl.sql.ElasticSql2DslParser;
 import io.github.iamazy.elasticsearch.dsl.sql.enums.SqlOperation;
@@ -13,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.indices.GetMappingsRequest;
+import org.elasticsearch.client.indices.GetMappingsResponse;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 
 import java.io.IOException;
@@ -42,13 +46,26 @@ public class ElasticStatement extends AbstractStatement {
     public ResultSet executeQuery(String sql) throws SQLException {
         ElasticSqlParseResult parseResult = elasticSql2DslParser.parse(sql);
         checkDatabase(parseResult.getIndices());
-        assert parseResult.getSqlOperation() == SqlOperation.SELECT;
+        JdbcResponseExtractor jdbcResponseExtractor = new JdbcResponseExtractor();
         try {
-            SearchResponse searchResponse = connection.getRestClient().search(parseResult.getSearchRequest(), RequestOptions.DEFAULT);
-            JdbcResponseExtractor jdbcResponseExtractor = new JdbcResponseExtractor();
-            this.aliasMap=parseResult.getAliasMap();
-            this.resultSet = new ElasticResultSet(this, jdbcResponseExtractor.parseSearchResponse(searchResponse,parseResult.getAliasMap()));
-            return resultSet;
+            switch (parseResult.getSqlOperation()) {
+                case SELECT:
+                    SearchResponse searchResponse = connection.getRestClient().search(parseResult.getSearchRequest(), RequestOptions.DEFAULT);
+                    this.aliasMap=parseResult.getAliasMap();
+                    this.resultSet = new ElasticResultSet(this, jdbcResponseExtractor.parseSearchResponse(searchResponse,parseResult.getAliasMap()));
+                    return resultSet;
+                case DESC:
+                    if (parseResult.getMappingsRequest().indices().length > 1) {
+                        throw new SQLException("more than one index in desc");
+                    }
+                    GetMappingsRequest getMappingsRequest = new GetMappingsRequest();
+                    getMappingsRequest.indices(parseResult.getMappingsRequest().indices());
+                    GetMappingsResponse mappingResponse = connection.getRestClient().indices().getMapping(getMappingsRequest, RequestOptions.DEFAULT);
+                    this.resultSet = new ElasticDescResultSet(this, jdbcResponseExtractor.parseDescResponse(mappingResponse));
+                    return resultSet;
+                default:
+                    throw new SQLException("only support [select, desc] operation");
+            }
         } catch (IOException e) {
             throw new SQLException(e.getMessage());
         }
