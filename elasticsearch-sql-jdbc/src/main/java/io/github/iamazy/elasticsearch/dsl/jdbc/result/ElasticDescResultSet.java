@@ -1,16 +1,14 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc.result;
 
-import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcDescResponse;
-import io.github.iamazy.elasticsearch.dsl.utils.FlatMapUtils;
 
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Objects;
 
 /**
- * @author chen.weihao@ruanyun.net
+ * @author wellCh4n
+ * @date 2022/10/21
  */
 public class ElasticDescResultSet extends AbstractResultSet {
 
