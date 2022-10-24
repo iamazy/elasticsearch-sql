@@ -38,16 +38,6 @@ public class ElasticDescResultSet extends AbstractResultSet {
     }
 
     @Override
-    public Object getObject(String columnLabel) throws SQLException {
-        Object object = response.getResult().get(rowCursor).get(columnLabel);
-        try {
-            return CoreConstants.OBJECT_MAPPER.writeValueAsString(object);
-        } catch (Exception e) {
-            throw new RuntimeException("desc parse to json exception");
-        }
-    }
-
-    @Override
     public boolean getBoolean(String columnLabel) throws SQLException {
         return Boolean.parseBoolean(getString(columnLabel));
     }

@@ -206,7 +206,7 @@ public class JdbcResponseExtractor {
             desc.put("name", property.getKey());
             desc.put("type", property.getValue().get("type"));
             property.getValue().remove("type");
-            desc.put("extra", property);
+            desc.put("extra", property.getValue());
             result.add(desc);
         }
 
