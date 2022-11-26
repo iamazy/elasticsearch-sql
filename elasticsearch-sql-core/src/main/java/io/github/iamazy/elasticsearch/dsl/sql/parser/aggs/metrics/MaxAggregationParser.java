@@ -13,7 +13,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
  **/
 public class MaxAggregationParser implements AggregationParser {
 
-    private final static String AGG_MAX_METHOD = "max";
+    private static final String AGG_MAX_METHOD = "max";
 
     @Override
     public void parseAggregateItemClauseContext(AggregateQuery aggregateQuery, ElasticsearchParser.AggregateItemClauseContext aggregateItemClauseContext) {

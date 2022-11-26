@@ -15,9 +15,7 @@ import org.elasticsearch.index.reindex.RemoteInfo;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 
-
 import java.util.Collections;
-
 import java.util.concurrent.TimeUnit;
 
 /**

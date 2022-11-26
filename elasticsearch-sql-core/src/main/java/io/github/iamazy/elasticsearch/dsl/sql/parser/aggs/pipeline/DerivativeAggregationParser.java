@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
  **/
 public class DerivativeAggregationParser implements AggregationParser {
 
-    private final static String AGG_DERIVATIVE_METHOD = "derivative";
+    private static final String AGG_DERIVATIVE_METHOD = "derivative";
 
     @Override
     public void parseAggregateItemClauseContext(AggregateQuery aggregateQuery, ElasticsearchParser.AggregateItemClauseContext aggregateItemClauseContext) {

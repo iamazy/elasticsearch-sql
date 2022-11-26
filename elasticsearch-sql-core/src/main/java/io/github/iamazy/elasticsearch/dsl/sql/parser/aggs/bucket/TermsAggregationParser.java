@@ -15,7 +15,7 @@ import org.elasticsearch.search.aggregations.BucketOrder;
  **/
 public class TermsAggregationParser implements AggregationParser {
 
-    private final static String AGG_TERMS_METHOD = "terms";
+    private static final String AGG_TERMS_METHOD = "terms";
 
 
     @Override
