@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-
 import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.DEFAULT_IP;
 import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.DEFAULT_PORT;
 import static io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants.ELASTIC_DRIVER_PREFIX;

@@ -1,7 +1,5 @@
 package io.github.iamazy.elasticsearch.dsl.sql;
 
-import org.elasticsearch.geometry.Point;
-import org.elasticsearch.geometry.utils.Geohash;
 import org.junit.Test;
 
 /**
