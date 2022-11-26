@@ -1,7 +1,5 @@
 package io.github.iamazy.elasticsearch.dsl.jdbc.elastic;
 
-import org.elasticsearch.cluster.metadata.MappingMetadata;
-
 import java.util.List;
 import java.util.Map;
 

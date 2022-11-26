@@ -3,7 +3,6 @@ package io.github.iamazy.elasticsearch.dsl.jdbc.statement;
 import io.github.iamazy.elasticsearch.dsl.cons.CoreConstants;
 import io.github.iamazy.elasticsearch.dsl.jdbc.ElasticConnection;
 import io.github.iamazy.elasticsearch.dsl.jdbc.cons.JdbcConstants;
-import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcDescResponse;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcResponseExtractor;
 import io.github.iamazy.elasticsearch.dsl.jdbc.elastic.JdbcSearchResponse;
 import io.github.iamazy.elasticsearch.dsl.jdbc.result.ElasticDescResultSet;
