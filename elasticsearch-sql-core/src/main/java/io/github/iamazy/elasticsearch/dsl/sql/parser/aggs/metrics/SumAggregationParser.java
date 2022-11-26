@@ -13,7 +13,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
  **/
 public class SumAggregationParser implements AggregationParser {
 
-    private final static String AGG_SUM_METHOD = "sum";
+    private static final String AGG_SUM_METHOD = "sum";
 
 
     @Override

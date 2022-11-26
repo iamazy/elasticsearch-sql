@@ -13,7 +13,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
  **/
 public class MinAggregationParser implements AggregationParser {
 
-    private final static String AGG_MIN_METHOD = "min";
+    private static final String AGG_MIN_METHOD = "min";
 
     @Override
     public void parseAggregateItemClauseContext(AggregateQuery aggregateQuery, ElasticsearchParser.AggregateItemClauseContext aggregateItemClauseContext) {

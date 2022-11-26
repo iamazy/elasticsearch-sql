@@ -13,7 +13,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
  **/
 public class AvgAggregationParser implements AggregationParser {
 
-    private final static String AGG_AVG_METHOD = "avg";
+    private static final String AGG_AVG_METHOD = "avg";
 
     @Override
     public void parseAggregateItemClauseContext(AggregateQuery aggregateQuery, ElasticsearchParser.AggregateItemClauseContext aggregateItemClauseContext) {

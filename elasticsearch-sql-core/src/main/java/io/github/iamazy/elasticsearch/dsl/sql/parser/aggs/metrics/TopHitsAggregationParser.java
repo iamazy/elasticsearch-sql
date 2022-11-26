@@ -13,7 +13,7 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
  **/
 public class TopHitsAggregationParser implements AggregationParser {
 
-    private final static String AGG_TOP_HITS_METHOD = "top_hits";
+    private static final String AGG_TOP_HITS_METHOD = "top_hits";
 
     @Override
     public void parseAggregateItemClauseContext(AggregateQuery aggregateQuery, ElasticsearchParser.AggregateItemClauseContext aggregateItemClauseContext) {
