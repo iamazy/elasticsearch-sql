@@ -192,6 +192,31 @@ public class JdbcTest {
         }
     }
 
+    public static void desc() {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL);
+            String sql = "DESC device_search";
+            ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            System.out.println(rs);
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(ps != null) ps.close();
+            } catch (SQLException ignored) {}
+            try {
+                if (conn != null) conn.close();
+            } catch (SQLException ignored) {}
+        }
+    }
+
+
     public static void main(String[] args) {
         scroll();
     }
