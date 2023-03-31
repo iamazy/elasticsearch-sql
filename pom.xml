@@ -25,7 +25,7 @@
         <elasticsearch.version>${project.version}</elasticsearch.version>
         <java.version>1.8</java.version>
         <antlr4.version>4.9.3</antlr4.version>
-        <jackson.version>2.13.4</jackson.version>
+        <jackson.version>2.13.4.2</jackson.version>
         <guava.version>31.0.1-jre</guava.version>
         <spatial4j.version>0.8</spatial4j.version>
         <jts-core.version>1.18.2</jts-core.version>
